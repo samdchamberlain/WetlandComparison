@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 
 # WetlandComparison
 
-The goal of WetlandComparison is to ...
+The goal of WetlandComparison is to make a first attempt at a reproducible research R package. This will still be somewhat hampered by the fact that much of this research is conducted with Matlab.
 
 ## Installation
 
