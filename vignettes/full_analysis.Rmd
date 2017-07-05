@@ -1,0 +1,222 @@
+---
+title: "Wetland inter-comparison"
+author: "Sam Chamberlain"
+---
+-------
+
+This .rmd goes step-by-step through the analysis used in Sam Chamberlain's wetland methane flux intercomparison. All analysis completed within R is reproducible within this document; however, model hypothesis testing and information theory analysis was conducted in MATLAB. The MATLAB analyses are not directly reproducible from this document, but links to MATLAB scripts are provide along with instructions to repeat those analyses. Otherwise, all statistics, figures, and tables will be recreated within this script.
+
+##Loading packages
+```{r packages, message=FALSE}
+library(knitr); library(tidyverse); library(lubridate); library(plotly); library(zoo); library(devtools); library(gridExtra); library(scales)
+```
+
+##Data processing to daily and yearly fluxes
+In the following *_processing.R* files, half-hourly flux and met files for all sites are merged and processed into daily and yearly fluxes. Each *.R* contains an identical script re-run for each site, where the input met variables (temp probe depths) vary across sites. All processing relies on *tidyverse* package.
+
+```{r load_process}
+#load and process data into half-hourly, daily, and annual sums
+source("../R/peat19_processing.R") #19yr old peat site
+source("../R/peat6_processing.R") #6yr old peat site
+source("../R/alluvium_processing.R") #alluvium site
+```
+
+Now we can combine the individual files into single sets with all data indexed by site.
+```{r combine_daily}
+#merge daily sums to single dataset
+all_daily <- rbind(peat19_daily, peat6_daily); all_daily <- rbind(all_daily, alluvium_daily)
+
+#For annual fluxes we will do a bit more processing...
+#add age of wetland variable
+peat19_yearly$age <- peat19_yearly$year - 1997
+peat6_yearly$age <- peat6_yearly$year - 2011
+alluvium_yearly$age <- alluvium_yearly$year - 2014
+
+#remove year with draw down disturbance at old peat site to compare stable states only 
+peat19_yearly <- subset(peat19_yearly, year != 2013)
+
+#merge to single dataset
+all_annual <- rbind(peat19_yearly, peat6_yearly); all_sites <- rbind(all_annual, alluvium_yearly)
+
+#remove incomplete years
+all_annual <- subset(all_annual, Days >= 365)
+```
+
+#Analysis and figures
+```{r figure1, fig.height = 6, fig.width = 10, fig.align = "center",fig.cap="Fig. 1: Meteorological variables across core sites", echo=FALSE, warning=FALSE}
+#create a date variable for x variable
+all_daily$date <- as.Date(all_daily$datetime)
+
+#create plot objects
+a <- ggplot(all_daily, aes(x=date, y=Tair, color=site)) +
+  geom_line() + theme_bw() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab(expression(T[a]~" ("~degree~C~")")) +
+  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(), axis.title.x = element_blank())
+
+b <- ggplot(all_daily, aes(x=date, y=Tw, color=site)) +
+  geom_line() + theme_bw() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab(expression(T[w]~" ("~degree~C~")")) +
+  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(), axis.title.x = element_blank())
+
+c <- ggplot(all_daily, aes(x=date, y=PAR, color=site)) +
+  geom_line() + theme_bw() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab(expression(PAR~" ("~mu~mol~m^{-2}~s^{-1}~")")) + 
+  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(), axis.title.x = element_blank())
+
+d <- ggplot(all_daily, aes(x=date, y=WTD, color=site)) +
+  geom_line() + theme_bw() + geom_hline(yintercept=0) +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab("WTD (cm)") +
+  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(), axis.title.x = element_blank())
+
+#Multiple plots aligned
+iA <- ggplotGrob(a)
+iB <- ggplotGrob(b)
+iC <- ggplotGrob(c)
+iD <- ggplotGrob(d)
+
+maxWidth = grid::unit.pmax(iA$widths[2:5], iB$widths[2:5], iC$widths[2:5], iD$widths[2:5])
+iA$widths[2:5] <- as.list(maxWidth); iB$widths[2:5] <- as.list(maxWidth); iC$widths[2:5] <- as.list(maxWidth);
+iD$widths[2:5] <- as.list(maxWidth);
+
+grid.arrange(iA, iB, iC, iD, ncol=1)
+```
+Daily time series for dominant met drivers (**Tair**, **Tw**, **PAR**, **WTD**) across the three core sites. Atmospheric drivers (**Tair** and **PAR**) are equivalent across sites. The old peat site experienced some water table drops early on, but otherwise the sites are consistently inundated. Water temperature (**Tw**) is lower at the old peat site due to differences in site structure explained in more detail in *Eichelmann et al. in review*.
+
+&nbsp;
+
+```{r figure2, fig.height = 6, fig.width = 10, fig.align = "center",fig.cap="Fig. 2: Daily CH4, GEP, ER, and NEE fluxes across wetland core sites", echo=FALSE, warning=FALSE}
+a <- ggplot(all_daily, aes(x=date, y=mgCH4, color=site)) +
+  geom_line() + theme_bw() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab(expression(F[CH4]~" (mg C"~m^{-2}~d^{-1}~")")) + 
+  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank())
+
+b <- ggplot(all_daily, aes(x=date, y=gGEP, color=site)) +
+  geom_line() + theme_bw() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab(expression(GEP~" (g C"~m^{-2}~d^{-1}~")")) + 
+  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank())
+
+c <- ggplot(all_daily, aes(x=date, y=gER, color=site)) +
+  geom_line() + theme_bw() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  scale_y_continuous(limits=c(0,15)) +
+  ylab(expression(ER~" (g C"~m^{-2}~d^{-1}~")")) + 
+  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank())
+
+d <- ggplot(all_daily, aes(x=date, y=gCO2, color=site)) +
+  geom_line() + theme_bw() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab(expression(NEE~" (g C"~m^{-2}~d^{-1}~")")) + 
+  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(), axis.title.x = element_blank())
+
+#Multiple plots aligned
+iA <- ggplotGrob(a)
+iB <- ggplotGrob(b)
+iC <- ggplotGrob(c)
+iD <- ggplotGrob(d)
+
+maxWidth = grid::unit.pmax(iA$widths[2:5], iB$widths[2:5], iC$widths[2:5], iD$widths[2:5])
+iA$widths[2:5] <- as.list(maxWidth); iB$widths[2:5] <- as.list(maxWidth); iC$widths[2:5] <- as.list(maxWidth);
+iD$widths[2:5] <- as.list(maxWidth);
+
+grid.arrange(iA, iB, iC, iD, ncol=1)
+```
+Daily **NEE** fluxes are quite similar across sites, including the partitioned **GEP** and **ER** fluxes. However, daily **F_CH4** are notably lower at the alluvium site, despite the fact that it has similar magnitude photosynthetic input to the old peat site (Fig. 2), and by 2016, much larger photosynthetic input than the young peat site (Fig. 2). This observation displays a clear disconnect between recent photosynthetic input and wetland **F_CH4**. Additionally, the trajectory post-restoration of the recently restored peat and alluvium sites are notably divergent (Fig. 3). CH_4 fluxes are largest 1 year post-restoration and reduce with time, whereas the alluvium site fluxes gradually increase with time but are much lower than the peat site **F_CH4** (Fig. 3 below).
+
+&nbsp;
+
+```{r figure3, fig.height = 3, fig.width = 7, fig.align = "center",fig.cap="Fig. 3: Daily CH4 fluxes following restoration for alluvium and peat sites restored within the last six years", echo=FALSE, warning=FALSE}
+#First three years of restoration progess for young peat and alluvium sites
+trajectory <- subset(all_daily, site != "Peat - 19 yr old")
+
+#create a year since restoration index column
+trajectory$rest_year <- ifelse(trajectory$site == "Alluvium - 3 yr old", 
+                         trajectory$year - 2013, trajectory$year - 2010)
+#compare first three years only (we only have 3 yrs of alluvium site)
+trajectory <- subset(trajectory, rest_year < 4)
+
+#Early restoration time series
+ggplot(trajectory, aes(x=(dday-365), y=mgCH4, color=site)) +
+  geom_point(aes(fill=site), colour="black",pch=21) +
+  ylab(expression(F[CH4]~" "~"("~mg~m^{-2}~day^{-1}~")")) + theme_bw() +
+  xlab("Day since restoration")
+```
+
+##Annual flux comparisons
+For annual budget analysis, we first combine the yearly datasets into a single dataframe from which we can estimate mean annual fluxes and complete cross-site comparisons. Below are the mean annual fluxes with standard deviations.
+
+```{r combine_annual, echo=FALSE}
+#Add age since restoration variable
+peat19_yearly$age <- peat19_yearly$year - 1997
+peat6_yearly$age <- peat6_yearly$year - 2011
+alluvium_yearly$age <- alluvium_yearly$year - 2014
+
+peat19_yearly <- subset(peat19_yearly, year != 2013) # remove year with draw down disturbance at WP
+
+#merge to single dataset
+all_sites <- rbind(peat19_yearly, peat6_yearly); all_sites <- rbind(all_sites, alluvium_yearly)
+
+#remove incomplete years
+all_sites <- subset(all_sites, Days >= 365)
+```
+
+```{r table1, echo=FALSE}
+combined <- all_sites %>%
+  group_by(site) %>%
+  summarise(NEE = mean(tNEE),
+            sdNEE = sd(tNEE),
+            CH4 = mean(tCH4),
+            sdCH4 = sd(tCH4),
+            GEP = mean(tGEP),
+            sdGEP = sd(tGEP),
+            ER = mean(tER),
+            sdER = sd(tER),
+            GHG = mean(GHGbalance),
+            sdGHG = sd(GHGbalance),
+            sites_years = sum(!is.na(tNEE)))
+
+kable(combined, caption="Mean annual fluxes and site years")
+
+```
+
+```{r site compare, fig.height = 6, fig.width = 8, fig.align = "center",fig.cap="Fig. 4: Annual wetland flux comparisons", echo=FALSE}
+#plotting site comparisons
+a <- ggplot(all_sites, aes(x=site, y=tNEE)) +
+  ylab(expression(NEE~" ("~g~CO[2]-C~m^{-2}~yr^{-1}~")")) + 
+  geom_boxplot()
+
+b <- ggplot(all_sites, aes(x=site, y=abs(tGEP))) +
+  ylab(expression(GEP~" ("~g~CO[2]-C~m^{-2}~yr^{-1}~")")) + 
+  geom_boxplot()
+
+c <- ggplot(all_sites, aes(x=site, y=tCH4)) +
+  ylab(expression(F[CH4]~" ("~g~CH[4]-C~m^{-2}~yr^{-1}~")")) + 
+  geom_boxplot()
+
+d <- ggplot(all_sites, aes(x=site, y=tER)) +
+  ylab(expression(ER~" ("~g~CO[2]-C~m^{-2}~yr^{-1}~")")) + 
+  geom_boxplot()
+
+grid.arrange(a, b, c, d, nrow=2)
+
+```
+&nbsp;
+
+#Significance testing
+There is considerable overlap in the mean annual **NEE**, **GEP**, and **ER** fluxes across all three sites. Looking at the statistics below, the only significant difference across sites exists for CH_4 fluxes, and for CH_4 fluxes, the annual fluxes from the alluvium site are significantly lower than either peat site, yet the peat sites are not significantly different from one another (see *TukeyHSD* comparison)
+
+```{r stats}
+NEE <- aov(all_sites$tNEE ~ all_sites$site); summary(NEE)
+
+GPP <- aov(all_sites$tGEP ~ all_sites$site); summary(GPP)
+
+ER <- aov(all_sites$tER ~ all_sites$site); summary(ER)
+
+CH4 <- aov(all_sites$tCH4 ~ all_sites$site); summary(CH4)
+TukeyHSD(CH4)
+```
