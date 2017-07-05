@@ -9,6 +9,9 @@ This .rmd goes step-by-step through the analysis used in Sam Chamberlain's wetla
 ##Loading packages
 ```{r packages, message=FALSE}
 library(knitr); library(tidyverse); library(lubridate); library(plotly); library(zoo); library(devtools); library(gridExtra); library(scales)
+
+#load manuscript package
+library(WetlandComparison)
 ```
 
 ##Data processing to daily and yearly fluxes
