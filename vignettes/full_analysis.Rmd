@@ -13,7 +13,7 @@ This .rmd goes step-by-step through the analysis used in Sam Chamberlain's wetla
 
 ##Loading packages
 ```{r packages, message=FALSE}
-library(knitr); library(tidyverse); library(lubridate); library(plotly); library(devtools); library(gridExtra); library(scales); library(zoo)
+library(knitr); library(tidyverse); library(lubridate); library(gridExtra); library(scales); library(zoo)
 ```
 
 ##Data processing to daily and yearly fluxes
@@ -131,7 +131,9 @@ iD$widths[2:5] <- as.list(maxWidth);
 
 grid.arrange(iA, iB, iC, iD, ncol=1)
 ```
-Daily **NEE** fluxes are quite similar across sites, including the partitioned **GEP** and **ER** fluxes. However, daily **F_CH4** are notably lower at the alluvium site, despite the fact that it has similar magnitude photosynthetic input to the old peat site (Fig. 2), and by 2016, much larger photosynthetic input than the young peat site (Fig. 2). This observation displays a clear disconnect between recent photosynthetic input and wetland **F_CH4**. Additionally, the trajectory post-restoration of the recently restored peat and alluvium sites are notably divergent (Fig. 3). CH_4 fluxes are largest 1 year post-restoration and reduce with time, whereas the alluvium site fluxes gradually increase with time but are much lower than the peat site **F_CH4** (Fig. 3 below).
+Daily **NEE** fluxes are quite similar across sites, including the partitioned **GEP** and **ER** fluxes. However, daily **F_CH4** are notably lower at the alluvium site, despite the fact that it has similar magnitude photosynthetic input to the old peat site (Fig. 2), and by 2016, much larger photosynthetic input than the young peat site (Fig. 2). This observation displays a clear disconnect between recent photosynthetic input and wetland **F_CH4**. 
+
+The trajectory post-restoration of the recently restored peat and alluvium sites are also notably divergent (Fig. 3). CH_4 fluxes are largest 1 year post-restoration and reduce with time, whereas the alluvium site fluxes gradually increase with time but are much lower than the peat site **F_CH4** (Fig. 3 below).
 
 &nbsp;
 
@@ -173,7 +175,7 @@ all_sites <- subset(all_sites, Days >= 365)
 ```{r table1, echo=FALSE}
 combined <- all_sites %>%
   group_by(site) %>%
-  summarise(NEE = mean(tNEE),
+  summarise(NEE = median(tNEE),
             sdNEE = sd(tNEE),
             CH4 = mean(tCH4),
             sdCH4 = sd(tCH4),
@@ -185,7 +187,7 @@ combined <- all_sites %>%
             sdGHG = sd(GHGbalance),
             sites_years = sum(!is.na(tNEE)))
 
-kable(combined, caption="Mean annual fluxes and site years")
+kable(combined, caption="Mean annual fluxes and site years", digits = 2)
 
 ```
 
