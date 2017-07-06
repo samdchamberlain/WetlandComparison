@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 This .rmd goes step-by-step through the analysis used in Sam Chamberlain's wetland methane flux intercomparison. All analysis completed within R is reproducible within this document; however, model hypothesis testing and information theory analysis was conducted in MATLAB. The MATLAB analyses are not directly reproducible from this document, but links to MATLAB scripts are provide along with instructions to repeat those analyses. Otherwise, all statistics, figures, and tables will be recreated within this script.
 
-##Loading packages
+## Loading packages
 
 ```{r packages, message=FALSE}
 library(knitr)
