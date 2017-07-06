@@ -1,7 +1,8 @@
 ---
 title: "Wetland inter-comparison"
 author: "Sam Chamberlain"
-output: github_document
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
 ---
 -------
 
@@ -65,7 +66,7 @@ all_annual <- subset(all_annual, Days >= 365)
 
 # Figures and analysis
 ## Wetland Met Drivers
-```{r figure1, fig.height = 6, fig.width = 10, fig.align = "center",fig.cap="Fig. 1: Meteorological variables across core sites", echo=FALSE, warning=FALSE}
+```{r figure1, fig.height = 5, fig.width = 8, fig.align = "center",fig.cap="Fig. 1: Meteorological variables across core sites", echo=FALSE, warning=FALSE}
 #create a date variable for x variable
 all_daily$date <- as.Date(all_daily$datetime)
 
@@ -110,7 +111,7 @@ Daily time series for dominant met drivers (**Tair**, **Tw**, **PAR**, **WTD**) 
 &nbsp;
 
 ##Daily CO2 and CH4 Fluxes
-```{r figure2, fig.height = 6, fig.width = 10, fig.align = "center",fig.cap="Fig. 2: Daily CH4, GEP, ER, and NEE fluxes across wetland core sites", echo=FALSE, warning=FALSE}
+```{r figure2, fig.height = 5, fig.width = 8, fig.align = "center",fig.cap="Fig. 2: Daily CH4, GEP, ER, and NEE fluxes across wetland core sites", echo=FALSE, warning=FALSE}
 a <- ggplot(all_daily, aes(x=date, y=mgCH4, color=site)) +
   geom_line() + theme_bw() +
   scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
@@ -171,6 +172,9 @@ ggplot(trajectory, aes(x=(dday-365), y=mgCH4, color=site)) +
   ylab(expression(F[CH4]~" "~"("~mg~m^{-2}~day^{-1}~")")) + theme_bw() +
   xlab("Day since restoration")
 ```
+
+&nbsp;
+&nbsp;
 
 # Annual flux comparisons
 ```{r combine_annual, echo=FALSE}

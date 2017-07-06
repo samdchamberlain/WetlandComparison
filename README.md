@@ -20,9 +20,4 @@ devtools::install_github("samdchamberlain/WetlandComparison")
 How to Run
 ----------
 
-Load package into RStudio
-
-What next
----------
-
-Try to write
+Load package into RStudio....
