@@ -4,14 +4,16 @@ author: "Sam Chamberlain"
 ---
 -------
 
+```{r setup}
+#setwd to main package directory
+knitr::opts_knit$set(root.dir = normalizePath("../"))
+```
+
 This .rmd goes step-by-step through the analysis used in Sam Chamberlain's wetland methane flux intercomparison. All analysis completed within R is reproducible within this document; however, model hypothesis testing and information theory analysis was conducted in MATLAB. The MATLAB analyses are not directly reproducible from this document, but links to MATLAB scripts are provide along with instructions to repeat those analyses. Otherwise, all statistics, figures, and tables will be recreated within this script.
 
 ##Loading packages
 ```{r packages, message=FALSE}
-library(knitr); library(tidyverse); library(lubridate); library(plotly); library(zoo); library(devtools); library(gridExtra); library(scales)
-
-#load manuscript package
-library(WetlandComparison)
+library(knitr); library(tidyverse); library(lubridate); library(plotly); library(devtools); library(gridExtra); library(scales); library(zoo)
 ```
 
 ##Data processing to daily and yearly fluxes
@@ -19,9 +21,9 @@ In the following *_processing.R* files, half-hourly flux and met files for all s
 
 ```{r load_process}
 #load and process data into half-hourly, daily, and annual sums
-source("../R/peat19_processing.R") #19yr old peat site
-source("../R/peat6_processing.R") #6yr old peat site
-source("../R/alluvium_processing.R") #alluvium site
+source("R/peat19_processing.R") #19yr old peat site
+source("R/peat6_processing.R") #6yr old peat site
+source("R/alluvium_processing.R") #alluvium site
 ```
 
 Now we can combine the individual files into single sets with all data indexed by site.

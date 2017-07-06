@@ -13,3 +13,7 @@ Suggests: testthat,
     covr
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
+Imports: dplyr,
+    zoo,
+    lubridate,
+    magrittr

@@ -1,10 +1,15 @@
-# Script to load, merge, and process daily to annual budgets.
-# Code varies for each site as input met variables vary across sites
-# Site: Alluvium
+#' Script to load, merge, and process daily to annual budgets.
+#' Code varies for each site as input met variables vary across sites
+#' Site: Alluvium
+#'
+#' @import dplyr
+#' @importFrom dplyr "%>%"
+#' @importFrom lubridate month
+#' @importFrom zoo na.approx
 
 # load datasets
-load("../data/alluvium_eddy.Rda") #eddy fluxes
-load("../data/alluvium_met.Rda") #met variables
+load("data/alluvium_eddy.Rda") #eddy fluxes
+load("data/alluvium_met.Rda") #met variables
 
 # merge met and eddy dataframes by shared time variable
 alluvium_all <- merge(alluvium_eddy, alluvium_met, by="decday")

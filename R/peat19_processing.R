@@ -1,10 +1,14 @@
-# Script to load, merge, and process daily to annual budgets.
-# Code varies for each site as input met variables vary across sites
-# Site: Peat 19 yr old
+#' Script to load, merge, and process daily to annual budgets.
+#' Code varies for each site as input met variables vary across sites
+#' Site: Peat 19 yr old
+#'
+#' @import dplyr
+#' @importFrom dplyr "%>%"
+#' @importFrom lubridate month
 
 # load datasets
-load("../data/peat19_eddy.Rda") #eddy fluxes
-load("../data/peat19_met.Rda") #met variables
+load("data/peat19_eddy.Rda") #eddy fluxes
+load("data/peat19_met.Rda") #met variables
 
 # merge met and eddy dataframes by shared time variable
 peat19_all <- merge(peat19_eddy, peat19_met, by="decday")
