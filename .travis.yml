@@ -16,3 +16,27 @@ cache: packages
 
   after_success:
   - Rscript -e 'library(covr); coveralls()'
+
+  r_binary_packages:
+  - testthat
+  - knitr
+  - tidyverse
+
+  r_github_packages:
+  - jimhester/covr
+
+  after_success:
+  - Rscript -e 'library(covr); coveralls()'
+
+  r_binary_packages:
+  - testthat
+  - knitr
+  - dplyr
+  - lubridate
+  - zoo
+
+  r_github_packages:
+  - jimhester/covr
+
+  after_success:
+  - Rscript -e 'library(covr); coveralls()'
