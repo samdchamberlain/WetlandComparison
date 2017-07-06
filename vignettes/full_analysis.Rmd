@@ -110,7 +110,7 @@ grid.arrange(iA, iB, iC, iD, ncol=1)
 Daily time series for dominant met drivers (**Tair**, **Tw**, **PAR**, **WTD**) across the three core sites. Atmospheric drivers (**Tair** and **PAR**) are equivalent across sites. The old peat site experienced some water table drops early on, but otherwise the sites are consistently inundated. Water temperature (**Tw**) is lower at the old peat site due to differences in site structure explained in more detail in *Eichelmann et al. in review*.
 &nbsp;
 
-##Daily CO2 and CH4 Fluxes
+## Daily CO2 and CH4 Fluxes
 ```{r figure2, fig.height = 5, fig.width = 8, fig.align = "center",fig.cap="Fig. 2: Daily CH4, GEP, ER, and NEE fluxes across wetland core sites", echo=FALSE, warning=FALSE}
 a <- ggplot(all_daily, aes(x=date, y=mgCH4, color=site)) +
   geom_line() + theme_bw() +
@@ -151,7 +151,7 @@ grid.arrange(iA, iB, iC, iD, ncol=1)
 ```
 Daily **NEE** fluxes are quite similar across sites, including the partitioned **GEP** and **ER** fluxes. However, daily **F_CH4** are notably lower at the alluvium site, despite the fact that it has similar magnitude photosynthetic input to the old peat site (Fig. 2), and by 2016, much larger photosynthetic input than the young peat site (Fig. 2). This observation displays a clear disconnect between recent photosynthetic input and wetland **F_CH4**. 
 
-##Trajectories Post-Restoration
+## Trajectories Post-Restoration
 The trajectory post-restoration of the recently restored peat and alluvium sites are also notably divergent (Fig. 3). CH_4 fluxes are largest 1 year post-restoration and reduce with time, whereas the alluvium site fluxes gradually increase with time but are much lower than the peat site **F_CH4** (Fig. 3 below).
 
 &nbsp;
