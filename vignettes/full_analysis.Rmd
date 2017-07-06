@@ -1,22 +1,34 @@
 ---
 title: "Wetland inter-comparison"
 author: "Sam Chamberlain"
+output: github_document
 ---
 -------
 
-```{r setup}
+```{r setup, echo=FALSE}
 #setwd to main package directory
 knitr::opts_knit$set(root.dir = normalizePath("../"))
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>")
 ```
 
 This .rmd goes step-by-step through the analysis used in Sam Chamberlain's wetland methane flux intercomparison. All analysis completed within R is reproducible within this document; however, model hypothesis testing and information theory analysis was conducted in MATLAB. The MATLAB analyses are not directly reproducible from this document, but links to MATLAB scripts are provide along with instructions to repeat those analyses. Otherwise, all statistics, figures, and tables will be recreated within this script.
 
 ##Loading packages
+
 ```{r packages, message=FALSE}
-library(knitr); library(tidyverse); library(lubridate); library(gridExtra); library(scales); library(zoo)
+library(knitr)
+library(tidyverse)
+library(lubridate)
+library(gridExtra)
+library(scales)
+library(zoo)
 ```
 
-##Data processing to daily and yearly fluxes
+## Data processing and budgets
+
 In the following *_processing.R* files, half-hourly flux and met files for all sites are merged and processed into daily and yearly fluxes. Each *.R* contains an identical script re-run for each site, where the input met variables (temp probe depths) vary across sites. All processing relies on *tidyverse* package.
 
 ```{r load_process}
@@ -26,6 +38,7 @@ source("R/peat6_processing.R") #6yr old peat site
 source("R/alluvium_processing.R") #alluvium site
 ```
 
+## Merging files
 Now we can combine the individual files into single sets with all data indexed by site.
 ```{r combine_daily}
 #merge daily sums to single dataset
@@ -47,7 +60,11 @@ all_annual <- rbind(peat19_yearly, peat6_yearly); all_sites <- rbind(all_annual,
 all_annual <- subset(all_annual, Days >= 365)
 ```
 
-#Analysis and figures
+&nbsp;
+&nbsp;
+
+# Figures and analysis
+## Wetland Met Drivers
 ```{r figure1, fig.height = 6, fig.width = 10, fig.align = "center",fig.cap="Fig. 1: Meteorological variables across core sites", echo=FALSE, warning=FALSE}
 #create a date variable for x variable
 all_daily$date <- as.Date(all_daily$datetime)
@@ -90,9 +107,9 @@ iD$widths[2:5] <- as.list(maxWidth);
 grid.arrange(iA, iB, iC, iD, ncol=1)
 ```
 Daily time series for dominant met drivers (**Tair**, **Tw**, **PAR**, **WTD**) across the three core sites. Atmospheric drivers (**Tair** and **PAR**) are equivalent across sites. The old peat site experienced some water table drops early on, but otherwise the sites are consistently inundated. Water temperature (**Tw**) is lower at the old peat site due to differences in site structure explained in more detail in *Eichelmann et al. in review*.
-
 &nbsp;
 
+##Daily CO2 and CH4 Fluxes
 ```{r figure2, fig.height = 6, fig.width = 10, fig.align = "center",fig.cap="Fig. 2: Daily CH4, GEP, ER, and NEE fluxes across wetland core sites", echo=FALSE, warning=FALSE}
 a <- ggplot(all_daily, aes(x=date, y=mgCH4, color=site)) +
   geom_line() + theme_bw() +
@@ -133,6 +150,7 @@ grid.arrange(iA, iB, iC, iD, ncol=1)
 ```
 Daily **NEE** fluxes are quite similar across sites, including the partitioned **GEP** and **ER** fluxes. However, daily **F_CH4** are notably lower at the alluvium site, despite the fact that it has similar magnitude photosynthetic input to the old peat site (Fig. 2), and by 2016, much larger photosynthetic input than the young peat site (Fig. 2). This observation displays a clear disconnect between recent photosynthetic input and wetland **F_CH4**. 
 
+##Trajectories Post-Restoration
 The trajectory post-restoration of the recently restored peat and alluvium sites are also notably divergent (Fig. 3). CH_4 fluxes are largest 1 year post-restoration and reduce with time, whereas the alluvium site fluxes gradually increase with time but are much lower than the peat site **F_CH4** (Fig. 3 below).
 
 &nbsp;
@@ -154,9 +172,7 @@ ggplot(trajectory, aes(x=(dday-365), y=mgCH4, color=site)) +
   xlab("Day since restoration")
 ```
 
-##Annual flux comparisons
-For annual budget analysis, we first combine the yearly datasets into a single dataframe from which we can estimate mean annual fluxes and complete cross-site comparisons. Below are the mean annual fluxes with standard deviations.
-
+# Annual flux comparisons
 ```{r combine_annual, echo=FALSE}
 #Add age since restoration variable
 peat19_yearly$age <- peat19_yearly$year - 1997
@@ -171,7 +187,7 @@ all_sites <- rbind(peat19_yearly, peat6_yearly); all_sites <- rbind(all_sites, a
 #remove incomplete years
 all_sites <- subset(all_sites, Days >= 365)
 ```
-
+**Table 1: Mean annual C fluxes (+/- SD) across core sites.**
 ```{r table1, echo=FALSE}
 combined <- all_sites %>%
   group_by(site) %>%
@@ -187,9 +203,12 @@ combined <- all_sites %>%
             sdGHG = sd(GHGbalance),
             sites_years = sum(!is.na(tNEE)))
 
-kable(combined, caption="Mean annual fluxes and site years", digits = 2)
+kable(combined, digits = 2)
 
 ```
+&nbsp;
+
+There is considerable overlap in the mean annual **NEE**, **GEP**, and **ER** fluxes across all three sites. Looking at the statistics below, the only significant difference across sites exists for CH_4 fluxes, and for CH_4 fluxes, the annual fluxes from the alluvium site are significantly lower than either peat site, yet the peat sites are not significantly different from one another (see *TukeyHSD* comparison)
 
 ```{r site compare, fig.height = 6, fig.width = 8, fig.align = "center",fig.cap="Fig. 4: Annual wetland flux comparisons", echo=FALSE}
 #plotting site comparisons
@@ -212,11 +231,8 @@ d <- ggplot(all_sites, aes(x=site, y=tER)) +
 grid.arrange(a, b, c, d, nrow=2)
 
 ```
-&nbsp;
 
-#Significance testing
-There is considerable overlap in the mean annual **NEE**, **GEP**, and **ER** fluxes across all three sites. Looking at the statistics below, the only significant difference across sites exists for CH_4 fluxes, and for CH_4 fluxes, the annual fluxes from the alluvium site are significantly lower than either peat site, yet the peat sites are not significantly different from one another (see *TukeyHSD* comparison)
-
+## Significance testing
 ```{r stats}
 NEE <- aov(all_sites$tNEE ~ all_sites$site); summary(NEE)
 
