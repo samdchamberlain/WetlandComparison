@@ -78,6 +78,7 @@ alluvium_yearly <- yearly
 alluvium_daily <- daily
 alluvium_yearly$site <- "Alluvium - 3 yr old"
 alluvium_daily$site <- "Alluvium - 3 yr old"
+alluvium_all$site <- "Alluvium - 3 yr old"
 
 #remove other dataframes
 rm(yearly); rm(daily); rm(alluvium_eddy); rm(alluvium_met)

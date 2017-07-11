@@ -73,6 +73,7 @@ peat6_yearly <- yearly
 peat6_daily <- daily
 peat6_yearly$site <- "Peat - 6 yr old"
 peat6_daily$site <- "Peat - 6 yr old"
+peat6_all$site <- "Peat - 6 yr old"
 
 #remove other dataframes
 rm(yearly); rm(daily); rm(peat6_eddy); rm(peat6_met)

@@ -2,7 +2,6 @@
 title: "Wetland inter-comparison"
 author: "Sam Chamberlain"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
 ---
 -------
 
@@ -15,7 +14,7 @@ knitr::opts_chunk$set(
   comment = "#>")
 ```
 
-This .rmd goes step-by-step through the analysis used in Sam Chamberlain's wetland methane flux intercomparison. All analysis completed within R is reproducible within this document; however, model hypothesis testing and information theory analysis was conducted in MATLAB. The MATLAB analyses are not directly reproducible from this document, but links to MATLAB scripts are provide along with instructions to repeat those analyses. Otherwise, all statistics, figures, and tables will be recreated within this script.
+This .rmd goes step-by-step through the analysis used in Sam Chamberlain's wetland methane flux inter-comparison. All analysis completed within R is reproducible within this document; however, information theory analysis was conducted in MATLAB. The MATLAB analyses are not directly reproducible from this document, but links to MATLAB scripts are provide along with instructions to repeat those analyses. Otherwise, all statistics, figures, and tables will be recreated within this script.
 
 ## Loading packages
 
@@ -64,8 +63,8 @@ all_annual <- subset(all_annual, Days >= 365)
 &nbsp;
 &nbsp;
 
-# Figures and analysis
-## Wetland Met Drivers
+## Wetland Time Series
+### Met Drivers
 ```{r figure1, fig.height = 5, fig.width = 8, fig.align = "center",fig.cap="Fig. 1: Meteorological variables across core sites", echo=FALSE, warning=FALSE}
 #create a date variable for x variable
 all_daily$date <- as.Date(all_daily$datetime)
@@ -107,10 +106,11 @@ iD$widths[2:5] <- as.list(maxWidth);
 
 grid.arrange(iA, iB, iC, iD, ncol=1)
 ```
+
 Daily time series for dominant met drivers (**Tair**, **Tw**, **PAR**, **WTD**) across the three core sites. Atmospheric drivers (**Tair** and **PAR**) are equivalent across sites. The old peat site experienced some water table drops early on, but otherwise the sites are consistently inundated. Water temperature (**Tw**) is lower at the old peat site due to differences in site structure explained in more detail in *Eichelmann et al. in review*.
 &nbsp;
 
-## Daily CO2 and CH4 Fluxes
+### Daily CO2 and CH4 Fluxes
 ```{r figure2, fig.height = 5, fig.width = 8, fig.align = "center",fig.cap="Fig. 2: Daily CH4, GEP, ER, and NEE fluxes across wetland core sites", echo=FALSE, warning=FALSE}
 a <- ggplot(all_daily, aes(x=date, y=mgCH4, color=site)) +
   geom_line() + theme_bw() +
@@ -149,9 +149,10 @@ iD$widths[2:5] <- as.list(maxWidth);
 
 grid.arrange(iA, iB, iC, iD, ncol=1)
 ```
+
 Daily **NEE** fluxes are quite similar across sites, including the partitioned **GEP** and **ER** fluxes. However, daily **F_CH4** are notably lower at the alluvium site, despite the fact that it has similar magnitude photosynthetic input to the old peat site (Fig. 2), and by 2016, much larger photosynthetic input than the young peat site (Fig. 2). This observation displays a clear disconnect between recent photosynthetic input and wetland **F_CH4**. 
 
-## Trajectories Post-Restoration
+### Trajectories Post-Restoration
 The trajectory post-restoration of the recently restored peat and alluvium sites are also notably divergent (Fig. 3). CH_4 fluxes are largest 1 year post-restoration and reduce with time, whereas the alluvium site fluxes gradually increase with time but are much lower than the peat site **F_CH4** (Fig. 3 below).
 
 &nbsp;
@@ -176,7 +177,7 @@ ggplot(trajectory, aes(x=(dday-365), y=mgCH4, color=site)) +
 &nbsp;
 &nbsp;
 
-# Annual flux comparisons
+## Annual flux comparisons
 ```{r combine_annual, echo=FALSE}
 #Add age since restoration variable
 peat19_yearly$age <- peat19_yearly$year - 1997
@@ -212,7 +213,9 @@ kable(combined, digits = 2)
 ```
 &nbsp;
 
-There is considerable overlap in the mean annual **NEE**, **GEP**, and **ER** fluxes across all three sites. Looking at the statistics below, the only significant difference across sites exists for CH_4 fluxes, and for CH_4 fluxes, the annual fluxes from the alluvium site are significantly lower than either peat site, yet the peat sites are not significantly different from one another (see *TukeyHSD* comparison)
+There is considerable overlap in the mean annual **NEE**, **GEP**, and **ER** fluxes across all three sites. Looking at the statistics below, the only significant difference across sites exists for CH_4 fluxes, and for CH_4 fluxes, the annual fluxes from the alluvium site are significantly lower than either peat site (*P* < 0.05), yet the peat sites are not significantly different from one another (*P* = 0.92).
+
+&nbsp;
 
 ```{r site compare, fig.height = 6, fig.width = 8, fig.align = "center",fig.cap="Fig. 4: Annual wetland flux comparisons", echo=FALSE}
 #plotting site comparisons
@@ -237,7 +240,7 @@ grid.arrange(a, b, c, d, nrow=2)
 ```
 
 ## Significance testing
-```{r stats}
+```{r stats, echo=FALSE}
 NEE <- aov(all_sites$tNEE ~ all_sites$site); summary(NEE)
 
 GPP <- aov(all_sites$tGEP ~ all_sites$site); summary(GPP)
@@ -247,3 +250,54 @@ ER <- aov(all_sites$tER ~ all_sites$site); summary(ER)
 CH4 <- aov(all_sites$tCH4 ~ all_sites$site); summary(CH4)
 TukeyHSD(CH4)
 ```
+
+&nbsp;
+
+## What drives variation in CH4 flux magnitudes across sites?
+There are many potential drivers that could lead to differences in wetland CH4 fluxes. These include:
+
+1. Substrate limitation via
+    * lack of available SOC
+    * lack of photosynthetic input
+2. Differences in biophysical environment via
+    * plant community composition
+    * diffusion conditions
+    * canopy structure (open v. closed)
+3. Inhibition
+    * Alternative electron acceptor pools
+      + Transient AEEs (SO4, NO3)
+      + Conserved AEEs (Fe, Mn)
+
+Below, I will evaluate each possible hypothesis until we can settle on a most likely candidate.
+
+### 1. Substrate limitation
+The substrate limitation hypothesis can be ruled out by examining the the partitioned GEP and ER fluxes across the three wetland sites. First, the alluvium site is likely not limited by recent photosynthates because there are no significant differences in annual GEP across sites (*P* = 0.97). In fact, in 2015 daily GEP at the alluvium site was similar to both peat sites, yet the annual CH4 fluxes were roughly half the magnitude. This clearly displays a disconnect between recent photosynthate and methane fluxes from these wetlands.
+
+Methane fluxes may also be reduced if there is limited SOC available for methanogenesis. This is a distinct possibility because the alluvium soil areas may contain lower SOC. However, we can rule out this hypothesis because there are no significant differences in respiration fluxes across sites (*P* = 0.91), and by 2016 respiration fluxes were somewhat larger from the alluvium site (Fig. 2). If SOC was limiting methanogenesis, we would expect to see similar reductions in annual ER that were observed in CH4 fluxes (Fig. 4). As we do not observe a similar reduction in ER we can logically rule out this hypothesis.
+
+### 2. Biophysical environment
+Another possibility is that there are differences in the biophysical environment that drove reduced fluxes from the alluvium wetland. Plant communities are similarly mixed across sites, as all three flux footprints are a mosaic of *Schoenoplectus actus* and *Typha latifolia*. It is therefore unlikely that differences in plant community are driving observed differences, as strong gradients in community structure are not observed across sites.
+
+Need to add diffusion analysis..........
+
+Canopy structure in terms of open water versus closed vegetation is another factor that may drive differences in observed CH4 fluxes, as was demonstrated using multiple towers across space in the young peat wetland (Hatala et al. 2014). However, closed versus open does not provide a clear explanation of observed site differences in this case because we observe no difference in annual CH4 flux between the two peat wetlands (*P* = 0.93), and these two sites are the most different in terms of open and closed canopies. The old peat site is completely closed with no standing water and a fully saturated decomposed organic matter layer, while the young peat wetland contains many open water channels within the flux footprint (**Fig. S**). If canopy structure is a dominant driver of CH4 fluxes we should expect differences between these sites. The alluvium site contains some open water channels and is dominantly vegetated within standing water, and is more intermediate along the open to closed gradient, so the reduced fluxes from this site are not explained by an extreme of canopy structure.
+
+### 3. Methanogenesis inhibition
+Methanogenesis inhibition may also explain differences between peat and alluvium sites. Alternative electron acceptors, such as nitrate or sulphate, are unlikely candidates for the long term reduction observed at the alluvium site because they are lost from the system and generally cause more transient inhibition. I can't rule this out.....
+
+
+
+# Flux pattern analysis
+## Diel patterns across sites
+How do flux patterns vary across wetland sites, and do they change year to year?
+```{r diel figure, fig.height = 3, fig.width = 8, fig.align = "center",fig.cap="Fig. 4: Diel patterns by site and year", echo=FALSE}
+source("R/Diel_patterns.R") #process the data
+
+ggplot(diel_all, aes(x=time, y=CH4, color=factor(year))) +
+  geom_line(size=0.5) + facet_grid(.~site) +
+  ylab(expression(F[CH4]~" ("~nmol~m^{-2}~s^{-1}~")")) +
+  xlab("Time of day (hr)") + labs(color='Year')  +
+  theme_bw() +
+  theme(panel.grid.minor = element_blank(), panel.grid.major.y = element_blank())
+```
+
