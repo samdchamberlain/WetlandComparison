@@ -6,9 +6,9 @@
 #' @importFrom dplyr "%>%"
 
 # load eddy flux and met dataset
-load("data/peat6_all.Rda")
-load("data/peat19_all.Rda")
-load("data/alluvium_all.Rda")
+load("data/peat6_all.Rdata")
+load("data/peat19_all.Rdata")
+load("data/alluvium_all.Rdata")
 
 ## Process each core site into diel values then we will merge them into a single file for visualization
 # diel fluxes from 6yr old peat site

@@ -6,7 +6,7 @@
 #' @importFrom dplyr "%>%"
 
 # load eddy flux and met dataset
-load("data/peat19_all.Rda")
+load("data/peat19_all.Rdata")
 
 #Simple average of daily fluxes for gapfilled values
 daily <- peat19_all %>%

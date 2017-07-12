@@ -7,7 +7,7 @@
 #' @importFrom zoo na.approx
 
 # load eddy flux and met dataset
-load("data/alluvium_all.Rda")
+load("data/alluvium_all.Rdata")
 
 # create a long-term water temperature measure, as the probes have changed over time
 # when we don't have a 10cm water temp measurement, add 8cm depth in place
