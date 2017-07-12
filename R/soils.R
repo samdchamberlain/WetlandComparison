@@ -3,12 +3,11 @@
 #' Sites: Peat 20 yr old, Alluvium 4 yr old. More to follow
 #'
 #' @import dplyr
-#' @importFrom readr read_csv
 #' @importFrom dplyr "%>%"
 
 #load data.frames for pH and iron
-pH_data <- read_csv("data/pH.csv")
-Fe_data <- read_csv("data/Fe_data.csv")
+pH_data <- read.csv("data/pH.csv")
+Fe_data <- read.csv("data/Fe_data.csv")
 
 #clean data tables to remove empty columns and rows
 pH_data <- pH_data[,colSums(is.na(pH_data))<nrow(pH_data)] #columns
@@ -19,9 +18,9 @@ Fe_data <- na.omit(Fe_data) #rows
 
 #merge data sources to single dataframe, clean up remaining dataframe
 soils_df <- merge(pH_data, Fe_data, by="Number") %>%
-  select(Number, `Depth (cm).x`, Tract.x, Point.x, Area.x, pH, `Fe(II)_mg.g`,
-         Fe_all_mg.g, `Fe(III)_mg.g`) %>%
-  rename(Depth = `Depth (cm).x`, FeII_mg.g = `Fe(II)_mg.g`, FeIII_mg.g = `Fe(III)_mg.g`)
+  select(Number, Depth..cm..x, Tract.x, Point.x, Area.x, pH, Fe.II._mg.g,
+         Fe_all_mg.g, Fe.III._mg.g) %>%
+  rename(Depth = Depth..cm..x, FeII_mg.g = Fe.II._mg.g, FeIII_mg.g = Fe.III._mg.g)
 
 #create site variable based on 'Area' site names
 soils_df$site <- ifelse(soils_df$Area.x == "East End", "Alluvium - 3 yr old",
