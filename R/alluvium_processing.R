@@ -4,19 +4,10 @@
 #'
 #' @import dplyr
 #' @importFrom dplyr "%>%"
-#' @importFrom lubridate month
 #' @importFrom zoo na.approx
 
-# load datasets
-load("data/alluvium_eddy.Rda") #eddy fluxes
-load("data/alluvium_met.Rda") #met variables
-
-# merge met and eddy dataframes by shared time variable
-alluvium_all <- merge(alluvium_eddy, alluvium_met, by="decday")
-alluvium_all$datetime <- as.POSIXct((alluvium_all$Mdate  - 719529)*86400, origin = "1970-01-01", tz = "UTC")
-alluvium_all$month <- month(alluvium_all$datetime)
-alluvium_all$yr.m <- paste(alluvium_all$year, alluvium_all$month, sep="_")
-alluvium_all$dday <- floor(alluvium_all$decday)
+# load eddy flux and met dataset
+load("data/alluvium_all.Rda")
 
 # create a long-term water temperature measure, as the probes have changed over time
 # when we don't have a 10cm water temp measurement, add 8cm depth in place
@@ -81,7 +72,7 @@ alluvium_daily$site <- "Alluvium - 3 yr old"
 alluvium_all$site <- "Alluvium - 3 yr old"
 
 #remove other dataframes
-rm(yearly); rm(daily); rm(alluvium_eddy); rm(alluvium_met)
+rm(yearly); rm(daily);
 
 
 

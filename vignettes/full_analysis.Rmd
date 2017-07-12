@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 This .rmd goes step-by-step through the analysis used in Sam Chamberlain's wetland methane flux inter-comparison. All analysis completed within R is reproducible within this document; however, information theory analysis was conducted in MATLAB. The MATLAB analyses are not directly reproducible from this document, but links to MATLAB scripts are provide along with instructions to repeat those analyses. Otherwise, all statistics, figures, and tables will be recreated within this script.
 
-## Loading packages
+### Loading packages
 
 ```{r packages, message=FALSE}
 library(knitr)
@@ -27,7 +27,7 @@ library(scales)
 library(zoo)
 ```
 
-## Data processing and budgets
+### Data processing and budgets
 
 In the following *_processing.R* files, half-hourly flux and met files for all sites are merged and processed into daily and yearly fluxes. Each *.R* contains an identical script re-run for each site, where the input met variables (temp probe depths) vary across sites. All processing relies on *tidyverse* package.
 
@@ -38,7 +38,7 @@ source("R/peat6_processing.R") #6yr old peat site
 source("R/alluvium_processing.R") #alluvium site
 ```
 
-## Merging files
+### Merging files
 Now we can combine the individual files into single sets with all data indexed by site.
 ```{r combine_daily}
 #merge daily sums to single dataset
@@ -65,7 +65,7 @@ all_annual <- subset(all_annual, Days >= 365)
 
 ## Wetland Time Series
 ### Met Drivers
-```{r figure1, fig.height = 5, fig.width = 8, fig.align = "center",fig.cap="Fig. 1: Meteorological variables across core sites", echo=FALSE, warning=FALSE}
+```{r figure1, fig.height = 6, fig.width = 8, fig.align = "center",fig.cap="Fig. 1: Meteorological variables across core sites", echo=FALSE, warning=FALSE}
 #create a date variable for x variable
 all_daily$date <- as.Date(all_daily$datetime)
 
@@ -111,7 +111,7 @@ Daily time series for dominant met drivers (**Tair**, **Tw**, **PAR**, **WTD**) 
 &nbsp;
 
 ### Daily CO2 and CH4 Fluxes
-```{r figure2, fig.height = 5, fig.width = 8, fig.align = "center",fig.cap="Fig. 2: Daily CH4, GEP, ER, and NEE fluxes across wetland core sites", echo=FALSE, warning=FALSE}
+```{r figure2, fig.height = 6, fig.width = 8, fig.align = "center",fig.cap="Fig. 2: Daily CH4, GEP, ER, and NEE fluxes across wetland core sites", echo=FALSE, warning=FALSE}
 a <- ggplot(all_daily, aes(x=date, y=mgCH4, color=site)) +
   geom_line() + theme_bw() +
   scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
@@ -239,7 +239,7 @@ grid.arrange(a, b, c, d, nrow=2)
 
 ```
 
-## Significance testing
+### Annual flux significance testing
 ```{r stats, echo=FALSE}
 NEE <- aov(all_sites$tNEE ~ all_sites$site); summary(NEE)
 
@@ -265,25 +265,66 @@ There are many potential drivers that could lead to differences in wetland CH4 f
     * canopy structure (open v. closed)
 3. Inhibition
     * Alternative electron acceptor pools
-      + Transient AEEs (SO4, NO3)
-      + Conserved AEEs (Fe, Mn)
+        + Transient AEEs (SO4, NO3)
+        + Conserved AEEs (Fe, Mn)
 
 Below, I will evaluate each possible hypothesis until we can settle on a most likely candidate.
 
 ### 1. Substrate limitation
 The substrate limitation hypothesis can be ruled out by examining the the partitioned GEP and ER fluxes across the three wetland sites. First, the alluvium site is likely not limited by recent photosynthates because there are no significant differences in annual GEP across sites (*P* = 0.97). In fact, in 2015 daily GEP at the alluvium site was similar to both peat sites, yet the annual CH4 fluxes were roughly half the magnitude. This clearly displays a disconnect between recent photosynthate and methane fluxes from these wetlands.
 
-Methane fluxes may also be reduced if there is limited SOC available for methanogenesis. This is a distinct possibility because the alluvium soil areas may contain lower SOC. However, we can rule out this hypothesis because there are no significant differences in respiration fluxes across sites (*P* = 0.91), and by 2016 respiration fluxes were somewhat larger from the alluvium site (Fig. 2). If SOC was limiting methanogenesis, we would expect to see similar reductions in annual ER that were observed in CH4 fluxes (Fig. 4). As we do not observe a similar reduction in ER we can logically rule out this hypothesis.
+Methane fluxes may also be reduced if there is limited SOC available for methanogenesis. This is a distinct possibility because the alluvium soil areas contained lower SOC in the pre-flooded soils (data not shown). However, we can rule out this hypothesis because there are no significant differences in respiration fluxes across sites (*P* = 0.91), and by 2016 respiration fluxes were somewhat larger from the alluvium site (Fig. 2). If SOC were limiting methanogenesis, we would expect to see similar reductions in annual ER that were observed in CH4 fluxes (Fig. 4). As we do not observe a similar reduction in ER we can logically rule out this hypothesis.
 
 ### 2. Biophysical environment
 Another possibility is that there are differences in the biophysical environment that drove reduced fluxes from the alluvium wetland. Plant communities are similarly mixed across sites, as all three flux footprints are a mosaic of *Schoenoplectus actus* and *Typha latifolia*. It is therefore unlikely that differences in plant community are driving observed differences, as strong gradients in community structure are not observed across sites.
 
 Need to add diffusion analysis..........
 
-Canopy structure in terms of open water versus closed vegetation is another factor that may drive differences in observed CH4 fluxes, as was demonstrated using multiple towers across space in the young peat wetland (Hatala et al. 2014). However, closed versus open does not provide a clear explanation of observed site differences in this case because we observe no difference in annual CH4 flux between the two peat wetlands (*P* = 0.93), and these two sites are the most different in terms of open and closed canopies. The old peat site is completely closed with no standing water and a fully saturated decomposed organic matter layer, while the young peat wetland contains many open water channels within the flux footprint (**Fig. S**). If canopy structure is a dominant driver of CH4 fluxes we should expect differences between these sites. The alluvium site contains some open water channels and is dominantly vegetated within standing water, and is more intermediate along the open to closed gradient, so the reduced fluxes from this site are not explained by an extreme of canopy structure.
+Canopy structure in terms of open water versus closed vegetation is another factor that may drive differences in observed CH4 fluxes, as was demonstrated using multiple towers across space in the young peat wetland (Hatala et al. 2014). However, closed versus open does not provide a clear explanation of observed site differences in this case because we observe no difference in annual CH4 flux between the two peat wetlands (*P* = 0.93), and these two sites are the most different in terms of open and closed canopies. The old peat site is completely closed with no standing water and a fully saturated decomposed organic matter layer, while the young peat wetland contains many open water channels within the flux footprint (**Fig. S**). If canopy structure is a dominant driver of CH4 fluxes we should expect differences between these sites. The alluvium site contains some open water channels and is dominantly vegetated within standing water, and is more intermediate along the open to closed gradient, so the reduced fluxes from this site are not explained by being on an extreme end of a open to closed canopy gradient.
 
 ### 3. Methanogenesis inhibition
-Methanogenesis inhibition may also explain differences between peat and alluvium sites. Alternative electron acceptors, such as nitrate or sulphate, are unlikely candidates for the long term reduction observed at the alluvium site because they are lost from the system and generally cause more transient inhibition. I can't rule this out.....
+Methanogenesis inhibition may also explain differences between peat and alluvium sites. Alternative electron acceptors, such as nitrate or sulphate, are unlikely candidates for the long term reduction observed at the alluvium site because they are lost from the system and generally cause more transient inhibition. Nitrate generally is not considered an important inhibitor due to its rapid uptake by plant roots (wetland review, 2014), but elevated sulphate concentrations found in seawater are observed to inhibit ecosystem-scale CH4 fluxes (CITATIONS). We can rule out sulphate inhibition as a likely candidate because the young peat site experienced a substaintial rise in salinity, peaking in 2016, but CH4 fluxes remained higher than the alluvium site (**Fig. S**). Additionally, water in the alluvium wetland was fresh throughout the measurement period (**Fig. S**), and sulphate from seawater is therefore an unlikely source of the potential inhibition.
+
+Iron may also cause long-term reduction in methanogenesis because it is not lost from the system via outgassing, and may be continually recycled to its oxidized form in the presence of oxygen. This recycling of Fe(III) could create long-term methanogenesis inhibition in soils given in the O2 input to soils via wetland plant roots (CITATION). Total iron concentrations were signficantly higher at the alluvium site compared to the old peat site (Fig. 5a; *P* < 0.005). The alluvium weltand soils contained high concentrations of iron is the surficial muck layer (20.9 mg Fe/g soil; Table 2) and compact underlying soil layer (19.3 mg Fe/g soil; Table 2). Iron was not found in appreciable quantities in the surface sediments at the old peat wetland (0.8 mg Fe/g soil; Table 2) which were composed of undecomposed organic matter, though the underlying sediments (~0.7 m below surface) contained appreciable iron concentrations (8.5 mg/g; Table 2). Similarly, pH was significantly lower in the alluvium sediments compared to the old peat site (Fig. 5b; *P* < 0.005), and at the alluvium site, pH was signficantly more acidic within the hardpack underlying soil compared to the surficial muck layer (Fig. 5b; *P* < 0.005)
+
+```{r Fig5, echo=FALSE, warning=FALSE, message=FALSE, fig.height=3, fig.width=8, fig.align = "center", fig.cap="Fig. 5: Soil pH and iron in surface and deep wetland sediments"}
+source("R/soils.R") #process soils data into summary dataframe
+
+a <- ggplot(soils_df, aes(x=site, y=Fe_all_mg.g, fill=horizon)) +
+  geom_boxplot() +
+  ylab(expression("Total Fe (mg Fe"~g^{-1}~"soil)"))
+
+b <- ggplot(soils_df, aes(x=site, y=pH, fill=horizon)) +
+  geom_boxplot() +
+  ylab(expression("pH"))
+
+grid.arrange(a, b, nrow=1)
+```
+
+Additionally, it is likely that the elevated iron concentrations at the alluvium site could inhibit CH4 fluxes because after four years of continuous inundation 25-31% of total iron was in the oxidized Fe(III) form (Table 2). A similar percentage of oxidized iron was observed within the deep peat soils 0.7m below surface (Table 2). It is unknown if CH4 produced in this deep layer contributed to ecosystem CH4 fluxes, so it is therefore unknown if Fe(III) presence in this deep layer attenuates net CH4 fluxes from the old peat wetland.
+
+**Table 2: Soil pH, total iron content, and percent of total iron in oxidized form (Fe(III)) across wetland sites within surface organic and deep soil horizons.**
+```{r table2, echo=FALSE}
+soil_properties <- soils_df %>%
+  group_by(site, horizon) %>%
+  summarise(pH_m = mean(pH),
+            pH_sd = sd(pH),
+            Fe_all_m = mean(Fe_all_mg.g),
+            Fe_all_sd = sd(Fe_all_mg.g),
+            percent_FeIII = mean(percent_ox),
+            percent_FeIII_sd = sd(percent_ox))
+
+kable(soil_properties, digits = 1)
+```
+
+#### Stats for this section
+```{r stat_soils}
+fe_aov <- aov(Fe_all_mg.g ~ site*horizon, data=soils_df); summary(fe_aov); 
+TukeyHSD(fe_aov)
+
+ph_aov <- aov(pH ~ site*horizon, data=soils_df); summary(ph_aov); 
+TukeyHSD(ph_aov)
+```
 
 
 

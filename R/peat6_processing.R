@@ -4,19 +4,9 @@
 #'
 #' @import dplyr
 #' @importFrom dplyr "%>%"
-#' @importFrom lubridate month
 
-
-# load datasets
-load("data/peat6_eddy.Rda") #eddy fluxes
-load("data/peat6_met.Rda") #met variables
-
-# merge met and eddy dataframes by shared time variable
-peat6_all <- merge(peat6_eddy, peat6_met, by="decday")
-peat6_all$datetime <- as.POSIXct((peat6_all$Mdate  - 719529)*86400, origin = "1970-01-01", tz = "UTC")
-peat6_all$month <- month(peat6_all$datetime)
-peat6_all$yr.m <- paste(peat6_all$year, peat6_all$month, sep="_")
-peat6_all$dday <- floor(peat6_all$decday)
+# load eddy flux and met dataset
+load("data/peat6_all.Rda")
 
 #Simple average of daily fluxes for gapfilled values
 daily <- peat6_all %>%
@@ -76,4 +66,4 @@ peat6_daily$site <- "Peat - 6 yr old"
 peat6_all$site <- "Peat - 6 yr old"
 
 #remove other dataframes
-rm(yearly); rm(daily); rm(peat6_eddy); rm(peat6_met)
+rm(yearly); rm(daily);
