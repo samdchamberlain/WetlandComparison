@@ -17,8 +17,8 @@ diel_peat6 <- peat6_all %>%
   group_by(year, time, site) %>%
   summarise(CH4 = mean(wm, na.rm=T),
             sdCH4 = sd(wm, na.rm=T),
-            GPP = mean(wc, na.rm=T),
-            sdGPP = sd(wc, na.rm=T),
+            NEE = mean(wc, na.rm=T),
+            sdNEE = sd(wc, na.rm=T),
             ET = mean(wq, na.rm=T),
             sdET = sd(wq, na.rm=T),
             Ta = mean(TA.y, na.rm=T),
@@ -34,8 +34,8 @@ diel_peat19 <- peat19_all %>%
   group_by(year, time, site) %>%
   summarise(CH4 = mean(wm, na.rm=T),
             sdCH4 = sd(wm, na.rm=T),
-            GPP = mean(wc, na.rm=T),
-            sdGPP = sd(wc, na.rm=T),
+            NEE = mean(wc, na.rm=T),
+            sdNEE = sd(wc, na.rm=T),
             ET = mean(wq, na.rm=T),
             sdET = sd(wq, na.rm=T),
             Ta = mean(TA.y, na.rm=T),
@@ -47,12 +47,12 @@ diel_peat19 <- peat19_all %>%
 
 #diel fluxes for 4yr old alluvium site
 diel_alluvium <- alluvium_all %>%
-  subset(DOY.x < 301 & DOY.x > 99) %>% #use growing season only
+  subset(DOY.x < 301 & DOY.x > 99 & year > 2013) %>% #use growing season only
   group_by(year, time, site) %>%
   summarise(CH4 = mean(wm, na.rm=T),
             sdCH4 = sd(wm, na.rm=T),
-            GPP = mean(wc, na.rm=T),
-            sdGPP = sd(wc, na.rm=T),
+            NEE = mean(wc, na.rm=T),
+            sdNEE = sd(wc, na.rm=T),
             ET = mean(wq, na.rm=T),
             sdET = sd(wq, na.rm=T),
             Ta = mean(TA.y, na.rm=T),

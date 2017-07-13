@@ -331,14 +331,30 @@ TukeyHSD(ph_aov)
 # Flux pattern analysis
 ## Diel patterns across sites
 How do flux patterns vary across wetland sites, and do they change year to year?
-```{r diel figure, fig.height = 3, fig.width = 8, fig.align = "center",fig.cap="Fig. 4: Diel patterns by site and year", echo=FALSE}
+```{r diel figure, fig.height = 8, fig.width = 8, fig.align = "center",fig.cap="Fig. 4: Diel patterns by site and year", echo=FALSE}
 source("R/Diel_patterns.R") #process the data
 
-ggplot(diel_all, aes(x=time, y=CH4, color=factor(year))) +
+a <- ggplot(diel_all, aes(x=time, y=CH4, color=factor(year))) +
   geom_line(size=0.5) + facet_grid(.~site) +
   ylab(expression(F[CH4]~" ("~nmol~m^{-2}~s^{-1}~")")) +
   xlab("Time of day (hr)") + labs(color='Year')  +
   theme_bw() +
   theme(panel.grid.minor = element_blank(), panel.grid.major.y = element_blank())
+
+b <- ggplot(diel_all, aes(x=time, y=NEE, color=factor(year))) +
+  geom_line(size=0.5) + facet_grid(.~site) +
+  ylab(expression(NEE~" ("~mu~mol~m^{-2}~s^{-1}~")")) +
+  xlab("Time of day (hr)") + labs(color='Year')  +
+  theme_bw() +
+  theme(panel.grid.minor = element_blank(), panel.grid.major.y = element_blank())
+
+c <- ggplot(diel_all, aes(x=time, y=ET, color=factor(year))) +
+  geom_line(size=0.5) + facet_grid(.~site) +
+  ylab(expression(ET~" ("~mmol~m^{-2}~s^{-1}~")")) +
+  xlab("Time of day (hr)") + labs(color='Year')  +
+  theme_bw() +
+  theme(panel.grid.minor = element_blank(), panel.grid.major.y = element_blank())
+
+grid.arrange(a, b, c, ncol=1)
 ```
 
