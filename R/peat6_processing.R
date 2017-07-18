@@ -20,7 +20,7 @@ daily <- peat6_all %>%
             ET = mean(wq_gf),           #evapotranspiration (umol m-2 s-1)
             q_obs = sum(!is.na(wq)),
             H = mean(H_gf),                    #sensible heat flux (W m-2)
-            mGCC = mean(GCCsmooth, na.rm=T),   #green index
+            mGCC = mean(GCC, na.rm=T),   #green index
             PAR = mean(PAR, na.rm=T),          #photosynthetic active radiation (umol m-2 s-1)
             Tair = mean(TA.y, na.rm=T),        #air temp (deg C)
             Tw = mean(TW_WATER_10cm, na.rm=T), #water temp (deg C)
