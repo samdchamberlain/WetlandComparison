@@ -287,16 +287,16 @@ Methanogenesis inhibition may also explain differences between peat and alluvium
 
 Iron may also cause long-term reduction in methanogenesis because it is not lost from the system via outgassing, and may be continually recycled to its oxidized form in the presence of oxygen. This recycling of Fe(III) could create long-term methanogenesis inhibition in soils given in the O2 input to soils via wetland plant roots (CITATION). Total iron concentrations were signficantly higher at the alluvium site compared to the old peat site (Fig. 5a; *P* < 0.005). The alluvium weltand soils contained high concentrations of iron is the surficial muck layer (20.9 mg Fe/g soil; Table 2) and compact underlying soil layer (19.3 mg Fe/g soil; Table 2). Iron was not found in appreciable quantities in the surface sediments at the old peat wetland (0.8 mg Fe/g soil; Table 2) which were composed of undecomposed organic matter, though the underlying sediments (~0.7 m below surface) contained appreciable iron concentrations (8.5 mg/g; Table 2). Similarly, pH was significantly lower in the alluvium sediments compared to the old peat site (Fig. 5b; *P* < 0.005), and at the alluvium site, pH was signficantly more acidic within the hardpack underlying soil compared to the surficial muck layer (Fig. 5b; *P* < 0.005)
 
-```{r Fig5, echo=FALSE, warning=FALSE, message=FALSE, fig.height=3, fig.width=8, fig.align = "center", fig.cap="Fig. 5: Soil pH and iron in surface and deep wetland sediments"}
+```{r Fig5, echo=FALSE, warning=FALSE, message=FALSE, fig.height=3, fig.width=10, fig.align = "center", fig.cap="Fig. 5: Soil pH and iron in surface and deep wetland sediments"}
 source("R/soils.R") #process soils data into summary dataframe
 
-a <- ggplot(soils_df, aes(x=site, y=Fe_all_mg.g, fill=horizon)) +
+a <- ggplot(soils_df, aes(x=site, y=FeT_mg.g, fill=horizon)) +
   geom_boxplot() +
-  ylab(expression("Total Fe (mg Fe"~g^{-1}~"soil)"))
+  ylab(expression("Total Fe (mg "~g^{-1}~"soil)"))
 
-b <- ggplot(soils_df, aes(x=site, y=pH, fill=horizon)) +
+b <- ggplot(soils_df, aes(x=site, y=FePC_mg.g, fill=horizon)) +
   geom_boxplot() +
-  ylab(expression("pH"))
+  ylab(expression("Poorly crystalline Fe (mg "~g^{-1}~"soil)"))
 
 grid.arrange(a, b, nrow=1)
 ```
@@ -319,11 +319,11 @@ kable(soil_properties, digits = 1)
 
 #### Stats for this section
 ```{r stat_soils}
-fe_aov <- aov(Fe_all_mg.g ~ site*horizon, data=soils_df); summary(fe_aov); 
+fe_aov <- aov(FeT_mg.g ~ site*horizon, data=soils_df); summary(fe_aov); 
 TukeyHSD(fe_aov)
 
-ph_aov <- aov(pH ~ site*horizon, data=soils_df); summary(ph_aov); 
-TukeyHSD(ph_aov)
+pc_aov <- aov(FePC_mg.g ~ site*horizon, data=soils_df); summary(pc_aov); 
+TukeyHSD(pc_aov)
 ```
 
 
