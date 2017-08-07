@@ -309,8 +309,8 @@ soil_properties <- soils_df %>%
   group_by(site, horizon) %>%
   summarise(pH_m = mean(pH),
             pH_sd = sd(pH),
-            Fe_all_m = mean(Fe_all_mg.g),
-            Fe_all_sd = sd(Fe_all_mg.g),
+            Fe_all_m = mean(FeT_mg.g),
+            Fe_all_sd = sd(FeT_mg.g),
             percent_FeIII = mean(percent_ox),
             percent_FeIII_sd = sd(percent_ox))
 
