@@ -54,7 +54,7 @@ alluvium_yearly$age <- alluvium_yearly$year - 2014
 peat19_yearly <- subset(peat19_yearly, year != 2013)
 
 #merge to single dataset
-all_annual <- rbind(peat19_yearly, peat6_yearly); all_sites <- rbind(all_annual, alluvium_yearly)
+all_annual <- rbind(peat19_yearly, peat6_yearly); all_annual <- rbind(all_annual, alluvium_yearly)
 
 #remove incomplete years
 all_annual <- subset(all_annual, Days >= 365)
@@ -358,3 +358,19 @@ c <- ggplot(diel_all, aes(x=time, y=ET, color=factor(year))) +
 grid.arrange(a, b, c, ncol=1)
 ```
 
+```{r cost_analysis}
+# Use pre-restoration values from Knox et al. 2015 for corn and pasture GHG balance
+site <- c("Ag Sites", "Ag Sites", "Ag Sites")
+GHGbalance <- c(1444, 1631, 2094)
+ag_sites <- data.frame(site, GHGbalance)
+
+#bind datasets
+cost_df <- rbind(cost_df, ag_sites)
+cost_df$cost <- cost_df$GHGbalance*(10000)*(10^-6)
+
+#plot average costs
+ggplot(cost_df, aes(x=site, y=cost)) +
+  geom_boxplot()
+
+test <- aov(cost_df$cost ~ cost_df$site); summary(test); TukeyHSD(test)
+```
