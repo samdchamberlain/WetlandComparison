@@ -106,10 +106,11 @@ all_daily <- rbind(peat19_daily, peat6_daily); all_daily <- rbind(all_daily, all
 ```
 
 ## Wetland Weather and Hydrology
-The three wetland sites on Sherman and Twitchell Islands experienced a similar conditions for major meteorologic and hydrologic drivers of ecosystem CO~2~ and CH~4~ fluxes (Fig. 2). Incoming *PAR* and *T~a~* exhibited strong seasonality, where peak values were observed in the summer months, and daily mean values were similar across all three wetland sites (Fig. 2a,b). Water temperature exhibited a similar seasonality across all three sites; however, *T~w~* was lower at the old peat compared to the two young wetland sites (Fig. 2c). Wetlands were similarly managed to maintain year-round inundation, where wetland ~WTD~ was meant to be above the land surface across all years (Fig. 2d). In some cases wetland water control structures would fail causing periods where the ~WTD~ would drop below the land surface. These events were common in summer 2013 at the old peat wetland, where the ~WTD~ dropped below the land surface many times over the course of the summer (Fig. 2d). A more detailed summary of annual meteorologic conditions across sites and years can be found in Eichelmann et al. (in review).
+The three wetland sites on Sherman and Twitchell Islands experienced similar meteorologic and hydrologic conditions for major biophysical drivers of CO~2~ and CH~4~ fluxes (Fig. 2). Incoming *PAR* and *T~a~* exhibited strong seasonality, where peak values were observed in summer months, and daily mean values were similar across all three wetland sites (Fig. 2a,b). Water temperature exhibited a similar seasonality across all three sites; however, *T~w~* was lower at the old peat compared to the two young wetland sites (Fig. 2c). Wetlands were similarly managed to maintain year-round inundation, where wetland *WTD* was maintained above the land surface across all years (Fig. 2d). In some cases, wetland water control structures would fail causing periods when the *WTD* would drop below the land surface. These events were common at the old peat wetland in summer 2013, when *WTD* dropped below the land surface 24 total days (Fig. 2d). A more detailed summary of meteorologic conditions across sites can be found in Eichelmann et al. (in review).
 
-```{r fig2, fig.cap="Daily mean (a) photosynthetically active radiation (*PAR*), (b) air temperature (*T~a~*), (c) water temperature (*T~w~*), and (d) water table depth (*WTD*) for the alluvium, young peat, and old peat wetland sites. The dashed line on panel d represents the ground surface elevation at the water table well location, and the sold line represents daily mean *WTD*.", warning=FALSE, fig.height=7, fig.width=8}
-all_daily$date <- as.Date(all_daily$datetime) #create a date variable for x variable
+```{r fig2, fig.cap="Daily mean (a) photosynthetically active radiation (*PAR*), (b) air temperature (*T~a~*), (c) water temperature (*T~w~*), and (d) water table depth (*WTD*) for the alluvium, young peat, and old peat wetland sites. The dashed line on panel d represents the ground surface elevation at the water table well location, and the solid lines represents daily mean *WTD*.", warning=FALSE, fig.height=7, fig.width=8}
+#create a date variable for x variable
+all_daily$date <- as.Date(all_daily$datetime)
 
 #create plot objects
 a <- ggplot(all_daily, aes(x=date, y=PAR, color=site)) +
@@ -117,8 +118,7 @@ a <- ggplot(all_daily, aes(x=date, y=PAR, color=site)) +
   scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
   ylab(expression(PAR~" ("~mu~mol~m^{-2}~s^{-1}~")")) + 
   annotate("text", x=as.Date("2010-10-01"), y=Inf, label="a", vjust=1, hjust=1) +
-  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(), axis.title.x = element_blank(),
-        legend.position="none")
+  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(), axis.title.x = element_blank())
 
 b <- ggplot(all_daily, aes(x=date, y=Tair, color=site)) +
   geom_line(size=0.5) + theme_bw() +
@@ -135,7 +135,8 @@ c <- ggplot(all_daily, aes(x=date, y=Tw, color=site)) +
   theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(), axis.title.x = element_blank())
 
 d <- ggplot(all_daily, aes(x=date, y=WTD, color=site)) +
-  geom_line(size=0.5) + theme_bw() + geom_hline(yintercept=0) +
+  geom_line(size=0.5) + theme_bw() + 
+  geom_hline(yintercept=0, linetype="dashed") +
   scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
   ylab("WTD (cm)") +
   annotate("text", x=as.Date("2010-10-01"), y=Inf, label="d", vjust=1, hjust=1) +
@@ -158,17 +159,29 @@ grid.arrange(iA, iB, iC, iD, ncol=1)
 ```{r soils, echo=FALSE, include=FALSE}
 source("R/soils.R") #process soils data into summary dataframe
 
-#compute signficant differences among sites. These output are reported in the following section, and significance is reported at 0.05, 0.001, and 0.0001 levels for P < 0.05. The maximum P value is used when multiple comparisons are cited
+#Computation of signficant differences among sites. These output are reported by hand in the following section, where significance is reported at 0.05, 0.001, and 0.0001 levels for all values where P < 0.05. In all cases, the maximum P value is reported when multiple Tukey HSD comparisons are cited. 
+
 hcl_fe <- aov(soils_df$FeT_mg.g ~ soils_df$site*soils_df$horizon) #hcl fe
 summary(hcl_fe); TukeyHSD(hcl_fe)
 
 pc_fe <- aov(soils_df$FePC_mg.g ~ soils_df$site*soils_df$horizon) #poorly crystalline fe
 summary(pc_fe); TukeyHSD(pc_fe)
 
-```
-HCl-extractable Fe concentrations were significantly higher in alluvium compared to peat sites in both recent (Tukey's HSD, *P* < 0.0001) and parent soil horizons (Fig. 3a; Tukey's HSD, *P* < 0.001). At the alluvium site, HCl-extractable Fe concentrations did not vary with depth (Tukey's HSD, *P* = 0.6); however at the peat sites, HCl-extractable Fe concentrations were lower in both young peat (Tukey's HSD, *P* = 0.051) and old peat sites (Tukey's HSD, *P* < 0.001). Mean Fe concentrations were `r mean(soils_df$FeT_mg.g[which(soils_df$site == "Young Peat" & soils_df$horizon == "Parent")]) - mean(soils_df$FeT_mg.g[which(soils_df$site == "Young Peat" & soils_df$horizon == "Recent")])` and `r mean(soils_df$FeT_mg.g[which(soils_df$site == "Old Peat" & soils_df$horizon == "Parent")]) - mean(soils_df$FeT_mg.g[which(soils_df$site == "Old Peat" & soils_df$horizon == "Recent")])` mg Fe g^-1^ lower in recent horizon for the young and old peat sites, respectively. Poorly crystalline Fe concentrations were roughly two orders of magnitude lower than HCl-extractable Fe concentrations across all three sites (Fig. 3a,b), and trends in poorly crystalline Fe were similar, as concentrations were signficantly higher in alluvium horizons compared to either peat wetland horizons (Tukey's HSD, *P* < 0.0001). Poorly crystalline Fe concentrations trended lower in recent horizons across all sites, but none of these differences were significant (Tukey's HSD, *P* > 0.08). Mean poorly crystalline Fe concentrations were over an order of magnitude higher in alluvium soils (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "aalluvium")])` mg Fe g^-1^ soil) compared to the young (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "Young Peat")])` mg Fe g^-1^ soil) and old (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "Old Peat")])` mg Fe g^-1^ soil) peat sites.
+ox_fe <- aov(soils_df$percent_ox ~ soils_df$site*soils_df$horizon) #percent oxidized
+summary(ox_fe); TukeyHSD(ox_fe)
 
-```{r fig3, fig.cap="Soil (a) HCl-extractable and (b) poorly crystalline iron (Fe), as well as (c) percent soil carbon (%C) in recent and parent sediments across three wetland sites (*n* 14 per depth). Solid horizontal lines are medians, boxes are the interquartile range (IQR), and whiskers are IQR. Points above each boxplot are the measured soils data for each site.", fig.width=8, fig.height=3, warning=FALSE}
+pH_aov <- aov(soils_df$pH ~ soils_df$site*soils_df$horizon) #percent oxidized
+summary(pH_aov); TukeyHSD(pH_aov)
+```
+
+Extractable Fe concentrations were significantly higher at the alluvium site compared to both peat sites in recent (Tukey's HSD, *P* < 0.0001) and parent soil horizons (Fig. 3a; Tukey's HSD, *P* < 0.001). At the alluvium site, extractable Fe concentrations did not vary with depth (Tukey's HSD, *P* = 0.6); however, extractable Fe concentrations were lower in the recently accreted horizon at both young peat (Tukey's HSD, *P* = 0.051) and old peat sites (Tukey's HSD, *P* < 0.001). Mean Fe concentrations were `r mean(soils_df$FeT_mg.g[which(soils_df$site == "Young Peat" & soils_df$horizon == "Parent")]) - mean(soils_df$FeT_mg.g[which(soils_df$site == "Young Peat" & soils_df$horizon == "Recent")])` and `r mean(soils_df$FeT_mg.g[which(soils_df$site == "Old Peat" & soils_df$horizon == "Parent")]) - mean(soils_df$FeT_mg.g[which(soils_df$site == "Old Peat" & soils_df$horizon == "Recent")])` mg Fe g^-1^ soil lower in recent compared to parent horizons at the young and old peat sites, respectively (Fig. 3a). Extractable Fe concentrations were close to zero in the recently accreted horizon at the old peat site (median = `r median(soils_df$FeT_mg.g[which(soils_df$site == "Old Peat" & soils_df$horizon == "Recent")])` mg Fe g^-1^), where the layer was predominantly poorly decomposed organic matter. Appreciable quantities of oxidized iron (Fe^3+^) were present in all other site horizons, and `r mean(soils_df$percent_ox[which(soils_df$site == "Alluvium")])`%, `r mean(soils_df$percent_ox[which(soils_df$site == "Young Peat")])`%, and `r mean(soils_df$percent_ox[which(soils_df$site == "Old Peat" & soils_df$horizon == "Parent")])`% of extractable Fe was Fe^3+^ at the alluvium site, young peat site, and parent horizon of the old peat site, respectively. The percentage of Fe in Fe^3+^ form did not vary between horizons at the young peat and alluvium sites (Tukey's HSD, *P* > 0.58).
+
+Poorly crystalline Fe concentrations were roughly two orders of magnitude lower than HCl-extractable Fe concentrations across all three sites (Fig. 3b), and trends in poorly crystalline Fe were similar to extractable Fe. Poorly crystalline Fe concentrations were signficantly higher in alluvium soils compared to young and old peat wetland soils (Tukey's HSD, *P* < 0.0001) and did not vary between peat sites (Tukey's HSD, *P* > 0.8). Poorly crystalline Fe concentrations trended lower in recent horizons across all sites, but none of these differences were significant (Tukey's HSD, *P* > 0.08). Mean poorly crystalline Fe concentrations were over an order of magnitude higher in alluvium soils (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "Alluvium")])` mg Fe g^-1^ soil) compared to the young (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "Young Peat")])` mg Fe g^-1^ soil) and old (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "Old Peat")])` mg Fe g^-1^ soil) peat sites (Fig. 3b).
+
+Soil pH also varied between wetland sites (ANOVA, *P* < 0.05), where pH was lowest at the alluvium site (mean = `r mean(soils_df$pH[which(soils_df$site == "Alluvium")])`), intermediate at the old peat site (mean = `r mean(soils_df$pH[which(soils_df$site == "Old Peat")])`), and near-neutral at the young peat site (mean  = `r mean(soils_df$pH[which(soils_df$site == "Young Peat")], na.rm=T)`) (Fig. 3c). pH did not vary by depth at either the old or young peat wetlands (Tukey's HSD, *P* > 0.49); however, pH varied signficantly by depth at the alluvium wetland (Tukey's HSD, *P* < 0.0001) where the parent horizon was more acidic (Fig. 3c).
+
+
+```{r fig3, fig.cap="Soil (a) HCl-extractable and (b) poorly crystalline iron (Fe), as well as soil (c) pH and (d) percent carbon (%C) in recent and parent sediments across the three wetland sites (*n* $\\geq$ 14 per depth). Solid horizontal lines are medians, boxes are the interquartile range (IQR), and whiskers are the 95% confidence interval. Points above each boxplot are the measured soils data for each site.", fig.width=8, fig.height=3, warning=FALSE}
 source("R/soils.R") #process soils data into summary dataframe
 
 a <- ggplot(soils_df, aes(x=site, y=FeT_mg.g, fill=horizon)) +
