@@ -61,9 +61,9 @@ yearly$GHGbalance <- (yearly$tNEE*44/12) + (25*yearly$tCH4*16/12) #CO2-eq m-2 yr
 #resave with specific names, and add a site name variable
 peat6_yearly <- yearly
 peat6_daily <- daily
-peat6_yearly$site <- "Peat - 6 yr old"
-peat6_daily$site <- "Peat - 6 yr old"
-peat6_all$site <- "Peat - 6 yr old"
+peat6_yearly$site <- "Young Peat"
+peat6_daily$site <- "Young Peat"
+peat6_all$site <- "Young Peat"
 
 #remove other dataframes
 rm(yearly); rm(daily);

@@ -30,12 +30,13 @@ csl: global-change-biology.csl
 ```{r setup, include=FALSE}
 #setwd to main package directory
 knitr::opts_knit$set(root.dir = normalizePath("../"))
+options(digits=2)
 
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>")
 
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ```{r packages, message=FALSE}
@@ -54,13 +55,13 @@ library(zoo)
 Wetlands plays a fundamental role in regulating global climate by storing ~18% of Earth's soil carbon (C) [@lal_carbon_2008], emitting ~30% of global methane (CH~4~) emissions [@kirschke_three_2013; @saunois_global_2016], while only occupying 5-8% of the terrestrial land surface [@mitsch_wetlands_2013]. Most wetlands are greenhouse gas (GHG) sinks over multi-century time scales due to carbon dioxide (CO~2~) sequestration within anoxic soils, though they are commonly greenhouse gas (GHG) sources over shorter time scales due to the high global warming potential of emitted CH~4~ [@whiting_greenhouse_2001; @mitsch_wetlands_2013; @petrescu_uncertain_2015]. Wetland C sequestration and CH~4~ emissions are inextricably linked, as the anoxic soil conditions that inhibits ecosystem respiration (*ER*) also activates archaeal CH~4~ production. The balance between these opposing fluxes primarily determines wetland GHG balances [@petrescu_uncertain_2015], and small differences in ecosystem CH~4~ emissions can induce large changes in wetland GHG exchange due to the > 28-fold radiative forcing of CH~4~ compared to CO~2~ over decadal to centennial time horizons [@pachauri_climate_2015]. Recent rises in atmospheric CH~4~ have been attributed to a global increase in wetland CH~4~ fluxes [@nisbet_rising_2016], and wetlands are currently the most uncertain component of the global CH~4~ budget [@kirschke_three_2013]. A key driver of this uncertainty is a lack of ecosystem-scale flux measurements to better constrain models and improve our understanding of how process-level controls scale to whole ecosystem CH~4~ emissions [@bridgham_methane_2013; @saunois_global_2016]. 
 <!-- It is therefore important to target ecosystem flux measurement campaigns across environmental gradients known to influence CH~4~ fluxes from small-scale field and laboratory studies. -->
 
-Methane fluxes from wetlands are governed by a number of interacting biophysical drivers including temperature, C inputs, alternative electron acceptor pools, and ecosystem inundation [@bridgham_methane_2013]. How these governing processes interact and scale to whole ecosystem fluxes if often highly uncertain due to sparse CH~4~ flux measurements across time and space [@petrescu_uncertain_2015], and current ecosystem measurement campaigns may under-sample relevant environmental gradients. Chamber flux syntheses have demonstrated that water table depth, temperature, vegetation, disturbance, and wetland type are important modulators of wetland CH~4~ flux [@turetsky_synthesis_2014]. A similar understanding of CH~4~ flux controls is emerging from eddy covariance studies, where temperature [@rinne_annual_2007; @olson_interannual_2013; @chu_net_2014], recent C inputs [@hatala_gross_2012; @morin_environmental_2014], wetland structure [@matthes_parsing_2014], and water table depth [@brown_evidence_2014; @goodrich_overriding_2015; @chamberlain_underlying_2015; @chamberlain_influence_2016; @sturtevant_identifying_2016; @chamberlain_impact_2017] have been identified as dominant controls across many ecosystems. Chamber and laboratory studies have also demonstrated the influence of soil C content [@bridgham_methane_2013; @ye_soil_2016] and alternative electron acceptor pools, such as sulfate and ferric iron (Fe(III)), on wetland CH~4~ fluxes [@laanbroek_methane_2010; @poffenbarger_salinity_2011; @bridgham_methane_2013]. However, the importance of these factors has not been consistently demonstrated at ecosystem scale. Recently, @holm_ecosystem_2016 and @krauss_component_2016 observed attenuation of ecosystem CH~4~ fluxes with increasing salinity (i.e. sulfate), verifying the ecosystem-scale relevance of previous chamber observations [@poffenbarger_salinity_2011]. Iron (Fe) presence is also expected to inhibit ecosystem CH~4~ fluxes [@laanbroek_methane_2010], as observed in many laboratory studies [@jackel_suppression_2000; @van_bodegom_direct_2004; @jerman_wetland_2009], but Fe inhibition to ecosystem fluxes has not been documented. Understanding the relevance of such factors may be particularly important to constraining wetland CH~4~ emissions from the tropics, the largest source of the global wetland CH~4~ emissions [@kirschke_three_2013], where high soil iron concentrations are known to influence organic matter decomposition and CH~4~ production rates in forest soils [@dubinsky_tropical_2010; @hall_iron_2013].
+Methane fluxes from wetlands are governed by a number of interacting biophysical drivers including temperature, C inputs, alternative electron acceptor pools, and ecosystem inundation [@bridgham_methane_2013]. How these governing processes interact and scale to whole ecosystem fluxes if often highly uncertain due to sparse CH~4~ flux measurements across time and space [@petrescu_uncertain_2015], and current ecosystem measurement campaigns may under-sample relevant environmental gradients. Chamber flux syntheses have demonstrated that water table depth, temperature, vegetation, disturbance, and wetland type are important modulators of wetland CH~4~ flux [@turetsky_synthesis_2014]. A similar understanding of CH~4~ flux controls is emerging from eddy covariance studies, where temperature [@rinne_annual_2007; @olson_interannual_2013; @chu_net_2014], recent C inputs [@hatala_gross_2012; @morin_environmental_2014], wetland structure [@matthes_parsing_2014], and water table depth [@brown_evidence_2014; @goodrich_overriding_2015; @chamberlain_underlying_2015; @chamberlain_influence_2016; @sturtevant_identifying_2016; @chamberlain_impact_2017] have been identified as dominant controls across many ecosystems. Chamber and laboratory studies have also demonstrated the influence of soil C content [@bridgham_methane_2013; @ye_soil_2016] and alternative electron acceptor pools, such as sulfate and ferric iron (Fe^3+^), on wetland CH~4~ fluxes [@laanbroek_methane_2010; @poffenbarger_salinity_2011; @bridgham_methane_2013]. However, the importance of these factors has not been consistently demonstrated at ecosystem scale. Recently, @holm_ecosystem_2016 and @krauss_component_2016 observed attenuation of ecosystem CH~4~ fluxes with increasing salinity (i.e. sulfate), verifying the ecosystem-scale relevance of previous chamber observations [@poffenbarger_salinity_2011]. Iron (Fe) presence is also expected to inhibit ecosystem CH~4~ fluxes [@laanbroek_methane_2010], as observed in many laboratory studies [@jackel_suppression_2000; @van_bodegom_direct_2004; @jerman_wetland_2009], but Fe inhibition to ecosystem fluxes has not been documented. Understanding the relevance of such factors may be particularly important to constraining wetland CH~4~ emissions from the tropics, the largest source of the global wetland CH~4~ emissions [@kirschke_three_2013], where high soil iron concentrations are known to influence organic matter decomposition and CH~4~ production rates in forest soils [@dubinsky_tropical_2010; @hall_iron_2013].
 
 Wetland restoration and management programs have increasingly been proposed and implemented as a means to mitigate climate change, and restoration strategies that minimize CH~4~ emissions and maximize CO~2~ uptake will provide the optimum climate benefit. These programs are particularly appealing in coastal ecosystems where CO~2~ sequestration rates are high and CH~4~ flux rates are low [@crooks_mitigating_2011; @conservation_international_blue; @poffenbarger_salinity_2011], and in drained peatlands where large CO~2~ emissions from oxidizing peat can be attenuated by re-flooding the landscape [@hatala_greenhouse_2012; @knox_agricultural_2015; @wilson_multiyear_2016]. A strong knowledge of CH~4~ flux drivers from restored wetlands is essential to these programs because the magnitude of CH~4~ fluxes may determine if restored wetlands are a GHG source or sink [@knox_agricultural_2015], and these CH~4~ emissions could affect the funding of wetland restoration programs if financed through carbon markets [@oikawa_evaluation_2017]. 
 
 The Sacramento-San Joaquin Delta region of California (hereafter referred to as the Delta) is an area of extensive wetland restoration where financing through California's Cap and Trade program is being considered. The Delta is comprised of a network of artificially drained islands reclaimed for agriculture, where the water table is maintained below sea level by active pumping and levees surrounding each island. Drainage began in the 1850's to facilitate agricultural development, and exposure of the highly organic soils has led to substantial land surface subsidence [@deverel_historic_2010] and CO~2~ emissions [@hatala_greenhouse_2012; @knox_agricultural_2015]. Prior to drainage, this region was a 5 billion m^3^ tidal marsh where soil mineral and C content varied substantially. A major driver of this soil variation was fluvial deposition from major rivers, which carried mineral alluvium from the Sierra Nevada mountain range to the Delta marshes. Alluvium marshes frequently developed adjacent to peat marsh soils that were spatially removed from the main river pathways. Alluvium soils are more common on islands adjacent to the Sacramento River compared to the central and eastern Delta region where fluvial deposition was less pronounced [@deverel_historic_2010]. These differences in pre-drainage wetland geomophology give rise to a contemporary agricultural landscape where large changes in soil carbon and mineral content occur over small spatial scales [@soilsurvey], but how this edaphic variation influences current GHG fluxes from restored wetlands is unknown. Understanding the importance of these legacy effects is highly desirable, as it would allow for more informed wetland restoration strategies where restoration sites could be chosen to minimize GHG emissions.
 
-The objectives of this study were to (1) determine how wetland CH~4~ and GHG budgets varied between peat and alluvium restored wetlands, (2) determine how soil properties varied across wetland types and which properties most likely caused observed flux differences, (3) identify if relationships between biophysical drivers and CH~4~ fluxes varied across wetland types, and (4) determine whether observed flux differences were economically relevant in a carbon market. We measured ecosystem-scale CH~4~ and CO~2~ fluxes by eddy covariance from three restored wetlands for 3+ years, where two wetlands were restored on peat soils and one wetland was restored on alluvium soil. We then used a combination of wavelet analysis and information theory to identify scale-emergent biophysical drivers of wetland CH~4~ fluxes and how they varied across the three wetlands, a technique previously applied by @sturtevant_identifying_2016 to identify scale-emergent CH~4~ flux controls for the two peat wetlands. We then measured multiple soil properties within the tower footprints, including soil C, nitrogen (N), ferrous iron (Fe(II)), Fe(III), and poorly crystalline Fe, to identify potential drivers of observed flux differences. These tower sites are an ideal network to isolate these controlling factors, as all wetlands sites have a similarly managed hydroperiod, are within 13 km of one another, experience the same climate, and have similar plant community compositions. Finally, we calculated potential economic benefits of restoring wetlands on peat versus alluvium soils using the observed differences in our eddy covariance fluxes and current carbon market costs used in California's Cap and Trade Program [@carbon_dash].
+The objectives of this study were to (1) determine how wetland CH~4~ and GHG budgets varied between peat and alluvium restored wetlands, (2) determine how soil properties varied across wetland types and which properties most likely caused observed flux differences, (3) identify if relationships between biophysical drivers and CH~4~ fluxes varied across wetland types, and (4) determine whether observed flux differences were economically relevant in a carbon market. We measured ecosystem-scale CH~4~ and CO~2~ fluxes by eddy covariance from three restored wetlands for 3+ years, where two wetlands were restored on peat soils and one wetland was restored on alluvium soil. We then used a combination of wavelet analysis and information theory to identify scale-emergent biophysical drivers of wetland CH~4~ fluxes and how they varied across the three wetlands, a technique previously applied by @sturtevant_identifying_2016 to identify scale-emergent CH~4~ flux controls for the two peat wetlands. We then measured multiple soil properties within the tower footprints, including soil C, nitrogen (N), ferrous iron (Fe^2+^), Fe^3+^, and poorly crystalline Fe, to identify potential drivers of observed flux differences. These tower sites are an ideal network to isolate these controlling factors, as all wetlands sites have a similarly managed hydroperiod, are within 13 km of one another, experience the same climate, and have similar plant community compositions. Finally, we calculated potential economic benefits of restoring wetlands on peat versus alluvium soils using the observed differences in our eddy covariance fluxes and current carbon market costs used in California's Cap and Trade Program [@carbon_dash].
 
 # Materials and Methods
 ## Site Description
@@ -76,7 +77,7 @@ Fluxes of CH~4~, CO~2~, H~2~O, and sensible heat were measured from all three we
 We also measured a number of auxiliary atmospheric and soil environmental variables averaged at half-hourly intervals and logged to CR1000 dataloggers (Campbell Scientific, Logan, Utah, USA). Atmospheric variables included air temperature (*T~a~*) and relative humidity (*RH*) using shielded and aspirated thermistor and capacitance sensors (HMP45C or HMP60; Viasala, Vantaa, Finland), atmospheric pressure (*PA*) using capacitance sensors (PTB110; Viasala, Vantaa, Finland), photosynthetically active radiation (*PAR*) using quantum sensors (PAR-LITE or PQS 1; Kipp and Zonen, Delft, Netherlands), and net radiation (*R~net~*) using four-component and double-sided net-radiometers (CNR1 or NR Lite; Kipp and Zonen, Delft, Netherlands). Double-sided net radiometers were only used at the young peat site. We also measured soil (*T~s~*) and water (*T~w~*) temperature at various depths using copper constant thermocouples, and water table depth (*WTD*) using pressure transducers (CS450 or CS451; Campbell Scientific, Logan, Utah, USA). An in depth description of the measurements made and instruments used at each site can be found in Eichelmann et al. (*in review*).
 
 ## Soil Analyses
-We measured soil C, N, and Fe content at the young peat, old peat, and alluvium sites in the recently accreted wetland O horizon and the underlying pre-restoration parent soils. Fifteen samples of both 0 horizon and parent soil were collected at each site across three transects with each sampling location at least 5m apart. The transects were within each tower's flux footprint (Fig. 1), all samples were collected from fully inundated locations, and the recently accreted O horizon sample was collected directly above the underlying parent soil sample. At the young peat and alluvium sites (both < 8 years old), the differentiation between these horizons was clear, as recently accreted O horizon was loose, mucky, and heavily comprised of poorly-decomposed plant matter, whereas the underlying parent horizon was hardpack agricultural soil. At these sites, we collected the recent O horizon by hand and the top 15cm of underlying parent soil using a sediment core. Our sampling strategy was different at the 20 year old peat site because more than 0.5m of O horizon has accumulated since initial restoration. Here, the wetland O horizon has accumulated to the water surface, and we collected the top 2 cm of this horizon to represent the most recently accreted peat. We then bore holes through the 0.5-0.7m saturated peat layer to collect the underlying agricultural soil horizon. Differentation between these layers was clear, as the top 0.5-0.7m was comprised of poorly-decomposed plant matter and the underlying horizon was silty soil. All soil samples were immediately bagged, and subsamples were field extracted in 0.5M HCl and 0.2M sodium citrate-0.05M sodium ascorbate solutions to measure total extractable Fe (Fe(II) and Fe(III)) and poorly crystalline Fe, respectively.
+We measured soil C, N, and Fe content at the young peat, old peat, and alluvium sites in the recently accreted wetland O horizon and the underlying pre-restoration parent soils. Fifteen samples of both 0 horizon and parent soil were collected at each site across three transects with each sampling location at least 5m apart. The transects were within each tower's flux footprint (Fig. 1), all samples were collected from fully inundated locations, and the recently accreted O horizon sample was collected directly above the underlying parent soil sample. At the young peat and alluvium sites (both < 8 years old), the differentiation between these horizons was clear, as recently accreted O horizon was loose, mucky, and heavily comprised of poorly-decomposed plant matter, whereas the underlying parent horizon was hardpack agricultural soil. At these sites, we collected the recent O horizon by hand and the top 15cm of underlying parent soil using a sediment core. Our sampling strategy was different at the 20 year old peat site because more than 0.5m of O horizon has accumulated since initial restoration. Here, the wetland O horizon has accumulated to the water surface, and we collected the top 2 cm of this horizon to represent the most recently accreted peat. We then bore holes through the 0.5-0.7m saturated peat layer to collect the underlying agricultural soil horizon. Differentation between these layers was clear, as the top 0.5-0.7m was comprised of poorly-decomposed plant matter and the underlying horizon was silty soil. All soil samples were immediately bagged, and subsamples were field extracted in 0.5M HCl and 0.2M sodium citrate-0.05M sodium ascorbate solutions to measure HCl-extractable Fe (Fe^2+^ and Fe^3+^) and poorly crystalline Fe, respectively.
 
 
 ## Data Analysis
@@ -93,6 +94,101 @@ $$H_{x,y}=-\sum_{x_t}\sum_{y_t}p(x_t,y_t)log_2p(x_t,y_t)$$
 where *x~t~* and *y~t~* are states within the overall distribution of *X* and *Y*. Here, we bin our continuous data into discrete states to calculate *H~x~*, *H~y~*, and *H~x,y~*. We follow the same processing methodology in @sturtevant_identifying_2016 for calculating *I*. Briefly, we first wavelet decomposed variables of interest into hourly, diel, and multiday scales, and following wavelet decomposition, original data gaps were reinserted into the wavelet detail reconstructions. Analyses for each year were confined to the growing season (DOY 100-300), and time series border periods were removed to avoid wavelet-induced distortions. We then calculated joint and marginal Shannon entropies using 10 fixed-interval bins for the probability distributions, and calculated *I* for a number of time lags and leads of *X*. We calculated *I* at lags and leads up to 5 hours for the hourly and diel time scales, and up to 8 days for the multiday time scale. In all cases, CH~4~ flux (*F~CH4~*) was treated as the *Y* variable, as we were interested in the response of *F~CH4~* to external drivers. Statistical significance was then calculated at a 95% threshold using 1000 Monte Carlo random walks that underwent the same processing steps described above. A more detailed description of this processing methodology can be found in @sturtevant_identifying_2016, and all wavelet decomposition and entropy calculations were conducted using the ProcessNetwork Software (http://www.mathworks.com/matlabcentral/fileexchange/41515-processnetwork-processnetwork-software). Here, we present relative mutual information (*I^R^*) where *I* is divided by the Shannon entropy of the Y variable (*F~CH4~*). 
 
 # Results
+
+```{r load_process}
+#load and process wetland sites into half-hourly, daily, and annual sums
+source("R/peat19_processing.R") #19yr old peat site
+source("R/peat6_processing.R") #6yr old peat site
+source("R/alluvium_processing.R") #alluvium site
+
+#merge daily sums to single dataset
+all_daily <- rbind(peat19_daily, peat6_daily); all_daily <- rbind(all_daily, alluvium_daily)
+```
+
+## Wetland Weather and Hydrology
+The three wetland sites on Sherman and Twitchell Islands experienced a similar conditions for major meteorologic and hydrologic drivers of ecosystem CO~2~ and CH~4~ fluxes (Fig. 2). Incoming *PAR* and *T~a~* exhibited strong seasonality, where peak values were observed in the summer months, and daily mean values were similar across all three wetland sites (Fig. 2a,b). Water temperature exhibited a similar seasonality across all three sites; however, *T~w~* was lower at the old peat compared to the two young wetland sites (Fig. 2c). Wetlands were similarly managed to maintain year-round inundation, where wetland ~WTD~ was meant to be above the land surface across all years (Fig. 2d). In some cases wetland water control structures would fail causing periods where the ~WTD~ would drop below the land surface. These events were common in summer 2013 at the old peat wetland, where the ~WTD~ dropped below the land surface many times over the course of the summer (Fig. 2d). A more detailed summary of annual meteorologic conditions across sites and years can be found in Eichelmann et al. (in review).
+
+```{r fig2, fig.cap="Daily mean (a) photosynthetically active radiation (*PAR*), (b) air temperature (*T~a~*), (c) water temperature (*T~w~*), and (d) water table depth (*WTD*) for the alluvium, young peat, and old peat wetland sites. The dashed line on panel d represents the ground surface elevation at the water table well location, and the sold line represents daily mean *WTD*.", warning=FALSE, fig.height=7, fig.width=8}
+all_daily$date <- as.Date(all_daily$datetime) #create a date variable for x variable
+
+#create plot objects
+a <- ggplot(all_daily, aes(x=date, y=PAR, color=site)) +
+  geom_line(size=0.5) + theme_bw() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab(expression(PAR~" ("~mu~mol~m^{-2}~s^{-1}~")")) + 
+  annotate("text", x=as.Date("2010-10-01"), y=Inf, label="a", vjust=1, hjust=1) +
+  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(), axis.title.x = element_blank(),
+        legend.position="none")
+
+b <- ggplot(all_daily, aes(x=date, y=Tair, color=site)) +
+  geom_line(size=0.5) + theme_bw() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab(expression(T[a]~" ("~degree~C~")")) +
+  annotate("text", x=as.Date("2010-10-01"), y=Inf, label="b", vjust=1, hjust=1) +
+  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(), axis.title.x = element_blank())
+
+c <- ggplot(all_daily, aes(x=date, y=Tw, color=site)) +
+  geom_line(size=0.5) + theme_bw() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab(expression(T[w]~" ("~degree~C~")")) +
+  annotate("text", x=as.Date("2010-10-01"), y=Inf, label="c", vjust=1, hjust=1) +
+  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(), axis.title.x = element_blank())
+
+d <- ggplot(all_daily, aes(x=date, y=WTD, color=site)) +
+  geom_line(size=0.5) + theme_bw() + geom_hline(yintercept=0) +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab("WTD (cm)") +
+  annotate("text", x=as.Date("2010-10-01"), y=Inf, label="d", vjust=1, hjust=1) +
+  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(), axis.title.x = element_blank())
+
+#Multiple plots aligned
+iA <- ggplotGrob(a)
+iB <- ggplotGrob(b)
+iC <- ggplotGrob(c)
+iD <- ggplotGrob(d)
+
+maxWidth = grid::unit.pmax(iA$widths[2:5], iB$widths[2:5], iC$widths[2:5], iD$widths[2:5])
+iA$widths[2:5] <- as.list(maxWidth); iB$widths[2:5] <- as.list(maxWidth); iC$widths[2:5] <- as.list(maxWidth);
+iD$widths[2:5] <- as.list(maxWidth);
+
+grid.arrange(iA, iB, iC, iD, ncol=1)
+```
+
+## Soil Properties
+```{r soils, echo=FALSE, include=FALSE}
+source("R/soils.R") #process soils data into summary dataframe
+
+#compute signficant differences among sites. These output are reported in the following section, and significance is reported at 0.05, 0.001, and 0.0001 levels for P < 0.05. The maximum P value is used when multiple comparisons are cited
+hcl_fe <- aov(soils_df$FeT_mg.g ~ soils_df$site*soils_df$horizon) #hcl fe
+summary(hcl_fe); TukeyHSD(hcl_fe)
+
+pc_fe <- aov(soils_df$FePC_mg.g ~ soils_df$site*soils_df$horizon) #poorly crystalline fe
+summary(pc_fe); TukeyHSD(pc_fe)
+
+```
+HCl-extractable Fe concentrations were significantly higher in alluvium compared to peat sites in both recent (Tukey's HSD, *P* < 0.0001) and parent soil horizons (Fig. 3a; Tukey's HSD, *P* < 0.001). At the alluvium site, HCl-extractable Fe concentrations did not vary with depth (Tukey's HSD, *P* = 0.6); however at the peat sites, HCl-extractable Fe concentrations were lower in both young peat (Tukey's HSD, *P* = 0.051) and old peat sites (Tukey's HSD, *P* < 0.001). Mean Fe concentrations were `r mean(soils_df$FeT_mg.g[which(soils_df$site == "Young Peat" & soils_df$horizon == "Parent")]) - mean(soils_df$FeT_mg.g[which(soils_df$site == "Young Peat" & soils_df$horizon == "Recent")])` and `r mean(soils_df$FeT_mg.g[which(soils_df$site == "Old Peat" & soils_df$horizon == "Parent")]) - mean(soils_df$FeT_mg.g[which(soils_df$site == "Old Peat" & soils_df$horizon == "Recent")])` mg Fe g^-1^ lower in recent horizon for the young and old peat sites, respectively. Poorly crystalline Fe concentrations were roughly two orders of magnitude lower than HCl-extractable Fe concentrations across all three sites (Fig. 3a,b), and trends in poorly crystalline Fe were similar, as concentrations were signficantly higher in alluvium horizons compared to either peat wetland horizons (Tukey's HSD, *P* < 0.0001). Poorly crystalline Fe concentrations trended lower in recent horizons across all sites, but none of these differences were significant (Tukey's HSD, *P* > 0.08). Mean poorly crystalline Fe concentrations were over an order of magnitude higher in alluvium soils (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "aalluvium")])` mg Fe g^-1^ soil) compared to the young (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "Young Peat")])` mg Fe g^-1^ soil) and old (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "Old Peat")])` mg Fe g^-1^ soil) peat sites.
+
+```{r fig3, fig.cap="Soil (a) HCl-extractable and (b) poorly crystalline iron (Fe), as well as (c) percent soil carbon (%C) in recent and parent sediments across three wetland sites (*n* 14 per depth). Solid horizontal lines are medians, boxes are the interquartile range (IQR), and whiskers are IQR. Points above each boxplot are the measured soils data for each site.", fig.width=8, fig.height=3, warning=FALSE}
+source("R/soils.R") #process soils data into summary dataframe
+
+a <- ggplot(soils_df, aes(x=site, y=FeT_mg.g, fill=horizon)) +
+  geom_boxplot() +
+  ylab(expression("HCl-extractable Fe (mg "~g^{-1}~"soil)")) +
+  theme(legend.position="none")
+
+b <- ggplot(soils_df, aes(x=site, y=FePC_mg.g, fill=horizon)) +
+  geom_boxplot() +
+  ylab(expression("Poorly crystalline Fe (mg "~g^{-1}~"soil)")) +
+  theme(legend.position="none")
+
+c <- ggplot(soils_df, aes(x=site, y=pH, fill=horizon)) +
+  geom_boxplot() +
+  ylab(expression("pH")) +
+  theme(legend.position="none")
+
+grid.arrange(a, b, c, nrow=1)
+```
+
 
 # References
 

@@ -67,9 +67,9 @@ yearly$GHGbalance <- (yearly$tNEE*44/12) + (25*yearly$tCH4*16/12) #CO2-eq m-2 yr
 #resave with specific names, and add site name variable
 alluvium_yearly <- yearly
 alluvium_daily <- daily
-alluvium_yearly$site <- "Alluvium - 3 yr old"
-alluvium_daily$site <- "Alluvium - 3 yr old"
-alluvium_all$site <- "Alluvium - 3 yr old"
+alluvium_yearly$site <- "Alluvium"
+alluvium_daily$site <- "Alluvium"
+alluvium_all$site <- "Alluvium"
 
 #remove other dataframes
 rm(yearly); rm(daily);
