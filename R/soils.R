@@ -18,8 +18,8 @@ soils_df$percent_ox <- ifelse(soils_df$FeT_mg.g <= 0, NA, soils_df$percent_ox) #
 
 #New surface v. deep column represents more accurately that we are comparing a recent muck layer
 # to a deep older soil layer. This deep layer at the peat site is actually ~0.7m below surface
-soils_df$horizon <- ifelse(soils_df$Depth == "0-15", "Recent", "Parent")
+soils_df$horizon <- ifelse(soils_df$Depth == "0-15", "Accreted", "Parent")
 
 #Also, need to fix West Pond point 1 where 15-30 was also 'surface' litter
 soils_df$horizon <- ifelse(soils_df$Area == "West Pond" & soils_df$Point == "P1",
-                           "Recent", soils_df$horizon)
+                           "Accreted", soils_df$horizon)

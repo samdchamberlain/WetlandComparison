@@ -77,7 +77,7 @@ Fluxes of CH~4~, CO~2~, H~2~O, and sensible heat were measured from all three we
 We also measured a number of auxiliary atmospheric and soil environmental variables averaged at half-hourly intervals and logged to CR1000 dataloggers (Campbell Scientific, Logan, Utah, USA). Atmospheric variables included air temperature (*T~a~*) and relative humidity (*RH*) using shielded and aspirated thermistor and capacitance sensors (HMP45C or HMP60; Viasala, Vantaa, Finland), atmospheric pressure (*PA*) using capacitance sensors (PTB110; Viasala, Vantaa, Finland), photosynthetically active radiation (*PAR*) using quantum sensors (PAR-LITE or PQS 1; Kipp and Zonen, Delft, Netherlands), and net radiation (*R~net~*) using four-component and double-sided net-radiometers (CNR1 or NR Lite; Kipp and Zonen, Delft, Netherlands). Double-sided net radiometers were only used at the young peat site. We also measured soil (*T~s~*) and water (*T~w~*) temperature at various depths using copper constant thermocouples, and water table depth (*WTD*) using pressure transducers (CS450 or CS451; Campbell Scientific, Logan, Utah, USA). An in depth description of the measurements made and instruments used at each site can be found in Eichelmann et al. (*in review*).
 
 ## Soil Analyses
-We measured soil C, N, and Fe content at the young peat, old peat, and alluvium sites in the recently accreted wetland O horizon and the underlying pre-restoration parent soils. Fifteen samples of both 0 horizon and parent soil were collected at each site across three transects with each sampling location at least 5m apart. The transects were within each tower's flux footprint (Fig. 1), all samples were collected from fully inundated locations, and the recently accreted O horizon sample was collected directly above the underlying parent soil sample. At the young peat and alluvium sites (both < 8 years old), the differentiation between these horizons was clear, as recently accreted O horizon was loose, mucky, and heavily comprised of poorly-decomposed plant matter, whereas the underlying parent horizon was hardpack agricultural soil. At these sites, we collected the recent O horizon by hand and the top 15cm of underlying parent soil using a sediment core. Our sampling strategy was different at the 20 year old peat site because more than 0.5m of O horizon has accumulated since initial restoration. Here, the wetland O horizon has accumulated to the water surface, and we collected the top 2 cm of this horizon to represent the most recently accreted peat. We then bore holes through the 0.5-0.7m saturated peat layer to collect the underlying agricultural soil horizon. Differentation between these layers was clear, as the top 0.5-0.7m was comprised of poorly-decomposed plant matter and the underlying horizon was silty soil. All soil samples were immediately bagged, and subsamples were field extracted in 0.5M HCl and 0.2M sodium citrate-0.05M sodium ascorbate solutions to measure HCl-extractable Fe (Fe^2+^ and Fe^3+^) and poorly crystalline Fe, respectively.
+We measured soil C, N, and Fe content at the young peat, old peat, and alluvium sites in the recently accreted wetland O horizon, hereafter referred to as accreted horizon, and the underlying pre-restoration parent soils, hereafter referred to as the parent horizon. Fifteen samples of both accreted and parent soil were collected at each site across three transects with each sampling location at least 5m apart. The transects were within each tower's flux footprint (Fig. 1), all samples were collected from fully inundated locations, and the accreted sample was collected directly above the underlying parent soil sample. At the young peat and alluvium sites (both < 8 years old), the differentiation between these horizons was clear, as recently accreted horizon was loose, mucky, and heavily comprised of poorly-decomposed plant matter, whereas the underlying parent horizon was hardpack agricultural soil. At these sites, we collected the accreted horizon by hand and the top 15cm of parent horizon using a sediment core. Our sampling strategy was different at the 20 year old peat site because more than 0.5m of O horizon has accumulated since initial restoration. Here, the accreted horizon has accumulated to the water surface, and we collected the top 2 cm of this horizon to represent the most recently accreted peat. We then bore holes through the 0.5-0.7m saturated peat layer to collect the underlying parent soil. Differentation between these layers was also clear, as the top 0.5-0.7m was comprised of poorly-decomposed plant matter and the underlying horizon was silty soil. All soil samples were immediately bagged, and subsamples were field extracted in 0.5M HCl and 0.2M sodium citrate-0.05M sodium ascorbate solutions to measure HCl-extractable Fe (Fe^2+^ and Fe^3+^) and poorly crystalline Fe, respectively.
 
 
 ## Data Analysis
@@ -174,14 +174,13 @@ pH_aov <- aov(soils_df$pH ~ soils_df$site*soils_df$horizon) #percent oxidized
 summary(pH_aov); TukeyHSD(pH_aov)
 ```
 
-Extractable Fe concentrations were significantly higher at the alluvium site compared to both peat sites in recent (Tukey's HSD, *P* < 0.0001) and parent soil horizons (Fig. 3a; Tukey's HSD, *P* < 0.001). At the alluvium site, extractable Fe concentrations did not vary with depth (Tukey's HSD, *P* = 0.6); however, extractable Fe concentrations were lower in the recently accreted horizon at both young peat (Tukey's HSD, *P* = 0.051) and old peat sites (Tukey's HSD, *P* < 0.001). Mean Fe concentrations were `r mean(soils_df$FeT_mg.g[which(soils_df$site == "Young Peat" & soils_df$horizon == "Parent")]) - mean(soils_df$FeT_mg.g[which(soils_df$site == "Young Peat" & soils_df$horizon == "Recent")])` and `r mean(soils_df$FeT_mg.g[which(soils_df$site == "Old Peat" & soils_df$horizon == "Parent")]) - mean(soils_df$FeT_mg.g[which(soils_df$site == "Old Peat" & soils_df$horizon == "Recent")])` mg Fe g^-1^ soil lower in recent compared to parent horizons at the young and old peat sites, respectively (Fig. 3a). Extractable Fe concentrations were close to zero in the recently accreted horizon at the old peat site (median = `r median(soils_df$FeT_mg.g[which(soils_df$site == "Old Peat" & soils_df$horizon == "Recent")])` mg Fe g^-1^), where the layer was predominantly poorly decomposed organic matter. Appreciable quantities of oxidized iron (Fe^3+^) were present in all other site horizons, and `r mean(soils_df$percent_ox[which(soils_df$site == "Alluvium")])`%, `r mean(soils_df$percent_ox[which(soils_df$site == "Young Peat")])`%, and `r mean(soils_df$percent_ox[which(soils_df$site == "Old Peat" & soils_df$horizon == "Parent")])`% of extractable Fe was Fe^3+^ at the alluvium site, young peat site, and parent horizon of the old peat site, respectively. The percentage of Fe in Fe^3+^ form did not vary between horizons at the young peat and alluvium sites (Tukey's HSD, *P* > 0.58).
+Extractable Fe concentrations were significantly higher at the alluvium site compared to both peat sites in the recently accreted (Tukey's HSD, *P* < 0.0001) and parent soil horizons (Fig. 3a; Tukey's HSD, *P* < 0.001). At the alluvium site, extractable Fe concentrations did not vary with depth (Tukey's HSD, *P* = 0.6); however, extractable Fe concentrations were lower in the accreted horizon at both young peat (Tukey's HSD, *P* = 0.051) and old peat sites (Tukey's HSD, *P* < 0.001). Mean Fe concentrations were `r mean(soils_df$FeT_mg.g[which(soils_df$site == "Young Peat" & soils_df$horizon == "Parent")]) - mean(soils_df$FeT_mg.g[which(soils_df$site == "Young Peat" & soils_df$horizon == "Accreted")])` and `r mean(soils_df$FeT_mg.g[which(soils_df$site == "Old Peat" & soils_df$horizon == "Parent")]) - mean(soils_df$FeT_mg.g[which(soils_df$site == "Old Peat" & soils_df$horizon == "Accreted")])` mg Fe g^-1^ soil lower in accreted compared to parent horizons at the young and old peat sites, respectively (Fig. 3a). Extractable Fe concentrations were close to zero in the accreted horizon at the old peat site (median = `r median(soils_df$FeT_mg.g[which(soils_df$site == "Old Peat" & soils_df$horizon == "Accreted")])` mg Fe g^-1^), where the layer was predominantly poorly decomposed organic matter. Appreciable quantities of oxidized iron (Fe^3+^) were present in all other site horizons, and `r mean(soils_df$percent_ox[which(soils_df$site == "Alluvium")])`%, `r mean(soils_df$percent_ox[which(soils_df$site == "Young Peat")])`%, and `r mean(soils_df$percent_ox[which(soils_df$site == "Old Peat" & soils_df$horizon == "Parent")])`% of extractable Fe was Fe^3+^ at the alluvium site, young peat site, and parent horizon of the old peat site, respectively. The percentage of Fe in Fe^3+^ form did not vary between horizons at the young peat and alluvium sites (Tukey's HSD, *P* > 0.58).
 
-Poorly crystalline Fe concentrations were roughly two orders of magnitude lower than HCl-extractable Fe concentrations across all three sites (Fig. 3b), and trends in poorly crystalline Fe were similar to extractable Fe. Poorly crystalline Fe concentrations were signficantly higher in alluvium soils compared to young and old peat wetland soils (Tukey's HSD, *P* < 0.0001) and did not vary between peat sites (Tukey's HSD, *P* > 0.8). Poorly crystalline Fe concentrations trended lower in recent horizons across all sites, but none of these differences were significant (Tukey's HSD, *P* > 0.08). Mean poorly crystalline Fe concentrations were over an order of magnitude higher in alluvium soils (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "Alluvium")])` mg Fe g^-1^ soil) compared to the young (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "Young Peat")])` mg Fe g^-1^ soil) and old (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "Old Peat")])` mg Fe g^-1^ soil) peat sites (Fig. 3b).
+Poorly crystalline Fe concentrations were roughly two orders of magnitude lower than HCl-extractable Fe concentrations across all three sites (Fig. 3b), and trends in poorly crystalline Fe were similar to extractable Fe. Poorly crystalline Fe concentrations were signficantly higher in alluvium soils compared to young and old peat wetland soils (Tukey's HSD, *P* < 0.0001) and did not vary between peat sites (Tukey's HSD, *P* > 0.8). Poorly crystalline Fe concentrations trended lower in accreted horizons across all sites, but none of these differences were significant (Tukey's HSD, *P* > 0.08). Mean poorly crystalline Fe concentrations were over an order of magnitude higher in alluvium soils (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "Alluvium")])` mg Fe g^-1^ soil) compared to the young (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "Young Peat")])` mg Fe g^-1^ soil) and old (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "Old Peat")])` mg Fe g^-1^ soil) peat soils (Fig. 3b).
 
 Soil pH also varied between wetland sites (ANOVA, *P* < 0.05), where pH was lowest at the alluvium site (mean = `r mean(soils_df$pH[which(soils_df$site == "Alluvium")])`), intermediate at the old peat site (mean = `r mean(soils_df$pH[which(soils_df$site == "Old Peat")])`), and near-neutral at the young peat site (mean  = `r mean(soils_df$pH[which(soils_df$site == "Young Peat")], na.rm=T)`) (Fig. 3c). pH did not vary by depth at either the old or young peat wetlands (Tukey's HSD, *P* > 0.49); however, pH varied signficantly by depth at the alluvium wetland (Tukey's HSD, *P* < 0.0001) where the parent horizon was more acidic (Fig. 3c).
 
-
-```{r fig3, fig.cap="Soil (a) HCl-extractable and (b) poorly crystalline iron (Fe), as well as soil (c) pH and (d) percent carbon (%C) in recent and parent sediments across the three wetland sites (*n* $\\geq$ 14 per depth). Solid horizontal lines are medians, boxes are the interquartile range (IQR), and whiskers are the 95% confidence interval. Points above each boxplot are the measured soils data for each site.", fig.width=8, fig.height=3, warning=FALSE}
+```{r fig3, fig.cap="Soil (a) HCl-extractable and (b) poorly crystalline iron (Fe), as well as soil (c) pH and (d) percent carbon (%C) in accreted and parent sediments across the three wetland sites (*n* $\\geq$ 14 per depth). Solid horizontal lines are medians, boxes are the interquartile range (IQR), and whiskers are the 95% confidence interval. Points above each boxplot are the measured soils data for each site.", fig.width=8, fig.height=3, warning=FALSE}
 source("R/soils.R") #process soils data into summary dataframe
 
 a <- ggplot(soils_df, aes(x=site, y=FeT_mg.g, fill=horizon)) +
@@ -201,6 +200,59 @@ c <- ggplot(soils_df, aes(x=site, y=pH, fill=horizon)) +
 
 grid.arrange(a, b, c, nrow=1)
 ```
+
+## CO~2~ and CH~4~ Flux Budgets
+```{r combine_annual, echo=FALSE}
+#Add age since restoration variable
+peat19_yearly$age <- peat19_yearly$year - 1997
+peat6_yearly$age <- peat6_yearly$year - 2011
+alluvium_yearly$age <- alluvium_yearly$year - 2014
+
+peat19_s <- subset(peat19_yearly, year != 2013) # remove year with draw down disturbance at WP
+
+#merge to single dataset
+all_sites <- rbind(peat19_s, peat6_yearly); all_sites <- rbind(all_sites, alluvium_yearly)
+
+#remove incomplete years
+all_sites <- subset(all_sites, Days >= 365)
+```
+```{r annual_stats}
+#Computation of significant differences among sites. These output are reported by hand in the following section, where significance is reported at 0.05, 0.001, and 0.0001 levels for all values where P < 0.05. In all cases, the maximum P value is reported when multiple Tukey HSD comparisons are cited. 
+NEE <- aov(all_sites$tNEE ~ all_sites$site); summary(NEE)
+
+GPP <- aov(all_sites$tGEP ~ all_sites$site); summary(GPP)
+
+ER <- aov(all_sites$tER ~ all_sites$site); summary(ER)
+
+CH4 <- aov(all_sites$tCH4 ~ all_sites$site); summary(CH4)
+TukeyHSD(CH4)
+```
+
+We measured fluxes for three complete years from the alluvium wetland, four complete years from the old peat wetland, and six complete years from the young peat wetland. Old peat wetland fluxes from 2013 were omitted from the annual flux intercomparison because the water table dropped below the land surface for 24 days, and fluxes from this year were thus not representative of stable state restored wetland fluxes. Annual *NEE* budgets were not significantly different across the three wetland sites (ANOVA, *P* = 0.7), though all sites were CO~2~ sinks on average (Fig. 4a). Mean annual *NEE* was `r mean(alluvium_yearly$tNEE)` $\pm$ `r sd(alluvium_yearly$tNEE)`, `r mean(peat19_s$tNEE)` $\pm$ `r sd(peat19_s$tNEE)`, and `r mean(peat6_yearly$tNEE)` $\pm$ `r sd(peat6_yearly$tNEE)` g CO~2~-C m^-2^ yr^-1^ for the alluvium, old peat, and young peat wetlands, respectively (mean $\pm$ SD). Similarly, annual *GEP* (ANOVA, *P* = 0.97) and *ER* (ANOVA, *P* = 0.9) did not vary across the three wetland sites (Fig. 4b,c). Mean annual CH~4~ fluxes varied significantly across sites (ANOVA, *P* < 0.01), and annual CH~4~ fluxes from the alluvium wetland were significantly lower than those from either peat site (Tukey's HSD, *P* < 0.05) (Fig. 4d). Mean annual CH~4~ fluxes did not vary between young and old peat wetlands (Tukey's HSD, *P* = 0.92) (Fig. 4d). Annual CH~4~ fluxes were `r mean(alluvium_yearly$tCH4)` $\pm$ `r sd(alluvium_yearly$tCH4)`, `r mean(peat19_s$tCH4)` $\pm$ `r sd(peat19_s$tCH4)`, and `r mean(peat6_yearly$tCH4)` $\pm$ `r sd(peat6_yearly$tCH4)` g CH~4~-C m^-2^ yr^-1^ for the alluvium, old peat, and young peat wetlands, respectively (mean $\pm$ SD). Consequently, annual GHG equivalent budgets were higher from the old peat (`r mean(peat19_s$GHGbalance)` $\pm$ `r sd(peat19_s$GHGbalance)`) and young peat sites (`r mean(peat6_yearly$GHGbalance)` $\pm$ `r sd(peat6_yearly$GHGbalance)` g CO~2~eq. m^-2^ yr^-1^) compared to the alluvium site (`r mean(alluvium_yearly$GHGbalance)` $\pm$ `r sd(alluvium_yearly$GHGbalance)`); however, these differences were not statistically significant.
+
+```{r fig4, fig.cap="Annual fluxes of (a) net ecosystem exchange (*NEE*), (b) ecosystem respiration (*ER*), (c) gross ecosystem photosynthesis (*GEP*), and (b) methane flux (*F~CH4~*. Letters denote significant differences. Solid horizontal lines are medians, boxes are the interquartile range (IQR), and whiskers are the 95% confidence interval  ", echo=FALSE}
+#plotting annual flux budgets
+a <- ggplot(all_sites, aes(x=site, y=tNEE)) +
+  ylab(expression(NEE~" ("~g~CO[2]-C~m^{-2}~yr^{-1}~")")) + 
+  geom_boxplot()
+
+b <- ggplot(all_sites, aes(x=site, y=abs(tGEP))) +
+  ylab(expression(GEP~" ("~g~CO[2]-C~m^{-2}~yr^{-1}~")")) + 
+  geom_boxplot()
+
+c <- ggplot(all_sites, aes(x=site, y=tER)) +
+  ylab(expression(ER~" ("~g~CO[2]-C~m^{-2}~yr^{-1}~")")) + 
+  geom_boxplot()
+
+d <- ggplot(all_sites, aes(x=site, y=tCH4)) +
+  ylab(expression(F[CH4]~" ("~g~CH[4]-C~m^{-2}~yr^{-1}~")")) + 
+  geom_boxplot()
+
+grid.arrange(a, b, c, d, nrow=2)
+
+```
+
+## CO~2~ and CH~4~ Flux Times Series
 
 
 # References
