@@ -103,36 +103,40 @@ source("R/alluvium_processing.R") #alluvium site
 
 #merge daily sums to single dataset
 all_daily <- rbind(peat19_daily, peat6_daily); all_daily <- rbind(all_daily, alluvium_daily)
+all_daily$date <- as.Date(all_daily$datetime) #data plotting variable
 ```
 
 ## Wetland Weather and Hydrology
 The three wetland sites on Sherman and Twitchell Islands experienced similar meteorologic and hydrologic conditions for major biophysical drivers of CO~2~ and CH~4~ fluxes (Fig. 2). Incoming *PAR* and *T~a~* exhibited strong seasonality, where peak values were observed in summer months, and daily mean values were similar across all three wetland sites (Fig. 2a,b). Water temperature exhibited a similar seasonality across all three sites; however, *T~w~* was lower at the old peat compared to the two young wetland sites (Fig. 2c). Wetlands were similarly managed to maintain year-round inundation, where wetland *WTD* was maintained above the land surface across all years (Fig. 2d). In some cases, wetland water control structures would fail causing periods when the *WTD* would drop below the land surface. These events were common at the old peat wetland in summer 2013, when *WTD* dropped below the land surface 24 total days (Fig. 2d). A more detailed summary of meteorologic conditions across sites can be found in Eichelmann et al. (in review).
 
-```{r fig2, fig.cap="Daily mean (a) photosynthetically active radiation (*PAR*), (b) air temperature (*T~a~*), (c) water temperature (*T~w~*), and (d) water table depth (*WTD*) for the alluvium, young peat, and old peat wetland sites. The dashed line on panel d represents the ground surface elevation at the water table well location, and the solid lines represents daily mean *WTD*.", warning=FALSE, fig.height=7, fig.width=8}
-#create a date variable for x variable
-all_daily$date <- as.Date(all_daily$datetime)
+```{r fig2, fig.cap="Daily mean (a) photosynthetically active radiation (*PAR*), (b) air temperature (*T~a~*), (c) water temperature (*T~w~*), and (d) water table depth (*WTD*) for the alluvium, young peat, and old peat wetland sites. The dashed line on panel d represents the ground surface elevation at the water table well location, and the solid lines represents daily mean *WTD*.", warning=FALSE, fig.width=7, fig.asp=0.8}
+#themes
+time_series <- theme_bw() +
+  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
+        axis.title.x = element_blank(), axis.title.y = element_text(size=10))
 
-#create plot objects
+#create plot
 a <- ggplot(all_daily, aes(x=date, y=PAR, color=site)) +
   geom_line(size=0.5) + theme_bw() +
   scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
   ylab(expression(PAR~" ("~mu~mol~m^{-2}~s^{-1}~")")) + 
   annotate("text", x=as.Date("2010-10-01"), y=Inf, label="a", vjust=1, hjust=1) +
-  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(), axis.title.x = element_blank())
+  times_series + theme(axis.text.x = element_blank(), legend.position="none")
 
 b <- ggplot(all_daily, aes(x=date, y=Tair, color=site)) +
   geom_line(size=0.5) + theme_bw() +
   scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
   ylab(expression(T[a]~" ("~degree~C~")")) +
   annotate("text", x=as.Date("2010-10-01"), y=Inf, label="b", vjust=1, hjust=1) +
-  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(), axis.title.x = element_blank())
+  time_series + theme(axis.text.x = element_blank(), legend.position="none")
+
 
 c <- ggplot(all_daily, aes(x=date, y=Tw, color=site)) +
   geom_line(size=0.5) + theme_bw() +
   scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
   ylab(expression(T[w]~" ("~degree~C~")")) +
   annotate("text", x=as.Date("2010-10-01"), y=Inf, label="c", vjust=1, hjust=1) +
-  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(), axis.title.x = element_blank())
+  time_series + theme(axis.text.x = element_blank(), legend.position="none")
 
 d <- ggplot(all_daily, aes(x=date, y=WTD, color=site)) +
   geom_line(size=0.5) + theme_bw() + 
@@ -140,7 +144,8 @@ d <- ggplot(all_daily, aes(x=date, y=WTD, color=site)) +
   scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
   ylab("WTD (cm)") +
   annotate("text", x=as.Date("2010-10-01"), y=Inf, label="d", vjust=1, hjust=1) +
-  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(), axis.title.x = element_blank())
+  time_series + theme(legend.title=element_blank(), legend.position=c(.09, .45),
+                                        legend.margin = margin(0, 0, 0, 0))
 
 #Multiple plots aligned
 iA <- ggplotGrob(a)
@@ -178,30 +183,30 @@ Extractable Fe concentrations were significantly higher at the alluvium site com
 
 Poorly crystalline Fe concentrations were roughly two orders of magnitude lower than HCl-extractable Fe concentrations across all three sites (Fig. 3b), and trends in poorly crystalline Fe were similar to extractable Fe. Poorly crystalline Fe concentrations were signficantly higher in alluvium soils compared to young and old peat wetland soils (Tukey's HSD, *P* < 0.0001) and did not vary between peat sites (Tukey's HSD, *P* > 0.8). Poorly crystalline Fe concentrations trended lower in accreted horizons across all sites, but none of these differences were significant (Tukey's HSD, *P* > 0.08). Mean poorly crystalline Fe concentrations were over an order of magnitude higher in alluvium soils (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "Alluvium")])` mg Fe g^-1^ soil) compared to the young (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "Young Peat")])` mg Fe g^-1^ soil) and old (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "Old Peat")])` mg Fe g^-1^ soil) peat soils (Fig. 3b).
 
-Soil pH also varied between wetland sites (ANOVA, *P* < 0.05), where pH was lowest at the alluvium site (mean = `r mean(soils_df$pH[which(soils_df$site == "Alluvium")])`), intermediate at the old peat site (mean = `r mean(soils_df$pH[which(soils_df$site == "Old Peat")])`), and near-neutral at the young peat site (mean  = `r mean(soils_df$pH[which(soils_df$site == "Young Peat")], na.rm=T)`) (Fig. 3c). pH did not vary by depth at either the old or young peat wetlands (Tukey's HSD, *P* > 0.49); however, pH varied signficantly by depth at the alluvium wetland (Tukey's HSD, *P* < 0.0001) where the parent horizon was more acidic (Fig. 3c).
+Soil pH also varied across wetland sites (ANOVA, *P* < 0.05), where pH was lowest at the alluvium site (mean = `r mean(soils_df$pH[which(soils_df$site == "Alluvium")])`), intermediate at the old peat site (mean = `r mean(soils_df$pH[which(soils_df$site == "Old Peat")])`), and near-neutral at the young peat site (mean  = `r mean(soils_df$pH[which(soils_df$site == "Young Peat")], na.rm=T)`) (Fig. 3c). pH did not vary by depth at either the old or young peat wetlands (Tukey's HSD, *P* > 0.49); however, pH varied signficantly with depth at the alluvium wetland (Tukey's HSD, *P* < 0.0001) where the parent horizon was more acidic (Fig. 3c).
 
-```{r fig3, fig.cap="Soil (a) HCl-extractable and (b) poorly crystalline iron (Fe), as well as soil (c) pH and (d) percent carbon (%C) in accreted and parent sediments across the three wetland sites (*n* $\\geq$ 14 per depth). Solid horizontal lines are medians, boxes are the interquartile range (IQR), and whiskers are the 95% confidence interval. Points above each boxplot are the measured soils data for each site.", fig.width=8, fig.height=3, warning=FALSE}
+```{r fig3, fig.cap="Soil (a) HCl-extractable and (b) poorly crystalline iron (Fe), as well as soil (c) pH and (d) percent carbon (%C) in accreted and parent sediments across the three wetland sites (*n* $\\geq$ 14 per depth). Solid horizontal lines are medians, boxes are the interquartile range (IQR), and whiskers are the 95% confidence interval. Points denote measured outliers.", warning=FALSE, fig.asp = .4}
 source("R/soils.R") #process soils data into summary dataframe
 
 a <- ggplot(soils_df, aes(x=site, y=FeT_mg.g, fill=horizon)) +
   geom_boxplot() +
   ylab(expression("HCl-extractable Fe (mg "~g^{-1}~"soil)")) +
-  theme(legend.position="none")
+  theme(legend.position="none", axis.title.x = element_blank())
 
 b <- ggplot(soils_df, aes(x=site, y=FePC_mg.g, fill=horizon)) +
   geom_boxplot() +
   ylab(expression("Poorly crystalline Fe (mg "~g^{-1}~"soil)")) +
-  theme(legend.position="none")
+  theme(legend.position="none", axis.title.x = element_blank())
 
 c <- ggplot(soils_df, aes(x=site, y=pH, fill=horizon)) +
   geom_boxplot() +
   ylab(expression("pH")) +
-  theme(legend.position="none")
+  theme(legend.position="none", axis.title.x = element_blank())
 
 grid.arrange(a, b, c, nrow=1)
 ```
 
-## CO~2~ and CH~4~ Flux Budgets
+## Wetland CO~2~ and CH~4~ Flux Magnitudes
 ```{r combine_annual, echo=FALSE}
 #Add age since restoration variable
 peat19_yearly$age <- peat19_yearly$year - 1997
@@ -216,43 +221,118 @@ all_sites <- rbind(peat19_s, peat6_yearly); all_sites <- rbind(all_sites, alluvi
 #remove incomplete years
 all_sites <- subset(all_sites, Days >= 365)
 ```
-```{r annual_stats}
+```{r annual_stats, echo=FALSE, include=FALSE}
 #Computation of significant differences among sites. These output are reported by hand in the following section, where significance is reported at 0.05, 0.001, and 0.0001 levels for all values where P < 0.05. In all cases, the maximum P value is reported when multiple Tukey HSD comparisons are cited. 
-NEE <- aov(all_sites$tNEE ~ all_sites$site); summary(NEE)
+NEE <- aov(all_sites$tNEE ~ all_sites$site); summary(NEE) #NEE - ANOVA
 
-GPP <- aov(all_sites$tGEP ~ all_sites$site); summary(GPP)
+GPP <- aov(all_sites$tGEP ~ all_sites$site); summary(GPP) #GPP - ANOVA
 
-ER <- aov(all_sites$tER ~ all_sites$site); summary(ER)
+ER <- aov(all_sites$tER ~ all_sites$site); summary(ER) #ER - ANOVA
 
-CH4 <- aov(all_sites$tCH4 ~ all_sites$site); summary(CH4)
-TukeyHSD(CH4)
+CH4 <- aov(all_sites$tCH4 ~ all_sites$site); summary(CH4) #FCH4 ANOVA
+TukeyHSD(CH4) #Tukey HSD comparisons
+
+GHG <- aov(all_sites$GHGbalance ~ all_sites$site); summary(GHG) #CO2-eq budget ANOVA
 ```
 
-We measured fluxes for three complete years from the alluvium wetland, four complete years from the old peat wetland, and six complete years from the young peat wetland. Old peat wetland fluxes from 2013 were omitted from the annual flux intercomparison because the water table dropped below the land surface for 24 days, and fluxes from this year were thus not representative of stable state restored wetland fluxes. Annual *NEE* budgets were not significantly different across the three wetland sites (ANOVA, *P* = 0.7), though all sites were CO~2~ sinks on average (Fig. 4a). Mean annual *NEE* was `r mean(alluvium_yearly$tNEE)` $\pm$ `r sd(alluvium_yearly$tNEE)`, `r mean(peat19_s$tNEE)` $\pm$ `r sd(peat19_s$tNEE)`, and `r mean(peat6_yearly$tNEE)` $\pm$ `r sd(peat6_yearly$tNEE)` g CO~2~-C m^-2^ yr^-1^ for the alluvium, old peat, and young peat wetlands, respectively (mean $\pm$ SD). Similarly, annual *GEP* (ANOVA, *P* = 0.97) and *ER* (ANOVA, *P* = 0.9) did not vary across the three wetland sites (Fig. 4b,c). Mean annual CH~4~ fluxes varied significantly across sites (ANOVA, *P* < 0.01), and annual CH~4~ fluxes from the alluvium wetland were significantly lower than those from either peat site (Tukey's HSD, *P* < 0.05) (Fig. 4d). Mean annual CH~4~ fluxes did not vary between young and old peat wetlands (Tukey's HSD, *P* = 0.92) (Fig. 4d). Annual CH~4~ fluxes were `r mean(alluvium_yearly$tCH4)` $\pm$ `r sd(alluvium_yearly$tCH4)`, `r mean(peat19_s$tCH4)` $\pm$ `r sd(peat19_s$tCH4)`, and `r mean(peat6_yearly$tCH4)` $\pm$ `r sd(peat6_yearly$tCH4)` g CH~4~-C m^-2^ yr^-1^ for the alluvium, old peat, and young peat wetlands, respectively (mean $\pm$ SD). Consequently, annual GHG equivalent budgets were higher from the old peat (`r mean(peat19_s$GHGbalance)` $\pm$ `r sd(peat19_s$GHGbalance)`) and young peat sites (`r mean(peat6_yearly$GHGbalance)` $\pm$ `r sd(peat6_yearly$GHGbalance)` g CO~2~eq. m^-2^ yr^-1^) compared to the alluvium site (`r mean(alluvium_yearly$GHGbalance)` $\pm$ `r sd(alluvium_yearly$GHGbalance)`); however, these differences were not statistically significant.
-
-```{r fig4, fig.cap="Annual fluxes of (a) net ecosystem exchange (*NEE*), (b) ecosystem respiration (*ER*), (c) gross ecosystem photosynthesis (*GEP*), and (b) methane flux (*F~CH4~*. Letters denote significant differences. Solid horizontal lines are medians, boxes are the interquartile range (IQR), and whiskers are the 95% confidence interval  ", echo=FALSE}
+```{r fig4, fig.cap="Average annual fluxes of (a) net ecosystem exchange (*NEE*), (b) ecosystem respiration (*ER*), (c) gross ecosystem photosynthesis (*GEP*), and (b) methane flux (*F~CH4~*). Letters denote significant differences. Solid horizontal lines are medians, boxes are the interquartile range (IQR), and whiskers are the 95% confidence interval. Points denote measured outliers.", echo=FALSE, fig.width=3.5, fig.asp=2.5}
 #plotting annual flux budgets
 a <- ggplot(all_sites, aes(x=site, y=tNEE)) +
   ylab(expression(NEE~" ("~g~CO[2]-C~m^{-2}~yr^{-1}~")")) + 
-  geom_boxplot()
+  geom_boxplot() + theme(axis.title.x = element_blank(), axis.title.y = element_text(size=10))
 
 b <- ggplot(all_sites, aes(x=site, y=abs(tGEP))) +
   ylab(expression(GEP~" ("~g~CO[2]-C~m^{-2}~yr^{-1}~")")) + 
-  geom_boxplot()
+  geom_boxplot() + theme(axis.title.x = element_blank(), axis.title.y = element_text(size=10))
 
 c <- ggplot(all_sites, aes(x=site, y=tER)) +
   ylab(expression(ER~" ("~g~CO[2]-C~m^{-2}~yr^{-1}~")")) + 
-  geom_boxplot()
+  geom_boxplot() + theme(axis.title.x = element_blank(), axis.title.y = element_text(size=10))
 
 d <- ggplot(all_sites, aes(x=site, y=tCH4)) +
   ylab(expression(F[CH4]~" ("~g~CH[4]-C~m^{-2}~yr^{-1}~")")) + 
-  geom_boxplot()
+  geom_boxplot() + theme(axis.title.x = element_blank(), axis.title.y = element_text(size=10))
 
-grid.arrange(a, b, c, d, nrow=2)
+grid.arrange(a, b, c, d, ncol=1)
 
 ```
 
-## CO~2~ and CH~4~ Flux Times Series
+Annual *NEE* budgets were not significantly different across the three wetland sites (ANOVA, *P* = 0.7), though all sites were CO~2~ sinks on average (Fig. 4a). Mean annual *NEE* was `r mean(alluvium_yearly$tNEE)` $\pm$ `r sd(alluvium_yearly$tNEE)` (*n* = `r length(alluvium_yearly$tNEE)`), `r mean(peat19_s$tNEE)` $\pm$ `r sd(peat19_s$tNEE)` (*n* = `r length(peat19_yearly$tNEE)`), and `r mean(peat6_yearly$tNEE)` $\pm$ `r sd(peat6_yearly$tNEE)` (*n* = `r length(peat6_yearly$tNEE)`) g CO~2~-C m^-2^ yr^-1^ for the alluvium, old peat, and young peat wetlands, respectively (mean $\pm$ SD). Similarly, mean annual *GEP* (ANOVA, *P* = 0.97) and *ER* (ANOVA, *P* = 0.9) did not vary across the three wetland sites (Fig. 4b,c). These averages comprise three complete years from the alluvium wetland, four years from the old peat wetland, and six years from the young peat wetland (Fig. 5). Ecosystem CO~2~ fluxes (*NEE*, *GEP*, and *ER*) followed similar seasonal patterns across all three wetlands, where peak daily fluxes were observed during summer and the lowest fluxes were observed January to February of each year (Fig. 5). Daily *NEE* for the three wetlands overlapped in range, particularly in 2015, though the young peat wetland had highly variable fluxes across years (Fig. 5a). At this site, large *GEP* and *ER* fluxes were observed one year post-restoration when the vegetation was completely established, and fluxes were attentuated mid-growing season in 2014 and 2016 due to insect outbreaks and salinization, respectively (Fig. 5b,c). CO~2~ fluxes from the old peat wetland were much more consistent across time (Fig. 5a,b,c). Once the alluvium wetland was fully vegetated (2015 onward), *NEE*, *GEP*, and *ER* fluxes from this system were very similar to the old peat wetland site (Fig. 5a,b,c). Additionally, CO~2~ flux patterns from the young peat and alluvium wetland were similar during the initial flooding phase when wetland plants were not fully established. Here, peak CO~2~ fluxes were observed late in the growing season when plants became established within the flux footprints (Fig. 5a,b,c).
+
+Mean annual CH~4~ fluxes varied significantly across sites (ANOVA, *P* < 0.01). Annual CH~4~ fluxes from the alluvium wetland were significantly lower than those from either peat site (Tukey's HSD, *P* < 0.05) (Fig. 4d), and did not vary between young and old peat wetlands (Tukey's HSD, *P* = 0.92) (Fig. 4d). Annual CH~4~ fluxes were `r mean(alluvium_yearly$tCH4)` $\pm$ `r sd(alluvium_yearly$tCH4)` (*n* = `r length(alluvium_yearly$tCH4)`), `r mean(peat19_s$tCH4)` $\pm$ `r sd(peat19_s$tCH4)` (*n* = `r length(peat19_yearly$tCH4)`), and `r mean(peat6_yearly$tCH4)` $\pm$ `r sd(peat6_yearly$tCH4)` (*n* = `r length(peat6_yearly$tCH4)`) g CH~4~-C m^-2^ yr^-1^ for the alluvium, old peat, and young peat wetlands, respectively (mean $\pm$ SD). Methane fluxes from the old peat wetland were highly variable in 2013 due to multiple periods when *WTD* dropped below the land surface (24 days total), and CH~4~ fluxes crashed during these periods of draining (Fig. 5d). Old peat wetland fluxes from 2013 were therefore omitted from the annual flux analysis because they were not representative of stable state wetland fluxes. One similar draining event occurred in 2014, but CH~4~ fluxes recovered from this event and late growing season fluxes were similar to the young peat wetland. Methane fluxes from the two peat sites were very similar from 2015 through 2016; however, CH~4~ fluxes from the alluvium wetland were much lower than either peat site (Fig. 5d). Consequently, annual GHG equivalent budgets were higher from the old (`r mean(peat19_s$GHGbalance)` $\pm$ `r sd(peat19_s$GHGbalance)` g CO~2~eq. m^-2^ yr^-1^) and young peat sites (`r mean(peat6_yearly$GHGbalance)` $\pm$ `r sd(peat6_yearly$GHGbalance)` g CO~2~eq. m^-2^ yr^-1^) compared to the alluvium site (`r mean(alluvium_yearly$GHGbalance)` $\pm$ `r sd(alluvium_yearly$GHGbalance)` g CO~2~eq. m^-2^ yr^-1^); however, these differences were not statistically significant (ANOVA, *P* = 0.15).
+
+```{r fig5, fig.cap="Daily (a) net ecosystem exchange (*NEE*), (b) gross ecosystem photosynthesis (*GEP*), (c) ecosystem respiration (*ER*), and (d) methane (*F~CH4~*) flux from the alluvium, old peat, and young peat wetlands. Flux measurements from the young peat and alluvium wetland begin at the point of restoration.", warning=FALSE, fig.width=7, fig.asp=0.8}
+#themes
+times_series <- theme_bw() +
+  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
+        axis.title.x = element_blank(), axis.title.y = element_text(size=10))
+
+#plot objects
+a <- ggplot(all_daily, aes(x=date, y=gCO2, color=site)) +
+  geom_line() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab(expression(NEE~" (g C"~m^{-2}~d^{-1}~")")) + 
+  annotate("text", x=as.Date("2010-10-01"), y=Inf, label="a", vjust=1, hjust=1) +
+  times_series + theme(axis.text.x = element_blank(), legend.position = "none")
+
+b <- ggplot(all_daily, aes(x=date, y=gGEP, color=site)) +
+  geom_line() + theme_bw() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab(expression(GEP~" (g C"~m^{-2}~d^{-1}~")")) + 
+  annotate("text", x=as.Date("2010-10-01"), y=Inf, label="b", vjust=1, hjust=1) +
+  times_series + theme(axis.text.x = element_blank(), legend.position = "none")
+
+c <- ggplot(all_daily, aes(x=date, y=gER, color=site)) +
+  geom_line() + theme_bw() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  scale_y_continuous(limits=c(0,15)) +
+  ylab(expression(ER~" (g C"~m^{-2}~d^{-1}~")")) + 
+  annotate("text", x=as.Date("2010-10-01"), y=Inf, label="c", vjust=1, hjust=1) +
+  times_series + theme(axis.text.x = element_blank(), legend.title=element_blank(), legend.position=c(.92, .85),
+                                        legend.margin = margin(0, 0, 0, 0))
+
+d <- ggplot(all_daily, aes(x=date, y=mgCH4, color=site)) +
+  geom_line() + theme_bw() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab(expression(F[CH4]~" (mg C"~m^{-2}~d^{-1}~")")) + 
+  annotate("text", x=as.Date("2010-10-01"), y=Inf, label="d", vjust=1, hjust=1) +
+  times_series + theme(legend.title=element_blank(), legend.position="none")
+
+#Multiple plots aligned
+iA <- ggplotGrob(a)
+iB <- ggplotGrob(b)
+iC <- ggplotGrob(c)
+iD <- ggplotGrob(d)
+
+maxWidth = grid::unit.pmax(iA$widths[2:5], iB$widths[2:5], iC$widths[2:5], iD$widths[2:5])
+iA$widths[2:5] <- as.list(maxWidth); iB$widths[2:5] <- as.list(maxWidth); iC$widths[2:5] <- as.list(maxWidth);
+iD$widths[2:5] <- as.list(maxWidth);
+
+grid.arrange(iA, iB, iC, iD, ncol=1)
+```
+
+Methane flux trajectories from the recently restored peat and alluvium wetlands were quite different following initial restoration (Fig. 6). General flux patterns were similar across sites, where CH~4~ fluxes peaked late-season during year zero (days 0-365), and in the following growing seasons, peak CH~4~ fluxes occurred mid-summer (Fig. 6). Flux magnitudes were considerably lower from the alluvium site for the first three complete years following restoration (Fig. 6). Alluvium wetland fluxes increased with each year, whereas CH~4~ fluxes from the young peat wetland peaked during year 1 and decreased with subsequent years (Fig. 5,6d). Differences in daily fluxes across wetlands were largest during year 1 when alluvium wetland fluxes were increasing and young peat wetland emissions were peaking (Fig. 6). Young peat annual CH~4~ budgets for year 0 and 1 were over two times larger than the alluvium site. Year zero budgets were `r alluvium_yearly$tCH4[alluvium_yearly$year == 2014]` and `r peat6_yearly$tCH4[peat6_yearly$year == 2011]` g CH~4~ m^-2^ yr^-1^ for the alluvium and young peat sites, respectively, and year one budgets were `r alluvium_yearly$tCH4[alluvium_yearly$year == 2015]` and `r peat6_yearly$tCH4[peat6_yearly$year == 2012]` g CH~4~ m^-2^ yr^-1^ for the alluvium and young peat sites, respectively. This gap began to close during year two, when fluxes from the alluvium wetland were `r (alluvium_yearly$tCH4[alluvium_yearly$year == 2016])/(peat6_yearly$tCH4[peat6_yearly$year == 2013])*100`% the peat site, and annual fluxes were `r alluvium_yearly$tCH4[alluvium_yearly$year == 2016]` and `r peat6_yearly$tCH4[peat6_yearly$year == 2013]` g CH~4~ m^-2^ yr^-1^ from the alluvium and young peat wetland, respectively.
+
+```{r fig6, fig.cap="Methane fluxes (*F~CH4~*) from the young peat and alluvium wetlands for the first three years following restoration. Day zero is 2011-01-1 for the young peat wetland, and 2014-01-01 for the alluvium wetland.", fig.width=4}
+#Ch4 emissions from the newly restored wetlands from Day 0
+
+#subset and index data
+trajectory <- subset(all_daily, site != "Old Peat") #remove old peat site
+
+#create a year since restoration column
+trajectory$rest_year <- ifelse(trajectory$site == "Alluvium",  
+                         trajectory$year - 2013, trajectory$year - 2010)
+
+#compare first three years only (we only have 3 yrs of alluvium site)
+trajectory <- subset(trajectory, rest_year < 4)
+
+#Early restoration time series
+ggplot(trajectory, aes(x=(dday-365), y=mgCH4, color=site)) +
+  geom_point(aes(fill=site), colour="black",pch=21) +
+  ylab(expression(F[CH4]~" "~"("~mg~C~m^{-2}~day^{-1}~")")) + 
+  xlab("Day since restoration") + theme(legend.title=element_blank(), legend.position=c(.15, .85),
+                                        legend.margin = margin(0, 0, 0, 0))
+```
 
 
 # References

@@ -33,7 +33,7 @@ daily <- peat6_all %>%
             Cond = mean(Cond, na.rm=T),        #conductivity (mS)
             month = round(median(month)),
             year = round(median(year))) %>%
-  filter(year < 2017) #only pre-2017
+  filter(year > 2010) #cut pre-wetland measures
 
 #Time and unit conversions
 daily$datetime <- as.POSIXct(daily$dday*86400, origin="2010-01-01")
