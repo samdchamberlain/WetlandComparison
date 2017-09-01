@@ -109,25 +109,25 @@ all_daily$date <- as.Date(all_daily$datetime) #data plotting variable
 ## Wetland Weather and Hydrology
 The three wetland sites on Sherman and Twitchell Islands experienced similar meteorologic and hydrologic conditions for major biophysical drivers of CO~2~ and CH~4~ fluxes (Fig. 2). Incoming *PAR* and *T~a~* exhibited strong seasonality, where peak values were observed in summer months, and daily mean values were similar across all three wetland sites (Fig. 2a,b). Water temperature exhibited a similar seasonality across all three sites; however, *T~w~* was lower at the old peat compared to the two young wetland sites (Fig. 2c). Wetlands were similarly managed to maintain year-round inundation, where wetland *WTD* was maintained above the land surface across all years (Fig. 2d). In some cases, wetland water control structures would fail causing periods when the *WTD* would drop below the land surface. These events were common at the old peat wetland in summer 2013, when *WTD* dropped below the land surface 24 total days (Fig. 2d). A more detailed summary of meteorologic conditions across sites can be found in Eichelmann et al. (in review).
 
-```{r fig2, fig.cap="Daily mean (a) photosynthetically active radiation (*PAR*), (b) air temperature (*T~a~*), (c) water temperature (*T~w~*), and (d) water table depth (*WTD*) for the alluvium, young peat, and old peat wetland sites. The dashed line on panel d represents the ground surface elevation at the water table well location, and the solid lines represents daily mean *WTD*.", warning=FALSE, fig.width=7, fig.asp=0.8}
+```{r fig2, fig.cap="Daily mean (a) photosynthetically active radiation (*PAR*), (b) air temperature (*T~a~*), (c) water temperature (*T~w~*), and (d) water table depth (*WTD*) for the alluvium, young peat, and old peat wetland sites. The dashed line on panel d represents the ground surface elevation at the water table well location, and the solid lines represents daily mean *WTD*.", warning=FALSE, fig.width=7, fig.height=5}
 #themes
 time_series <- theme_bw() +
   theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
-        axis.title.x = element_blank(), axis.title.y = element_text(size=10))
+        axis.title.x = element_blank(), axis.title.y = element_text(size=9))
 
 #create plot
 a <- ggplot(all_daily, aes(x=date, y=PAR, color=site)) +
   geom_line(size=0.5) + theme_bw() +
   scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
   ylab(expression(PAR~" ("~mu~mol~m^{-2}~s^{-1}~")")) + 
-  annotate("text", x=as.Date("2010-10-01"), y=Inf, label="a", vjust=1, hjust=1) +
-  times_series + theme(axis.text.x = element_blank(), legend.position="none")
+  annotate("text", x=as.Date("2017-01-01"), y=Inf, label="a", vjust=1, hjust=1) +
+  time_series + theme(axis.text.x = element_blank(), legend.position="none")
 
 b <- ggplot(all_daily, aes(x=date, y=Tair, color=site)) +
   geom_line(size=0.5) + theme_bw() +
   scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
   ylab(expression(T[a]~" ("~degree~C~")")) +
-  annotate("text", x=as.Date("2010-10-01"), y=Inf, label="b", vjust=1, hjust=1) +
+  annotate("text", x=as.Date("2017-01-01"), y=Inf, label="b", vjust=1, hjust=1) +
   time_series + theme(axis.text.x = element_blank(), legend.position="none")
 
 
@@ -135,7 +135,7 @@ c <- ggplot(all_daily, aes(x=date, y=Tw, color=site)) +
   geom_line(size=0.5) + theme_bw() +
   scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
   ylab(expression(T[w]~" ("~degree~C~")")) +
-  annotate("text", x=as.Date("2010-10-01"), y=Inf, label="c", vjust=1, hjust=1) +
+  annotate("text", x=as.Date("2017-01-01"), y=Inf, label="c", vjust=1, hjust=1) +
   time_series + theme(axis.text.x = element_blank(), legend.position="none")
 
 d <- ggplot(all_daily, aes(x=date, y=WTD, color=site)) +
@@ -143,9 +143,10 @@ d <- ggplot(all_daily, aes(x=date, y=WTD, color=site)) +
   geom_hline(yintercept=0, linetype="dashed") +
   scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
   ylab("WTD (cm)") +
-  annotate("text", x=as.Date("2010-10-01"), y=Inf, label="d", vjust=1, hjust=1) +
+  annotate("text", x=as.Date("2017-01-01"), y=Inf, label="d", vjust=1, hjust=1) +
   time_series + theme(legend.title=element_blank(), legend.position=c(.09, .45),
-                                        legend.margin = margin(0, 0, 0, 0))
+                      legend.margin = margin(0, 0, 0, 0), 
+                      legend.background = element_rect(fill = "transparent"))
 
 #Multiple plots aligned
 iA <- ggplotGrob(a)
@@ -185,23 +186,30 @@ Poorly crystalline Fe concentrations were roughly two orders of magnitude lower 
 
 Soil pH also varied across wetland sites (ANOVA, *P* < 0.05), where pH was lowest at the alluvium site (mean = `r mean(soils_df$pH[which(soils_df$site == "Alluvium")])`), intermediate at the old peat site (mean = `r mean(soils_df$pH[which(soils_df$site == "Old Peat")])`), and near-neutral at the young peat site (mean  = `r mean(soils_df$pH[which(soils_df$site == "Young Peat")], na.rm=T)`) (Fig. 3c). pH did not vary by depth at either the old or young peat wetlands (Tukey's HSD, *P* > 0.49); however, pH varied signficantly with depth at the alluvium wetland (Tukey's HSD, *P* < 0.0001) where the parent horizon was more acidic (Fig. 3c).
 
-```{r fig3, fig.cap="Soil (a) HCl-extractable and (b) poorly crystalline iron (Fe), as well as soil (c) pH and (d) percent carbon (%C) in accreted and parent sediments across the three wetland sites (*n* $\\geq$ 14 per depth). Solid horizontal lines are medians, boxes are the interquartile range (IQR), and whiskers are the 95% confidence interval. Points denote measured outliers.", warning=FALSE, fig.asp = .4}
+```{r fig3, fig.cap="Soil (a) HCl-extractable and (b) poorly crystalline iron (Fe), as well as soil (c) pH and (d) percent carbon (%C) in accreted and parent sediments across the three wetland sites (*n* $\\geq$ 14 per depth). Solid horizontal lines are medians, boxes are the interquartile range (IQR), and whiskers are the 95% confidence interval. Points denote measured outliers.", warning=FALSE, fig.width=8, fig.asp = .3}
 source("R/soils.R") #process soils data into summary dataframe
+#theme
+boxplot_theme <- theme(axis.text.x = element_text(size=9),
+                 axis.title.y = element_text(size=10),
+                 axis.title.x = element_blank())
 
 a <- ggplot(soils_df, aes(x=site, y=FeT_mg.g, fill=horizon)) +
   geom_boxplot() +
   ylab(expression("HCl-extractable Fe (mg "~g^{-1}~"soil)")) +
-  theme(legend.position="none", axis.title.x = element_blank())
+  boxplot_theme +
+  theme(legend.position=c(.82,.90), legend.title = element_blank(), 
+        legend.margin = margin(0, 0, 0, 0), 
+        legend.background = element_rect(fill = "white"))
 
 b <- ggplot(soils_df, aes(x=site, y=FePC_mg.g, fill=horizon)) +
   geom_boxplot() +
   ylab(expression("Poorly crystalline Fe (mg "~g^{-1}~"soil)")) +
-  theme(legend.position="none", axis.title.x = element_blank())
+  boxplot_theme + theme(legend.position="none")
 
 c <- ggplot(soils_df, aes(x=site, y=pH, fill=horizon)) +
   geom_boxplot() +
   ylab(expression("pH")) +
-  theme(legend.position="none", axis.title.x = element_blank())
+  boxplot_theme + theme(legend.position="none", axis.title.x = element_blank())
 
 grid.arrange(a, b, c, nrow=1)
 ```
@@ -235,23 +243,28 @@ TukeyHSD(CH4) #Tukey HSD comparisons
 GHG <- aov(all_sites$GHGbalance ~ all_sites$site); summary(GHG) #CO2-eq budget ANOVA
 ```
 
-```{r fig4, fig.cap="Average annual fluxes of (a) net ecosystem exchange (*NEE*), (b) ecosystem respiration (*ER*), (c) gross ecosystem photosynthesis (*GEP*), and (b) methane flux (*F~CH4~*). Letters denote significant differences. Solid horizontal lines are medians, boxes are the interquartile range (IQR), and whiskers are the 95% confidence interval. Points denote measured outliers.", echo=FALSE, fig.width=3.5, fig.asp=2.5}
-#plotting annual flux budgets
+```{r fig4, fig.cap="Average annual fluxes of (a) net ecosystem exchange (*NEE*), (b) ecosystem respiration (*ER*), (c) gross ecosystem photosynthesis (*GEP*), and (b) methane flux (*F~CH4~*). Letters denote significant differences. Solid horizontal lines are medians, boxes are the interquartile range (IQR), and whiskers are the 95% confidence interval. Points denote measured outliers.", echo=FALSE, fig.width=3.5, fig.height=7.5}
+#theme
+box_theme <- theme(axis.title.x = element_blank(), 
+                   axis.title.y = element_text(size=10),
+                   axis.text.x = element_text(size=8))
+
 a <- ggplot(all_sites, aes(x=site, y=tNEE)) +
   ylab(expression(NEE~" ("~g~CO[2]-C~m^{-2}~yr^{-1}~")")) + 
-  geom_boxplot() + theme(axis.title.x = element_blank(), axis.title.y = element_text(size=10))
+  geom_boxplot() + box_theme
 
 b <- ggplot(all_sites, aes(x=site, y=abs(tGEP))) +
   ylab(expression(GEP~" ("~g~CO[2]-C~m^{-2}~yr^{-1}~")")) + 
-  geom_boxplot() + theme(axis.title.x = element_blank(), axis.title.y = element_text(size=10))
+  geom_boxplot() + theme(axis.title.x = element_blank(), axis.title.y = element_text(size=10)) + box_theme
 
 c <- ggplot(all_sites, aes(x=site, y=tER)) +
   ylab(expression(ER~" ("~g~CO[2]-C~m^{-2}~yr^{-1}~")")) + 
-  geom_boxplot() + theme(axis.title.x = element_blank(), axis.title.y = element_text(size=10))
+  geom_boxplot() + box_theme
 
 d <- ggplot(all_sites, aes(x=site, y=tCH4)) +
   ylab(expression(F[CH4]~" ("~g~CH[4]-C~m^{-2}~yr^{-1}~")")) + 
-  geom_boxplot() + theme(axis.title.x = element_blank(), axis.title.y = element_text(size=10))
+  geom_boxplot() + box_theme
+
 
 grid.arrange(a, b, c, d, ncol=1)
 
@@ -261,25 +274,25 @@ Annual *NEE* budgets were not significantly different across the three wetland s
 
 Mean annual CH~4~ fluxes varied significantly across sites (ANOVA, *P* < 0.01). Annual CH~4~ fluxes from the alluvium wetland were significantly lower than those from either peat site (Tukey's HSD, *P* < 0.05) (Fig. 4d), and did not vary between young and old peat wetlands (Tukey's HSD, *P* = 0.92) (Fig. 4d). Annual CH~4~ fluxes were `r mean(alluvium_yearly$tCH4)` $\pm$ `r sd(alluvium_yearly$tCH4)` (*n* = `r length(alluvium_yearly$tCH4)`), `r mean(peat19_s$tCH4)` $\pm$ `r sd(peat19_s$tCH4)` (*n* = `r length(peat19_yearly$tCH4)`), and `r mean(peat6_yearly$tCH4)` $\pm$ `r sd(peat6_yearly$tCH4)` (*n* = `r length(peat6_yearly$tCH4)`) g CH~4~-C m^-2^ yr^-1^ for the alluvium, old peat, and young peat wetlands, respectively (mean $\pm$ SD). Methane fluxes from the old peat wetland were highly variable in 2013 due to multiple periods when *WTD* dropped below the land surface (24 days total), and CH~4~ fluxes crashed during these periods of draining (Fig. 5d). Old peat wetland fluxes from 2013 were therefore omitted from the annual flux analysis because they were not representative of stable state wetland fluxes. One similar draining event occurred in 2014, but CH~4~ fluxes recovered from this event and late growing season fluxes were similar to the young peat wetland. Methane fluxes from the two peat sites were very similar from 2015 through 2016; however, CH~4~ fluxes from the alluvium wetland were much lower than either peat site (Fig. 5d). Consequently, annual GHG equivalent budgets were higher from the old (`r mean(peat19_s$GHGbalance)` $\pm$ `r sd(peat19_s$GHGbalance)` g CO~2~eq. m^-2^ yr^-1^) and young peat sites (`r mean(peat6_yearly$GHGbalance)` $\pm$ `r sd(peat6_yearly$GHGbalance)` g CO~2~eq. m^-2^ yr^-1^) compared to the alluvium site (`r mean(alluvium_yearly$GHGbalance)` $\pm$ `r sd(alluvium_yearly$GHGbalance)` g CO~2~eq. m^-2^ yr^-1^); however, these differences were not statistically significant (ANOVA, *P* = 0.15).
 
-```{r fig5, fig.cap="Daily (a) net ecosystem exchange (*NEE*), (b) gross ecosystem photosynthesis (*GEP*), (c) ecosystem respiration (*ER*), and (d) methane (*F~CH4~*) flux from the alluvium, old peat, and young peat wetlands. Flux measurements from the young peat and alluvium wetland begin at the point of restoration.", warning=FALSE, fig.width=7, fig.asp=0.8}
+```{r fig5, fig.cap="Daily (a) net ecosystem exchange (*NEE*), (b) gross ecosystem photosynthesis (*GEP*), (c) ecosystem respiration (*ER*), and (d) methane (*F~CH4~*) flux from the alluvium, old peat, and young peat wetlands. Flux measurements from the young peat and alluvium wetland begin at the point of restoration.", warning=FALSE, fig.width=7, fig.height=5.5}
 #themes
 times_series <- theme_bw() +
   theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
-        axis.title.x = element_blank(), axis.title.y = element_text(size=10))
+        axis.title.x = element_blank(), axis.title.y = element_text(size=9))
 
 #plot objects
 a <- ggplot(all_daily, aes(x=date, y=gCO2, color=site)) +
   geom_line() +
   scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
   ylab(expression(NEE~" (g C"~m^{-2}~d^{-1}~")")) + 
-  annotate("text", x=as.Date("2010-10-01"), y=Inf, label="a", vjust=1, hjust=1) +
+  annotate("text", x=as.Date("2017-01-01"), y=Inf, label="a", vjust=1, hjust=1) +
   times_series + theme(axis.text.x = element_blank(), legend.position = "none")
 
 b <- ggplot(all_daily, aes(x=date, y=gGEP, color=site)) +
   geom_line() + theme_bw() +
   scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
   ylab(expression(GEP~" (g C"~m^{-2}~d^{-1}~")")) + 
-  annotate("text", x=as.Date("2010-10-01"), y=Inf, label="b", vjust=1, hjust=1) +
+  annotate("text", x=as.Date("2017-01-01"), y=Inf, label="b", vjust=1, hjust=1) +
   times_series + theme(axis.text.x = element_blank(), legend.position = "none")
 
 c <- ggplot(all_daily, aes(x=date, y=gER, color=site)) +
@@ -287,16 +300,18 @@ c <- ggplot(all_daily, aes(x=date, y=gER, color=site)) +
   scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
   scale_y_continuous(limits=c(0,15)) +
   ylab(expression(ER~" (g C"~m^{-2}~d^{-1}~")")) + 
-  annotate("text", x=as.Date("2010-10-01"), y=Inf, label="c", vjust=1, hjust=1) +
-  times_series + theme(axis.text.x = element_blank(), legend.title=element_blank(), legend.position=c(.92, .85),
-                                        legend.margin = margin(0, 0, 0, 0))
+  annotate("text", x=as.Date("2017-01-01"), y=Inf, label="c", vjust=1, hjust=1) +
+  times_series + theme(axis.text.x = element_blank(), legend.title=element_blank(),
+                       legend.position=c(.08, .70), 
+                       legend.margin = margin(0, 0, 0, 0),
+                       legend.background = element_rect(fill = "transparent"))
 
 d <- ggplot(all_daily, aes(x=date, y=mgCH4, color=site)) +
   geom_line() + theme_bw() +
   scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
   ylab(expression(F[CH4]~" (mg C"~m^{-2}~d^{-1}~")")) + 
-  annotate("text", x=as.Date("2010-10-01"), y=Inf, label="d", vjust=1, hjust=1) +
-  times_series + theme(legend.title=element_blank(), legend.position="none")
+  annotate("text", x=as.Date("2017-01-01"), y=Inf, label="d", vjust=1, hjust=1) +
+  times_series + theme(legend.position = "none")
 
 #Multiple plots aligned
 iA <- ggplotGrob(a)
@@ -328,12 +343,64 @@ trajectory <- subset(trajectory, rest_year < 4)
 
 #Early restoration time series
 ggplot(trajectory, aes(x=(dday-365), y=mgCH4, color=site)) +
-  geom_point(aes(fill=site), colour="black",pch=21) +
+  geom_point(aes(fill=site), colour="black", pch=21, size=0.9) +
   ylab(expression(F[CH4]~" "~"("~mg~C~m^{-2}~day^{-1}~")")) + 
-  xlab("Day since restoration") + theme(legend.title=element_blank(), legend.position=c(.15, .85),
-                                        legend.margin = margin(0, 0, 0, 0))
+  xlab("Day since restoration") +  theme_bw() +
+  theme(legend.title=element_blank(), legend.position=c(.15, .85),
+        legend.margin = margin(0, 0, 0, 0), legend.background = element_rect(fill = "transparent"))
 ```
 
+#Methane flux patterns and biophysical drivers
+During the first year post-restoration, when differences in CH~4~ flux magnitudes between the two newly restored wetlands were largest (Fig. 6), timing of peak CH~4~ flux and relations to biophysical drivers were notably different.
+
+```{r fig7, fig.height = 6, fig.width = 3.5, fig.cap="Diel patterns of (a) methane flux (*F~CH4~*), (b) net ecosystem exchange (*NEE*), and (c) evapotranspiration (*ET*) for the first year following restoration and 2016. The first year following restoration was 2012 and 2015 for the young peat and alluvium wetland, respectively, when the wetlands were fully vegetated by plants. By 2016 the young peat wetland was six years old and the alluvium wetland was three years old. Solid lines and shaded regions represent means and standard deviation.) ", echo=FALSE}
+source("R/Diel_patterns.R") #process the data
+
+#Compare first year fluxes and 2016. Indexing and subsetting (young peat and alluvium only)
+diel_s <- subset(diel_all, site == "Young Peat" | site == "Alluvium")
+diel_s$index <- ifelse(diel_s$site == "Young Peat" & diel_s$year == 2012, "Year 1",
+                       ifelse(diel_s$site == "Alluvium" & diel_s$year == 2015, "Year 1",
+                       diel_s$year))
+
+diel_s <- subset(diel_s, index == "Year 1" | index== "2016") # comparing most recent and 1st year
+
+#turn index into factor for plotting
+diel_s$index = factor(diel_s$index, levels=c('Year 1', '2016'))
+
+##plotting
+#themes
+time_series <- theme_bw() +
+  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
+        axis.title = element_text(size=10))
+
+#plot objects
+a <- ggplot(diel_s, aes(x=time, y=CH4, color=site)) +
+  geom_line(size=0.5) + facet_grid(.~index) +
+  geom_ribbon(aes(x=time, ymin=CH4-sdCH4, ymax=CH4+sdCH4, group=site, fill=site), alpha=0.1) +
+  ylab(expression(F[CH4]~" ("~nmol^{-2}~s^{-1}~")")) +
+  scale_x_continuous(breaks=seq(0,24,5)) +
+  time_series + theme(legend.position = "none", axis.title.x = element_blank())
+
+b <- ggplot(diel_s, aes(x=time, y=NEE, color=site)) +
+  geom_line(size=0.5) + facet_grid(.~index) +
+  ylab(expression(NEE~" ("~mu~mol^{-2}~s^{-1}~")")) + 
+  geom_ribbon(aes(x=time, ymin=NEE-sdNEE, ymax=NEE+sdNEE, group=site, fill=site), alpha=0.1) +
+  scale_x_continuous(breaks=seq(0,24,5)) +
+  time_series + theme(legend.position = "none", axis.title.x = element_blank(),
+                      strip.background = element_blank(), strip.text = element_blank())
+
+c <- ggplot(diel_s, aes(x=time, y=ET, color=site)) +
+  geom_line(size=0.5) + facet_grid(.~index) +
+  ylab(expression(ET~" ("~mmol^{-2}~s^{-1}~")")) + xlab("Time of day") +
+  geom_ribbon(aes(x=time, ymin=ET-sdET, ymax=ET+sdET, group=site, fill=site), alpha=0.1) +
+  scale_x_continuous(breaks=seq(0,24,5)) +
+  time_series + theme(strip.background = element_blank(), strip.text = element_blank(),
+                      legend.position = c(0.7,.85), legend.title = element_blank(),
+                      legend.margin = margin(0, 0, 0, 0),
+                       legend.background = element_rect(fill = "transparent"))
+
+grid.arrange(a, b, c, ncol=1)
+```
 
 # References
 
