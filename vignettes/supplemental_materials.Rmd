@@ -23,9 +23,20 @@ knitr::opts_chunk$set(
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+```{r packages, message=FALSE}
+library(knitr)
+library(tidyverse)
+library(lubridate)
+library(gridExtra)
+library(scales)
+library(zoo)
+```
+
+
 ## Supplemental Results
 ```{r fig7, fig.height = 8, fig.width = 7, fig.align = "center",fig.cap="Diel patterns of mean (a) methane flux (*F~CH4~*), (b) net ecosystem exchange (*NEE*), (c) evapotranspiration (*ET*), and (d) water temperature (*T~w~*).", echo=FALSE}
 source("R/Diel_patterns.R") #process the data
+
 a <- ggplot(diel_all, aes(x=time, y=CH4, color=factor(year))) +
   geom_line(size=0.5) + facet_grid(.~site) +
   ylab(expression(F[CH4]~" ("~nmol~m^{-2}~s^{-1}~")")) +
