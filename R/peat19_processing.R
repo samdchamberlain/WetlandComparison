@@ -10,7 +10,7 @@ load("data/peat19_all.Rdata")
 
 #Simple average of daily fluxes for gapfilled values
 daily <- peat19_all %>%
-  group_by(dday) %>%
+  group_by(dday, site) %>%
   summarise(mNEE = mean(wc_gf),         #NEE (umol m-2 s-1)
             c_obs = sum(!is.na(wc)),    #num of non-filled observations (applies all _obs)
             mCH4 = mean(wm_gf),         #CH4 flux (nmol m-2 s-1)
@@ -33,7 +33,7 @@ daily <- peat19_all %>%
             Cond = mean(conductivity, na.rm=T), #conductivity (mS)
             month = round(median(month)),
             year = round(median(year))) %>%
-  filter(year < 2017) #only pre-2017
+  filter(year < 2017)
 
 #Time and unit conversions
 daily$datetime <- as.POSIXct(daily$dday*86400, origin="2012-01-01")
@@ -44,7 +44,7 @@ daily$gGEP <- (daily$GPP*12.01*3600*24)/1000000   #g C m-2 d-1
 
 #Annual fluxes from daily fluxes
 yearly <- daily %>%
-  group_by(year) %>%
+  group_by(year, site) %>%
   summarise(tCH4 = mean(mgCH4)*365/1000, #gC m-2 yr-1 (same for all fluxes below)
             tNEE = mean(gCO2)*365,
             tER = mean(gER)*365,
@@ -61,9 +61,6 @@ yearly$GHGbalance <- (yearly$tNEE*44/12) + (25*yearly$tCH4*16/12) #CO2-eq m-2 yr
 #resave with specific names, and add a site name variable
 peat19_yearly <- yearly
 peat19_daily <- daily
-peat19_yearly$site <- "Old Peat"
-peat19_daily$site <- "Old Peat"
-peat19_all$site <- "Old Peat"
 
 #remove other dataframes
 rm(yearly); rm(daily);

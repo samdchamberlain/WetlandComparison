@@ -16,7 +16,7 @@ alluvium_all$TW_10cm <- na.approx(alluvium_all$TW_10cm, na.rm=F) # linear interp
 
 #Simple average of daily fluxes for pre-gapfilled values
 daily <- alluvium_all %>%
-  group_by(dday) %>%
+  group_by(dday, site) %>%
   summarise(mNEE = mean(wc_gf),         #NEE (umol m-2 s-1)
             c_obs = sum(!is.na(wc)),    #num of non-filled observations (applies all _obs)
             mCH4 = mean(wm_gf),         #CH4 flux (nmol m-2 s-1)
@@ -39,7 +39,7 @@ daily <- alluvium_all %>%
             Cond = mean(Cond, na.rm=T),        #conductivity (mS)
             month = round(median(month)),
             year = round(median(year))) %>%
-  filter(year > 2013) #cut out pre-wetland measures
+  filter(year > 2013 & year < 2017) #cut out pre-wetland measures/incomplete years
 
 #Time and unit conversions
 daily$datetime <- as.POSIXct(daily$dday*86400, origin="2013-01-01")
@@ -50,7 +50,7 @@ daily$gGEP <- (daily$GPP*12.01*3600*24)/1000000   #g C m-2 d-1
 
 #Annual fluxes from daily fluxes
 yearly <- daily %>%
-  group_by(year) %>%
+  group_by(year, site) %>%
   summarise(tCH4 = mean(mgCH4)*365/1000, #gC m-2 yr-1 (same for all fluxes below)
             tNEE = mean(gCO2)*365,
             tER = mean(gER)*365,
@@ -67,9 +67,6 @@ yearly$GHGbalance <- (yearly$tNEE*44/12) + (25*yearly$tCH4*16/12) #CO2-eq m-2 yr
 #resave with specific names, and add site name variable
 alluvium_yearly <- yearly
 alluvium_daily <- daily
-alluvium_yearly$site <- "Alluvium"
-alluvium_daily$site <- "Alluvium"
-alluvium_all$site <- "Alluvium"
 
 #remove other dataframes
 rm(yearly); rm(daily);
