@@ -39,7 +39,7 @@ daily <- alluvium_all %>%
             Cond = mean(Cond, na.rm=T),        #conductivity (mS)
             month = round(median(month)),
             year = round(median(year))) %>%
-  filter(year > 2013 & year < 2017) #cut out pre-wetland measures/incomplete years
+  filter(year > 2013) #cut out pre-wetland measures/incomplete years
 
 #Time and unit conversions
 daily$datetime <- as.POSIXct(daily$dday*86400, origin="2013-01-01")

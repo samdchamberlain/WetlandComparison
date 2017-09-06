@@ -32,8 +32,7 @@ daily <- peat19_all %>%
             WTD = mean(WT, na.rm=T),    #water table (m from surface)
             Cond = mean(conductivity, na.rm=T), #conductivity (mS)
             month = round(median(month)),
-            year = round(median(year))) %>%
-  filter(year < 2017)
+            year = round(median(year)))
 
 #Time and unit conversions
 daily$datetime <- as.POSIXct(daily$dday*86400, origin="2012-01-01")
