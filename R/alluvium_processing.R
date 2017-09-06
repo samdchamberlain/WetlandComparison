@@ -37,9 +37,10 @@ daily <- alluvium_all %>%
             Rain = sum(PRECIP, na.rm=T),       #rain (mm)
             WTD = mean(WT, na.rm=T),           #water table (m from surface)
             Cond = mean(Cond, na.rm=T),        #conductivity (mS)
+            t_obs = length(wc_gf),      # total observations in the day
             month = round(median(month)),
             year = round(median(year))) %>%
-  filter(year > 2013) #cut out pre-wetland measures/incomplete years
+  filter(year > 2013 & t_obs == 48) #cut out pre-wetland measures, and incomplete days at edge of time series
 
 #Time and unit conversions
 daily$datetime <- as.POSIXct(daily$dday*86400, origin="2013-01-01")

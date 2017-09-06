@@ -26,7 +26,9 @@ diel_peat6 <- peat6_all %>%
             Tw = mean(TW_TULE_10cm, na.rm=T),
             sdTw = sd(TW_TULE_10cm, na.rm=T),
             PAR = mean(PAR, na.rm=T),
-            sdPAR = sd(PAR, na.rm=T))
+            sdPAR = sd(PAR, na.rm=T),
+            PA = mean(PA.y, na.rm=T),
+            sdPA = sd(PA.y, na.rm=T))
 
 #diel fluxes for 19yr old peat site
 diel_peat19 <- peat19_all %>%
@@ -43,7 +45,9 @@ diel_peat19 <- peat19_all %>%
             Tw = mean(TW_8cm, na.rm=T),
             sdTw = sd(TW_8cm, na.rm=T),
             PAR = mean(PAR, na.rm=T),
-            sdPAR = sd(PAR, na.rm=T))
+            sdPAR = sd(PAR, na.rm=T),
+            PA = mean(PA.y, na.rm=T),
+            sdPA = sd(PA.y, na.rm=T))
 
 #diel fluxes for 4yr old alluvium site
 diel_alluvium <- alluvium_all %>%
@@ -60,7 +64,9 @@ diel_alluvium <- alluvium_all %>%
             Tw = mean(TW_10cm, na.rm=T),
             sdTw = sd(TW_10cm, na.rm=T),
             PAR = mean(PAR, na.rm=T),
-            sdPAR = sd(PAR, na.rm=T))
+            sdPAR = sd(PAR, na.rm=T),
+            PA = mean(PA.y, na.rm=T),
+            sdPA = sd(PA.y, na.rm=T))
 
 #merge core site files
 diel_all <- rbind(diel_peat6, diel_peat19); diel_all <- rbind(diel_all, diel_alluvium);

@@ -31,9 +31,10 @@ daily <- peat6_all %>%
             Rain = sum(PRECIP, na.rm=T),       #rain (mm)
             WTD = mean(WT, na.rm=T),           #water table (m from surface)
             Cond = mean(Cond, na.rm=T),        #conductivity (mS)
+            t_obs = length(wc_gf),      # total observations in the day
             month = round(median(month)),
             year = round(median(year))) %>%
-  filter(year > 2010) #cut pre-wetland measures
+  filter(year > 2010 & t_obs == 48) #cut pre-wetland measures, and incomplete days at ends of time series
 
 #Time and unit conversions
 daily$datetime <- as.POSIXct(daily$dday*86400, origin="2010-01-01")

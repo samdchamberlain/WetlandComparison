@@ -31,8 +31,10 @@ daily <- peat19_all %>%
             Rain = 1,
             WTD = mean(WT, na.rm=T),    #water table (m from surface)
             Cond = mean(conductivity, na.rm=T), #conductivity (mS)
+            t_obs = length(wc_gf),      # total observations in the day
             month = round(median(month)),
-            year = round(median(year)))
+            year = round(median(year))) %>%
+  filter(t_obs == 48)  #remove incomplete days at either end of time series
 
 #Time and unit conversions
 daily$datetime <- as.POSIXct(daily$dday*86400, origin="2012-01-01")

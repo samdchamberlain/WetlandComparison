@@ -1,14 +1,11 @@
 ---
-title: "Supplemental Materials""
+title: "Supplemental Materials"
 author: Samuel D Chamberlain^1^, Tyler Anthony^1^, Whendee L Silver^1^, Elke Eichelmann^1^,
   Kyle S Hemes^1^, Patricia Y Oikawa^2^, Cove Sturtevant^3^, Sara H Knox^4^, Jaclyn
   Hatala Matthes^5^, Daphne J Szutu^1^, Joseph G Verfaillie^1^, Dennis D Baldocchi^1^
 date: '`r Sys.Date()`'
 output:
   pdf_document: default
-  word_document: default
-bibliography: library.bib
-csl: global-change-biology.csl
 ---
 
 ```{r setup, include=FALSE}
@@ -34,7 +31,8 @@ library(zoo)
 
 
 ## Supplemental Results
-```{r fig7, fig.height = 8, fig.width = 7, fig.align = "center",fig.cap="Diel patterns of mean (a) methane flux (*F~CH4~*), (b) net ecosystem exchange (*NEE*), (c) evapotranspiration (*ET*), and (d) water temperature (*T~w~*).", echo=FALSE}
+
+```{r figS1, fig.height = 8, fig.width = 7, fig.cap="Diel patterns of mean (a) methane flux (*F~CH4~*), (b) net ecosystem exchange (*NEE*), and (c) evapotranspiration (*ET*) by year.", echo=FALSE}
 source("R/Diel_patterns.R") #process the data
 
 a <- ggplot(diel_all, aes(x=time, y=CH4, color=factor(year))) +
@@ -69,3 +67,12 @@ iA$widths[2:5] <- as.list(maxWidth); iB$widths[2:5] <- as.list(maxWidth); iC$wid
 grid.arrange(a, b, c, ncol=1)
 ```
 
+```{r figS2, fig.height = 3, fig.width = 4, fig.cap="Mean methane flux (*F~CH4~*) and atmospheric pressure across all half-hourly periods in the 2015 growing season (DOY 100-300). Color scale on each dot denotes the time of day for each paired datapoint. Peak *F~CH4~* occurs late in the afternoon during atmopsheric pressure lows, and this relationship displays notable hysteresis."}
+ggplot(data=subset(diel_all, site == "Alluvium" & year == 2015), aes(x=PA, y=CH4, color=time)) +
+  geom_point(size=1.5) +
+  xlab("Atmospheric pressure (kPA)") +
+  ylab(expression(F[CH4]~" ("~nmol~m^{-2}~s^{-1}~")")) +
+  theme_bw()
+
+
+```
