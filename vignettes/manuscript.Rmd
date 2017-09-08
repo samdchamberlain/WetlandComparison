@@ -209,6 +209,14 @@ boxplot_theme <- theme(axis.text.x = element_text(size=9),
                  axis.title.y = element_text(size=9),
                  axis.title.x = element_blank())
 
+#Compare first year fluxes and 2016. Indexing and subsetting (young peat and alluvium only)
+all_s <- subset(all_sites, site == "Young Peat" | site == "Alluvium")
+all_s$horizon <- ifelse(all_s$site == "Young Peat" & all_s$year == 2012, "Parent",
+                        ifelse(all_s$site == "Alluvium" & all_s$year == 2015, "Parent",
+                               ifelse(all_s$site == "Alluvium" & all_s$year == 2017, "Recent",
+                                      ifelse(all_s$site == "Young Peat" & all_s$year == 2017, "Recent",
+                        NA))))
+
 a <- ggplot(soils_df, aes(x=site, y=FeT_mg.g, fill=horizon)) +
   geom_boxplot() +
   ylab(expression("Extractable Fe (mg "~g^{-1}~"soil)")) +
@@ -246,6 +254,12 @@ e <- ggplot(soils_df, aes(x=site, y=C, fill=horizon)) +
   ylab(expression("%C")) +
   scale_y_continuous(limits=c(10,50)) +
   boxplot_theme + theme(legend.position="none")
+
+f <- ggplot(all_s, aes(x=site, y=tCH4, fill=horizon)) +
+  geom_boxplot() +
+  stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
+  ylab(expression("%C")) +
+  boxplot_theme
 
 grid.arrange(a, b, c, d, e, ncol=1)
 ```
