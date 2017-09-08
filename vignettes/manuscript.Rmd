@@ -220,7 +220,7 @@ b <- ggplot(soils_df, aes(x=site, y=FeII_mg.g, fill=horizon)) +
   geom_boxplot() +
   ylab(expression("Fe2+ (mg "~g^{-1}~"soil)")) +
   stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
-  #scale_y_continuous(limits=c(0,32)) +
+  scale_y_continuous(limits=c(0,25)) +
   boxplot_theme + theme(legend.position="none")
 
 c <- ggplot(soils_df, aes(x=site, y=FePC_mg.g, fill=horizon)) +
@@ -240,11 +240,11 @@ d <- ggplot(soils_df, aes(x=site, y=pH, fill=horizon)) +
         legend.margin = margin(0, 0, 0, 0), 
         legend.background = element_rect(fill = "white"))
 
-e <- ggplot(soils_df, aes(x=site, y=N, fill=horizon)) +
+e <- ggplot(soils_df, aes(x=site, y=C, fill=horizon)) +
   geom_boxplot() +
   stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
   ylab(expression("%C")) +
-  #scale_y_continuous(limits=c(10,50)) +
+  scale_y_continuous(limits=c(10,50)) +
   boxplot_theme + theme(legend.position="none")
 
 grid.arrange(a, b, c, d, e, ncol=1)
