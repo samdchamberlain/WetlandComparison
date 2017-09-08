@@ -189,8 +189,11 @@ summary(pc_fe); TukeyHSD(pc_fe)
 ox_fe <- aov(soils_df$percent_ox ~ soils_df$site*soils_df$horizon) #percent oxidized
 summary(ox_fe); TukeyHSD(ox_fe)
 
-pH_aov <- aov(soils_df$pH ~ soils_df$site*soils_df$horizon) #percent oxidized
+pH_aov <- aov(soils_df$pH ~ soils_df$site*soils_df$horizon) #pH
 summary(pH_aov); TukeyHSD(pH_aov)
+
+percentC_aov <- aov(soils_df$C ~ soils_df$site*soils_df$horizon) #pH
+summary(percentC_aov); TukeyHSD(percentC_aov)
 ```
 
 Extractable Fe concentrations were significantly higher at the alluvium site compared to both peat sites in the recently accreted (Tukey's HSD, *P* < 0.0001) and parent soil horizons (Tukey's HSD, *P* < 0.001) (Fig. 3). At the alluvium site, extractable Fe concentrations did not vary with depth (Tukey's HSD, *P* = 0.6); however, extractable Fe concentrations were lower in the accreted horizon at both young peat (Tukey's HSD, *P* = 0.051) and old peat sites (Tukey's HSD, *P* < 0.001). Mean Fe concentrations were `r mean(soils_df$FeT_mg.g[which(soils_df$site == "Young Peat" & soils_df$horizon == "Parent")]) - mean(soils_df$FeT_mg.g[which(soils_df$site == "Young Peat" & soils_df$horizon == "Accreted")])` and `r mean(soils_df$FeT_mg.g[which(soils_df$site == "Old Peat" & soils_df$horizon == "Parent")]) - mean(soils_df$FeT_mg.g[which(soils_df$site == "Old Peat" & soils_df$horizon == "Accreted")])` mg Fe g^-1^ soil lower in accreted compared to parent horizons at the young and old peat sites, respectively (Fig. 3). Extractable Fe concentrations were close to zero in the accreted horizon at the old peat site (median = `r median(soils_df$FeT_mg.g[which(soils_df$site == "Old Peat" & soils_df$horizon == "Accreted")])` mg Fe g^-1^), where the accreted layer was predominantly poorly decomposed organic matter. Appreciable quantities of Fe^3+^ were present in all other site horizons, and `r mean(soils_df$percent_ox[which(soils_df$site == "Alluvium")])`%, `r mean(soils_df$percent_ox[which(soils_df$site == "Young Peat")])`%, and `r mean(soils_df$percent_ox[which(soils_df$site == "Old Peat" & soils_df$horizon == "Parent")])`% of extractable Fe was in Fe^3+^ form at the alluvium site, young peat site, and parent horizon of the old peat site, respectively. The percentage of Fe in Fe^3+^ form did not vary between horizons at the young peat and alluvium sites (Tukey's HSD, *P* > 0.58).
@@ -199,38 +202,52 @@ Poorly crystalline Fe concentrations were roughly two orders of magnitude lower 
 
 Soil pH also varied across wetland sites (ANOVA, *P* < 0.05), where pH was lowest at the alluvium site (`r mean(soils_df$pH[which(soils_df$site == "Alluvium")])` $\pm$ `r sd(soils_df$pH[which(soils_df$site == "Alluvium")])`), intermediate at the old peat site (`r mean(soils_df$pH[which(soils_df$site == "Old Peat")])` $\pm$ `r sd(soils_df$pH[which(soils_df$site == "Old Peat")])`), and near-neutral at the young peat site (`r mean(soils_df$pH[which(soils_df$site == "Young Peat")], na.rm=T)` $\pm$ `r sd(soils_df$pH[which(soils_df$site == "Young Peat")], na.rm=T)`) (Fig. 3). pH did not vary by depth at either the old or young peat wetlands (Tukey's HSD, *P* > 0.49); however, pH varied significantly with depth at the alluvium wetland (Tukey's HSD, *P* < 0.0001) where the parent horizon was more acidic (Fig. 3).
 
-```{r fig3, fig.cap="Soil HCl-extractable and poorly crystalline iron (Fe), as well as soil pH and percent carbon (%C) in accreted and parent horizons across the three core wetland sites (*n* $\\geq$ 14 per depth). Solid horizontal lines are medians, boxes are the interquartile range (IQR), whiskers are the 95% confidence interval, and points denote measured outliers. Significance levels are shown for pairwise comparisons between soil horizons at each site (t-tests), where ns denotes no significant differences and increasing asterisks denotes significance levels from *P* < 0.05, 0.01, 0.001, to 0.0001.", warning=FALSE, fig.width=8, fig.asp = .3}
+```{r fig3, fig.cap="Soil HCl-extractable iron (Fe), ferrous iron (Fe^2+^), poorly crystalline Fe (PC Fe), pH, and percent carbon (%C) in accreted and parent horizons across the three core wetland sites (*n* $\\geq$ 14 per depth). Solid horizontal lines are medians, boxes are the interquartile range (IQR), whiskers are the 95% confidence interval, and points denote measured outliers. Significance levels are shown for pairwise comparisons between soil horizons at each site (t-tests), where ns denotes no significant differences and increasing asterisks denotes significance levels from *P* < 0.05, 0.01, 0.001, to 0.0001.", warning=FALSE, fig.width=3.1, fig.height=9}
 source("R/soils.R") #process soils data into summary dataframe
 #theme
 boxplot_theme <- theme(axis.text.x = element_text(size=9),
-                 axis.title.y = element_text(size=10),
+                 axis.title.y = element_text(size=9),
                  axis.title.x = element_blank())
 
 a <- ggplot(soils_df, aes(x=site, y=FeT_mg.g, fill=horizon)) +
   geom_boxplot() +
-  ylab(expression("HCl-extractable Fe (mg "~g^{-1}~"soil)")) +
+  ylab(expression("Extractable Fe (mg "~g^{-1}~"soil)")) +
   stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
   scale_y_continuous(limits=c(0,32)) +
   boxplot_theme + theme(legend.position="none")
 
-b <- ggplot(soils_df, aes(x=site, y=FePC_mg.g, fill=horizon)) +
+b <- ggplot(soils_df, aes(x=site, y=FeII_mg.g, fill=horizon)) +
   geom_boxplot() +
-  ylab(expression("Poorly crystalline Fe (mg "~g^{-1}~"soil)")) +
+  ylab(expression("Fe2+ (mg "~g^{-1}~"soil)")) +
+  stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
+  #scale_y_continuous(limits=c(0,32)) +
+  boxplot_theme + theme(legend.position="none")
+
+c <- ggplot(soils_df, aes(x=site, y=FePC_mg.g, fill=horizon)) +
+  geom_boxplot() +
+  ylab(expression("PC Fe (mg "~g^{-1}~"soil)")) +
   stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
   scale_y_continuous(limits=c(0,0.5)) +
   boxplot_theme + theme(legend.position="none")
 
-c <- ggplot(soils_df, aes(x=site, y=pH, fill=horizon)) +
+d <- ggplot(soils_df, aes(x=site, y=pH, fill=horizon)) +
   geom_boxplot() +
   stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
   scale_y_continuous(limits=c(4.5,7.6)) +
   ylab(expression("pH")) +
   boxplot_theme +
-  theme(legend.position=c(.80,.15), legend.title = element_blank(), 
+  theme(legend.position=c(.84,.2), legend.title = element_blank(), 
         legend.margin = margin(0, 0, 0, 0), 
         legend.background = element_rect(fill = "white"))
 
-grid.arrange(a, b, c, nrow=1)
+e <- ggplot(soils_df, aes(x=site, y=N, fill=horizon)) +
+  geom_boxplot() +
+  stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
+  ylab(expression("%C")) +
+  #scale_y_continuous(limits=c(10,50)) +
+  boxplot_theme + theme(legend.position="none")
+
+grid.arrange(a, b, c, d, e, ncol=1)
 ```
 
 ## Wetland CO~2~ and CH~4~ Flux Magnitudes

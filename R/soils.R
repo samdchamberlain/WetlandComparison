@@ -14,7 +14,7 @@ soils_df$site <- ifelse(soils_df$Area == "East End", "Alluvium",
 
 #What percent of iron is in oxidized form?
 soils_df$percent_ox <- (soils_df$FeIII_mg.g/soils_df$FeT_mg.g)*100
-soils_df$percent_ox <- ifelse(soils_df$FeT_mg.g <= 0, NA, soils_df$percent_ox) #if no measurable Fe set to zero
+soils_df$percent_ox <- ifelse(soils_df$FeT_mg.g <= 1, NA, soils_df$percent_ox) #if no measurable Fe set to zero
 
 #New surface v. deep column represents more accurately that we are comparing a recent muck layer
 # to a deep older soil layer. This deep layer at the peat site is actually ~0.7m below surface
