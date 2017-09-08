@@ -36,7 +36,7 @@ header-includes:
 ```{r setup, include=FALSE}
 #setwd to main package directory
 knitr::opts_knit$set(root.dir = normalizePath("../"))
-options(digits=2)
+options(digits=4)
 
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -86,8 +86,9 @@ Fluxes of CH~4~, CO~2~, H~2~O, and sensible heat were measured from the three co
 We also measured a number of auxiliary atmospheric and soil environmental variables averaged at half-hourly intervals and logged to CR1000 dataloggers (Campbell Scientific, Logan, Utah, USA). Atmospheric variables included air temperature (*T~a~*) and relative humidity (*RH*) using shielded and aspirated thermistor and capacitance sensors (HMP45C or HMP60; Viasala, Vantaa, Finland), atmospheric pressure (*PA*) using capacitance sensors (PTB110; Viasala, Vantaa, Finland), photosynthetically active radiation (*PAR*) using quantum sensors (PAR-LITE or PQS 1; Kipp and Zonen, Delft, Netherlands), and net radiation (*R~net~*) using four-component and double-sided net-radiometers (CNR1 or NR Lite; Kipp and Zonen, Delft, Netherlands). We measured soil (*T~s~*) and water (*T~w~*) temperature at various depths using copper constant thermocouples, and water table depth (*WTD*) using pressure transducers (CS450 or CS451; Campbell Scientific, Logan, Utah, USA). An in depth description of the measurements made and instruments used at each core tower site can be found in Eichelmann et al. (*in review*).
 
 ## Soil Analyses
-We measured soil C, N, and Fe content at the young peat, old peat, and alluvium sites in the recently accreted wetland O horizon, hereafter referred to as accreted horizon, and the underlying pre-restoration parent soils, hereafter referred to as the parent horizon. Fifteen samples of both accreted and parent soil were collected at each site across three transects with each sampling location at least 3m apart. The transects were within each tower's flux footprint (Fig. 1), all samples were collected from fully inundated locations, and the accreted sample was collected directly above the underlying parent soil sample. At the young peat and alluvium sites (both < 8 years old), the differentiation between these horizons was clear, as the recently accreted horizon was loose, mucky, and heavily comprised of poorly-decomposed plant matter, whereas the underlying parent horizon was hardpack agricultural soil. At these sites, we collected the accreted horizon by hand and the top 15cm of parent horizon using a sediment core. Our sampling strategy was different at the old peat site because more than 0.5m of O horizon has accumulated since initial restoration. Here, the accreted horizon has accumulated to the water surface, and we collected the top 2 cm of this horizon to represent the most recently accreted peat. We then bore holes through the 0.5-0.7m saturated peat layer to collect the underlying parent soil horizon. Differentiation between these layers was also clear, as the top 0.5-0.7m was comprised of poorly-decomposed plant matter and the underlying horizon was silty soil. All soil samples were immediately bagged, and sub-samples were field extracted in 0.5M HCl and 0.2M sodium citrate-0.05M sodium ascorbate solutions to measure HCl-extractable Fe (Fe^2+^ and Fe^3+^) and poorly crystalline Fe, respectively.
+We measured soil C, N, and Fe content at the young peat, old peat, and alluvium sites in the recently accreted wetland O horizon, hereafter referred to as accreted horizon, and the underlying pre-restoration parent soils, hereafter referred to as the parent horizon. Fifteen samples of both accreted and parent soil were collected at each site across three transects with each sampling location at least 3m apart. The transects were within each tower's flux footprint (Fig. 1), all samples were collected from fully inundated locations, and the accreted sample was collected directly above the underlying parent soil sample. At the young peat and alluvium sites (both < 8 years old), the differentiation between these horizons was clear, as the recently accreted horizon was loose, mucky, and heavily comprised of poorly-decomposed plant matter, whereas the underlying parent horizon was hardpack agricultural soil. At these sites, we collected the accreted horizon by hand and the top 15cm of parent horizon using a sediment core. Our sampling strategy was different at the old peat site because more than 0.5m of O horizon has accumulated since initial restoration. Here, the accreted horizon has accumulated to the water surface, and we collected the top 2 cm of this horizon to represent the most recently accreted peat. We then bore holes through the 0.5-0.7m saturated peat layer to collect the underlying parent soil horizon. Differentiation between these layers was also clear, as the top 0.5-0.7m was comprised of poorly-decomposed plant matter and the underlying horizon was silty soil. 
 
+All soil samples were immediately bagged, and sub-samples were field extracted in 0.5M HCl and 0.2M sodium citrate/0.05M sodium ascorbate solutions to measure HCl-extractable Fe (Fe^2+^ and Fe^3+^) and reducible Fe oxides (Fe~ca~), respectively. The HCl extraction solubilizes reactive Fe^3+^ minerals and absorbed/solid Fe^2+^, and is used to quantify oxidized (Fe^3+^) and reduced (Fe^2+^) Fe pools in soil. The low pH of HCl prevents any Fe^2+^ oxidation after the samples are collected [@hall_reducing_2015]. Roughly 3g of dry mass sample were placed into the HCl solution in the field, and once back in the lab, samples were vortexed, shaken overnight, and centrifuged for 20 minutes at 1000 rcf. Concentrations of Fe^2+^ and Fe^3+^ were measured colorimetrically using the ferrozine assay [@viollier_ferrozine_2000]. Citrate-ascorbate extractions were used to quantify reducible Fe oxides that are representative of the Fe pool reducible by soil microbes [@hyacinthe_reactive_2006]. Roughly 1.5g of dry mass sample were placed into the citrate-ascorbate solutions in the field, and once back in the lab, samples were vortexed, shaken overnight, and then centrifuged for 20 minutes at 1000 rcf. Fe~ca~ concentrations were then quantified using an inductively coupled plasma optical emission spectrometer (ICP-OPS; Perkin Elmer Optima 5300 DV, Waltham, Massachusetts, USA). We then air dried soils samples at room temperature for the percent C (%C) analysis. Dried subsamples were sieved to 2mm and all major visible roots were removed by hand. Sieved, root-picked samples were then ground to a fine powder and analyzed in duplicate for total C using an elemental analyzer (CE Elantech, Lakewood, New Jersey, USA).
 
 ## Data Analysis
 ### Wavelet and Information Theory Analysis
@@ -174,96 +175,6 @@ iD$widths[2:5] <- as.list(maxWidth);
 grid.arrange(iA, iB, iC, iD, ncol=1)
 ```
 
-## Soil Properties
-```{r soils, echo=FALSE, include=FALSE}
-source("R/soils.R") #process soils data into summary dataframe
-
-#Computation of signficant differences among sites. These output are reported by hand in the following section, where significance is reported at 0.05, 0.001, and 0.0001 levels for all values where P < 0.05. In all cases, the maximum P value is reported when multiple Tukey HSD comparisons are cited.  Data were normally distrubuted within each site/horizon combination, so ANOVA and Tukey's were used.
-
-hcl_fe <- aov(soils_df$FeT_mg.g ~ soils_df$site*soils_df$horizon) #hcl fe
-summary(hcl_fe); TukeyHSD(hcl_fe)
-
-pc_fe <- aov(soils_df$FePC_mg.g ~ soils_df$site*soils_df$horizon) #poorly crystalline fe
-summary(pc_fe); TukeyHSD(pc_fe)
-
-ox_fe <- aov(soils_df$percent_ox ~ soils_df$site*soils_df$horizon) #percent oxidized
-summary(ox_fe); TukeyHSD(ox_fe)
-
-pH_aov <- aov(soils_df$pH ~ soils_df$site*soils_df$horizon) #pH
-summary(pH_aov); TukeyHSD(pH_aov)
-
-percentC_aov <- aov(soils_df$C ~ soils_df$site*soils_df$horizon) #pH
-summary(percentC_aov); TukeyHSD(percentC_aov)
-```
-
-Extractable Fe concentrations were significantly higher at the alluvium site compared to both peat sites in the recently accreted (Tukey's HSD, *P* < 0.0001) and parent soil horizons (Tukey's HSD, *P* < 0.001) (Fig. 3). At the alluvium site, extractable Fe concentrations did not vary with depth (Tukey's HSD, *P* = 0.6); however, extractable Fe concentrations were lower in the accreted horizon at both young peat (Tukey's HSD, *P* = 0.051) and old peat sites (Tukey's HSD, *P* < 0.001). Mean Fe concentrations were `r mean(soils_df$FeT_mg.g[which(soils_df$site == "Young Peat" & soils_df$horizon == "Parent")]) - mean(soils_df$FeT_mg.g[which(soils_df$site == "Young Peat" & soils_df$horizon == "Accreted")])` and `r mean(soils_df$FeT_mg.g[which(soils_df$site == "Old Peat" & soils_df$horizon == "Parent")]) - mean(soils_df$FeT_mg.g[which(soils_df$site == "Old Peat" & soils_df$horizon == "Accreted")])` mg Fe g^-1^ soil lower in accreted compared to parent horizons at the young and old peat sites, respectively (Fig. 3). Extractable Fe concentrations were close to zero in the accreted horizon at the old peat site (median = `r median(soils_df$FeT_mg.g[which(soils_df$site == "Old Peat" & soils_df$horizon == "Accreted")])` mg Fe g^-1^), where the accreted layer was predominantly poorly decomposed organic matter. Appreciable quantities of Fe^3+^ were present in all other site horizons, and `r mean(soils_df$percent_ox[which(soils_df$site == "Alluvium")])`%, `r mean(soils_df$percent_ox[which(soils_df$site == "Young Peat")])`%, and `r mean(soils_df$percent_ox[which(soils_df$site == "Old Peat" & soils_df$horizon == "Parent")])`% of extractable Fe was in Fe^3+^ form at the alluvium site, young peat site, and parent horizon of the old peat site, respectively. The percentage of Fe in Fe^3+^ form did not vary between horizons at the young peat and alluvium sites (Tukey's HSD, *P* > 0.58).
-
-Poorly crystalline Fe concentrations were roughly two orders of magnitude lower than HCl-extractable Fe across all three sites (Fig. 3), and trends in poorly crystalline Fe were similar to extractable Fe. Poorly crystalline Fe concentrations were significantly higher in alluvium soils compared to young and old peat wetland soils (Tukey's HSD, *P* < 0.0001) and did not vary between peat sites (Tukey's HSD, *P* > 0.8). Poorly crystalline Fe concentrations trended lower in accreted horizons across all sites, but none of these differences were significant (Tukey's HSD, *P* > 0.08). Mean poorly crystalline Fe concentrations were over an order of magnitude higher in alluvium soils (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "Alluvium")])` $\pm$ `r sd(soils_df$FePC_mg.g[which(soils_df$site == "Alluvium")])` mg Fe g^-1^ soil; mean $\pm$ SD) compared to the young (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "Young Peat")])` $\pm$ `r sd(soils_df$FePC_mg.g[which(soils_df$site == "Young Peat")])` mg Fe g^-1^ soil) and old (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "Old Peat")])` $\pm$ `r sd(soils_df$FePC_mg.g[which(soils_df$site == "Old Peat")])` mg Fe g^-1^ soil) peat soils (Fig. 3).
-
-Soil pH also varied across wetland sites (ANOVA, *P* < 0.05), where pH was lowest at the alluvium site (`r mean(soils_df$pH[which(soils_df$site == "Alluvium")])` $\pm$ `r sd(soils_df$pH[which(soils_df$site == "Alluvium")])`), intermediate at the old peat site (`r mean(soils_df$pH[which(soils_df$site == "Old Peat")])` $\pm$ `r sd(soils_df$pH[which(soils_df$site == "Old Peat")])`), and near-neutral at the young peat site (`r mean(soils_df$pH[which(soils_df$site == "Young Peat")], na.rm=T)` $\pm$ `r sd(soils_df$pH[which(soils_df$site == "Young Peat")], na.rm=T)`) (Fig. 3). pH did not vary by depth at either the old or young peat wetlands (Tukey's HSD, *P* > 0.49); however, pH varied significantly with depth at the alluvium wetland (Tukey's HSD, *P* < 0.0001) where the parent horizon was more acidic (Fig. 3).
-
-```{r fig3, fig.cap="Soil HCl-extractable iron (Fe), ferrous iron (Fe^2+^), poorly crystalline Fe (PC Fe), pH, and percent carbon (%C) in accreted and parent horizons across the three core wetland sites (*n* $\\geq$ 14 per depth). Solid horizontal lines are medians, boxes are the interquartile range (IQR), whiskers are the 95% confidence interval, and points denote measured outliers. Significance levels are shown for pairwise comparisons between soil horizons at each site (t-tests), where ns denotes no significant differences and increasing asterisks denotes significance levels from *P* < 0.05, 0.01, 0.001, to 0.0001.", warning=FALSE, fig.width=3.1, fig.height=9}
-source("R/soils.R") #process soils data into summary dataframe
-#theme
-boxplot_theme <- theme(axis.text.x = element_text(size=9),
-                 axis.title.y = element_text(size=9),
-                 axis.title.x = element_blank())
-
-#Compare first year fluxes and 2016. Indexing and subsetting (young peat and alluvium only)
-all_s <- subset(all_sites, site == "Young Peat" | site == "Alluvium")
-all_s$horizon <- ifelse(all_s$site == "Young Peat" & all_s$year == 2012, "Parent",
-                        ifelse(all_s$site == "Alluvium" & all_s$year == 2015, "Parent",
-                               ifelse(all_s$site == "Alluvium" & all_s$year == 2017, "Recent",
-                                      ifelse(all_s$site == "Young Peat" & all_s$year == 2017, "Recent",
-                        NA))))
-
-a <- ggplot(soils_df, aes(x=site, y=FeT_mg.g, fill=horizon)) +
-  geom_boxplot() +
-  ylab(expression("Extractable Fe (mg "~g^{-1}~"soil)")) +
-  stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
-  scale_y_continuous(limits=c(0,32)) +
-  boxplot_theme + theme(legend.position="none")
-
-b <- ggplot(soils_df, aes(x=site, y=FeII_mg.g, fill=horizon)) +
-  geom_boxplot() +
-  ylab(expression("Fe2+ (mg "~g^{-1}~"soil)")) +
-  stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
-  scale_y_continuous(limits=c(0,25)) +
-  boxplot_theme + theme(legend.position="none")
-
-c <- ggplot(soils_df, aes(x=site, y=FePC_mg.g, fill=horizon)) +
-  geom_boxplot() +
-  ylab(expression("PC Fe (mg "~g^{-1}~"soil)")) +
-  stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
-  scale_y_continuous(limits=c(0,0.5)) +
-  boxplot_theme + theme(legend.position="none")
-
-d <- ggplot(soils_df, aes(x=site, y=pH, fill=horizon)) +
-  geom_boxplot() +
-  stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
-  scale_y_continuous(limits=c(4.5,7.6)) +
-  ylab(expression("pH")) +
-  boxplot_theme +
-  theme(legend.position=c(.84,.2), legend.title = element_blank(), 
-        legend.margin = margin(0, 0, 0, 0), 
-        legend.background = element_rect(fill = "white"))
-
-e <- ggplot(soils_df, aes(x=site, y=C, fill=horizon)) +
-  geom_boxplot() +
-  stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
-  ylab(expression("%C")) +
-  scale_y_continuous(limits=c(10,50)) +
-  boxplot_theme + theme(legend.position="none")
-
-f <- ggplot(all_s, aes(x=site, y=tCH4, fill=horizon)) +
-  geom_boxplot() +
-  stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
-  ylab(expression("%C")) +
-  boxplot_theme
-
-grid.arrange(a, b, c, d, e, ncol=1)
-```
-
 ## Wetland CO~2~ and CH~4~ Flux Magnitudes
 ```{r combine_annual, echo=FALSE}
 #Add age since restoration variable
@@ -295,42 +206,50 @@ TukeyHSD(CH4) #Tukey HSD comparisons
 GHG <- aov(all_sites$GHGbalance ~ all_sites$site); summary(GHG) #CO2-eq budget ANOVA
 ```
 
-```{r fig4, fig.cap="Average annual fluxes of net ecosystem exchange (*NEE*), gross ecosystem photosynthesis (*GEP*), ecosystem respiration (*ER*), and methane flux (*F~CH4~*) for the three wetland sites. Solid horizontal lines are medians, boxes are the interquartile range (IQR), whiskers are the 95% confidence interval, and points denote measured outliers. Asterisks mark significant differences between sites at the *P* < 0.05 level.", echo=FALSE, fig.width=3, fig.height=8}
+```{r fig3, fig.cap="Average annual fluxes of net ecosystem exchange (*NEE*), gross ecosystem photosynthesis (*GEP*), ecosystem respiration (*ER*), and methane flux (*F~CH4~*) for the three wetland sites. Solid horizontal lines are medians, boxes are the interquartile range (IQR), whiskers are the 95% confidence interval, and points denote measured outliers. Asterisks mark significant differences between sites at the *P* < 0.05 level.", echo=FALSE, fig.width=3, fig.height=8}
 #theme
 box_theme <- theme(axis.title.x = element_blank(), 
                    axis.title.y = element_text(size=9),
                    axis.text.x = element_text(size=8))
 
 a <- ggplot(all_sites, aes(x=site, y=tNEE)) +
+  geom_boxplot() + 
   ylab(expression(NEE~" ("~g~CO[2]-C~m^{-2}~yr^{-1}~")")) +
-  geom_boxplot() + box_theme
+  #annotate("text",x=0.6,y=270,label="(a)") +
+  box_theme
 
 b <- ggplot(all_sites, aes(x=site, y=abs(tGEP))) +
+  geom_boxplot() + 
   ylab(expression(GEP~" ("~g~CO[2]-C~m^{-2}~yr^{-1}~")")) + 
-  geom_boxplot() + theme(axis.title.x = element_blank(), axis.title.y = element_text(size=10)) + box_theme
+  #annotate("text",x=0.6,y=2250,label="(b)") +
+  theme(axis.title.x = element_blank(), axis.title.y = element_text(size=10)) + box_theme
 
 c <- ggplot(all_sites, aes(x=site, y=tER)) +
+  geom_boxplot() + 
   ylab(expression(ER~" ("~g~CO[2]-C~m^{-2}~yr^{-1}~")")) + 
-  geom_boxplot() + box_theme
+  #annotate("text",x=0.6,y=1850,label="(c)") +
+  box_theme
 
 sig_comparisons <- list( c("Alluvium", "Old Peat"), c("Alluvium", "Young Peat"))
 
 d <- ggplot(all_sites, aes(x=site, y=tCH4)) +
+  geom_boxplot() + 
   ylab(expression(F[CH4]~" ("~g~CH[4]-C~m^{-2}~yr^{-1}~")")) + 
   scale_y_continuous(limits=c(20,75)) +
   stat_compare_means(comparisons=sig_comparisons, label="p.signif", method="t.test") +
-  geom_boxplot() + box_theme
+  #annotate("text",x=0.6,y=75,label="(d)") +
+  box_theme
 
 
 grid.arrange(a, b, c, d, ncol=1)
 
 ```
 
-Mean annual net ecosystem exchange (*NEE*) budgets were not significantly different across the three wetland sites (ANOVA, *P* = 0.7), though all sites were CO~2~ sinks on average (Fig. 4). Mean annual *NEE* was `r mean(alluvium_yearly$tNEE)` $\pm$ `r sd(alluvium_yearly$tNEE)` (*n* = `r length(alluvium_yearly$tNEE)`), `r mean(peat19_s$tNEE)` $\pm$ `r sd(peat19_s$tNEE)` (*n* = `r length(peat19_yearly$tNEE)`), and `r mean(peat6_yearly$tNEE)` $\pm$ `r sd(peat6_yearly$tNEE)` (*n* = `r length(peat6_yearly$tNEE)`) g CO~2~-C m^-2^ yr^-1^ for the alluvium, old peat, and young peat wetlands, respectively (mean $\pm$ SD). Similarly, mean annual *GEP* (ANOVA, *P* = 0.97) and *ER* (ANOVA, *P* = 0.9) did not vary across the three wetland sites (Fig. 4). These averages comprise three complete years from the alluvium wetland, four years from the old peat wetland, and six years from the young peat wetland (Fig. 5). Ecosystem CO~2~ fluxes (*NEE*, *GEP*, and *ER*) followed similar seasonal patterns across all three wetlands, where peak daily fluxes were observed during summer and the lowest fluxes were observed January to February of each year (Fig. 5). Daily *NEE* for the three wetlands overlapped in range, particularly in 2015, though the young peat wetland had highly variable fluxes across years (Fig. 5a). At this site, large *GEP* and *ER* fluxes were observed one year post-restoration when the vegetation was completely established, and fluxes were attenuated mid-growing season in 2014 and 2016 due to insect outbreaks and salinization, respectively (Fig. 5b,c). Young peat CO~2~ fluxes were similarly reduced in the 2017 growing season coincident with an insect outbreak and large-scale flushing event to reduce wetland salinity (Fig. 5a,b,c). CO~2~ fluxes from the old peat wetland were much more consistent across time (Fig. 5a,b,c), and once the alluvium wetland was fully vegetated (2015 onward), *NEE*, *GEP*, and *ER* fluxes from this system were very similar to the old peat wetland site (Fig. 5a,b,c). Additionally, CO~2~ flux patterns from the young peat and alluvium wetland were similar during the initial flooding phase when wetland vegetation cover was not fully established. Here, peak CO~2~ fluxes were observed late in the growing season when plant cover established within the flux footprints (Fig. 5a,b,c).
+Mean annual net ecosystem exchange (*NEE*) budgets were not significantly different across the three wetland sites (ANOVA, *P* = 0.7), though all sites were CO~2~ sinks on average (Fig. 3). Mean annual *NEE* was `r mean(alluvium_yearly$tNEE)` $\pm$ `r sd(alluvium_yearly$tNEE)` (*n* = `r length(alluvium_yearly$tNEE)`), `r mean(peat19_s$tNEE)` $\pm$ `r sd(peat19_s$tNEE)` (*n* = `r length(peat19_yearly$tNEE)`), and `r mean(peat6_yearly$tNEE)` $\pm$ `r sd(peat6_yearly$tNEE)` (*n* = `r length(peat6_yearly$tNEE)`) g CO~2~-C m^-2^ yr^-1^ for the alluvium, old peat, and young peat wetlands, respectively (mean $\pm$ SD). Similarly, mean annual *GEP* (ANOVA, *P* = 0.97) and *ER* (ANOVA, *P* = 0.9) did not vary across the three wetland sites (Fig. 3). These averages comprise three complete years from the alluvium wetland, four years from the old peat wetland, and six years from the young peat wetland (Fig. 4). Ecosystem CO~2~ fluxes (*NEE*, *GEP*, and *ER*) followed similar seasonal patterns across all three wetlands, where peak daily fluxes were observed during summer and the lowest fluxes were observed January to February of each year (Fig. 4). Daily *NEE* for the three wetlands overlapped in range, particularly in 2015, though the young peat wetland had highly variable fluxes across years (Fig. 4a). At this site, large *GEP* and *ER* fluxes were observed one year post-restoration when the vegetation was completely established, and fluxes were attenuated mid-growing season in 2014 and 2016 due to insect outbreaks and salinization, respectively (Fig. 4b,c). Young peat CO~2~ fluxes were similarly reduced in the 2017 growing season coincident with an insect outbreak and large-scale flushing event to reduce wetland salinity (Fig. 4a,b,c). CO~2~ fluxes from the old peat wetland were much more consistent across time (Fig. 4a,b,c), and once the alluvium wetland was fully vegetated (2015 onward), *NEE*, *GEP*, and *ER* fluxes from this system were very similar to the old peat wetland site (Fig. 4a,b,c). Additionally, CO~2~ flux patterns from the young peat and alluvium wetland were similar during the initial flooding phase when wetland vegetation cover was not fully established. Here, peak CO~2~ fluxes were observed late in the growing season when plant cover established within the flux footprints (Fig. 4a,b,c).
 
-Mean annual CH~4~ fluxes varied significantly across sites (ANOVA, *P* < 0.01). Annual CH~4~ fluxes from the alluvium wetland were significantly lower than either peat site (Tukey's HSD, *P* < 0.05), and did not vary between the peat wetlands (Tukey's HSD, *P* = 0.92) (Fig. 4). Annual CH~4~ fluxes were `r mean(alluvium_yearly$tCH4)` $\pm$ `r sd(alluvium_yearly$tCH4)` (*n* = `r length(alluvium_yearly$tCH4)`), `r mean(peat19_s$tCH4)` $\pm$ `r sd(peat19_s$tCH4)` (*n* = `r length(peat19_yearly$tCH4)`), and `r mean(peat6_yearly$tCH4)` $\pm$ `r sd(peat6_yearly$tCH4)` (*n* = `r length(peat6_yearly$tCH4)`) g CH~4~-C m^-2^ yr^-1^ for the alluvium, old peat, and young peat wetlands, respectively. Methane fluxes from the old peat wetland were highly variable in 2013 due to multiple periods when *WTD* dropped below the land surface (24 days total), and CH~4~ fluxes reduced during drained periods (Fig. 5d). Old peat wetland fluxes from 2013 were therefore omitted from the annual flux analysis above because they were not representative of stable state wetland fluxes. One similar draining event occurred in 2014, but CH~4~ fluxes recovered from this event and late season fluxes were similar to the young peat wetland. Methane fluxes from the two peat sites were very similar for 2015 and 2016; however, CH~4~ fluxes from the alluvium wetland were much lower than either peat site (Fig. 5d). Consequently, annual GHG equivalent budgets were higher from the old (`r mean(peat19_s$GHGbalance)` $\pm$ `r sd(peat19_s$GHGbalance)` g CO~2~eq. m^-2^ yr^-1^) and young peat sites (`r mean(peat6_yearly$GHGbalance)` $\pm$ `r sd(peat6_yearly$GHGbalance)` g CO~2~eq. m^-2^ yr^-1^) compared to the alluvium site (`r mean(alluvium_yearly$GHGbalance)` $\pm$ `r sd(alluvium_yearly$GHGbalance)` g CO~2~eq. m^-2^ yr^-1^); however, these differences were not statistically significant (ANOVA, *P* = 0.15).
+Mean annual CH~4~ fluxes varied significantly across sites (ANOVA, *P* < 0.01). Annual CH~4~ fluxes from the alluvium wetland were significantly lower than either peat site (Tukey's HSD, *P* < 0.05), and did not vary between the peat wetlands (Tukey's HSD, *P* = 0.92) (Fig. 3). Annual CH~4~ fluxes were `r mean(alluvium_yearly$tCH4)` $\pm$ `r sd(alluvium_yearly$tCH4)` (*n* = `r length(alluvium_yearly$tCH4)`), `r mean(peat19_s$tCH4)` $\pm$ `r sd(peat19_s$tCH4)` (*n* = `r length(peat19_yearly$tCH4)`), and `r mean(peat6_yearly$tCH4)` $\pm$ `r sd(peat6_yearly$tCH4)` (*n* = `r length(peat6_yearly$tCH4)`) g CH~4~-C m^-2^ yr^-1^ for the alluvium, old peat, and young peat wetlands, respectively. Methane fluxes from the old peat wetland were highly variable in 2013 due to multiple periods when *WTD* dropped below the land surface (24 days total), and CH~4~ fluxes reduced during drained periods (Fig. 4d). Old peat wetland fluxes from 2013 were therefore omitted from the annual flux analysis above because they were not representative of stable state wetland fluxes. One similar draining event occurred in 2014, but CH~4~ fluxes recovered from this event and late season fluxes were similar to the young peat wetland. Methane fluxes from the two peat sites were very similar for 2015 and 2016; however, CH~4~ fluxes from the alluvium wetland were much lower than either peat site (Fig. 4d). Consequently, annual GHG equivalent budgets were higher from the old (`r mean(peat19_s$GHGbalance)` $\pm$ `r sd(peat19_s$GHGbalance)` g CO~2~eq. m^-2^ yr^-1^) and young peat sites (`r mean(peat6_yearly$GHGbalance)` $\pm$ `r sd(peat6_yearly$GHGbalance)` g CO~2~eq. m^-2^ yr^-1^) compared to the alluvium site (`r mean(alluvium_yearly$GHGbalance)` $\pm$ `r sd(alluvium_yearly$GHGbalance)` g CO~2~eq. m^-2^ yr^-1^); however, these differences were not statistically significant (ANOVA, *P* = 0.15).
 
-```{r fig5, fig.cap="Daily (a) net ecosystem exchange (*NEE*), (b) gross ecosystem photosynthesis (*GEP*), (c) ecosystem respiration (*ER*), and (d) methane flux (*F~CH4~*) from the alluvium, old peat, and young peat wetlands. Flux measurements from the young peat and alluvium wetlands begin at the point of restoration.", warning=FALSE, fig.width=7, fig.height=5.2}
+```{r fig4, fig.cap="Daily (a) net ecosystem exchange (*NEE*), (b) gross ecosystem photosynthesis (*GEP*), (c) ecosystem respiration (*ER*), and (d) methane flux (*F~CH4~*) from the alluvium, old peat, and young peat wetlands. Flux measurements from the young peat and alluvium wetlands begin at the point of restoration.", warning=FALSE, fig.width=7, fig.height=5.2}
 #themes
 times_series <- theme_bw() +
   theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
@@ -382,9 +301,9 @@ iD$widths[2:5] <- as.list(maxWidth);
 grid.arrange(iA, iB, iC, iD, ncol=1)
 ```
 
-Methane flux trajectories from the young peat and alluvium wetlands were quite different following initial restoration (Fig. 6). General flux patterns were similar across sites, where CH~4~ fluxes peaked late-season during year zero (days 1-365), and in the following growing seasons, peak CH~4~ fluxes occurred mid-summer (Fig. 6). Flux magnitudes were considerably lower from the alluvium site for the first three years following restoration (Fig. 6). Alluvium wetland fluxes increased with each year, whereas CH~4~ fluxes from the young peat wetland peaked during year one and decreased with subsequent years (Figs. 5d and 6). Differences in daily fluxes across wetlands were largest during year one (days 366-730) when alluvium wetland fluxes were increasing and young peat wetland emissions were peaking (Fig. 6). Annual CH~4~ budgets for the young peat site were over two times larger than the alluvium site during year zero and one. Year zero budgets were `r alluvium_yearly$tCH4[alluvium_yearly$year == 2014]` and `r peat6_yearly$tCH4[peat6_yearly$year == 2011]` g CH~4~ m^-2^ yr^-1^ for the alluvium and young peat wetland, respectively, and year one budgets were `r alluvium_yearly$tCH4[alluvium_yearly$year == 2015]` and `r peat6_yearly$tCH4[peat6_yearly$year == 2012]` g CH~4~ m^-2^ yr^-1^ for the alluvium and young peat wetland, respectively. This gap began to close during year two (days 731-1095), when annual fluxes were `r alluvium_yearly$tCH4[alluvium_yearly$year == 2016]` and `r peat6_yearly$tCH4[peat6_yearly$year == 2013]` g CH~4~ m^-2^ yr^-1^ from the alluvium and young peat wetland, respectively. During year three (days > 1095), fluxes from the young peat and alluvium wetlands were roughly equivalent, and differences observed in previous years were no longer apparent (Fig. 6). Similarly, CH~4~ fluxes from the old peat and alluvium wetlands were roughly equivalent during the 2017 growing season (Fig. 5d). Methane fluxes from the young peat wetland were lower and unstable for most of 2017, but by mid-summer reached a similar magnitude as the other sites (Fig. 5d). Reduced CH~4~ fluxes at the young peat site were likely due to multiple sources of disturbance, namely insect outbreak and freshwater flushing, which also impacted CO~2~ fluxes in 2017 (Fig. 5).
+Methane flux trajectories from the young peat and alluvium wetlands were quite different following initial restoration (Fig. 5). General flux patterns were similar across sites, where CH~4~ fluxes peaked late-season during year zero (days 1-365), and in the following growing seasons, peak CH~4~ fluxes occurred mid-summer (Fig. 5). Flux magnitudes were considerably lower from the alluvium site for the first three years following restoration (Fig. 5). Alluvium wetland fluxes increased with each year, whereas CH~4~ fluxes from the young peat wetland peaked during year one and decreased with subsequent years (Figs. 5d and 6). Differences in daily fluxes across wetlands were largest during year one (days 366-730) when alluvium wetland fluxes were increasing and young peat wetland emissions were peaking (Fig. 5). Annual CH~4~ budgets for the young peat site were over two times larger than the alluvium site during year zero and one. Year zero budgets were `r alluvium_yearly$tCH4[alluvium_yearly$year == 2014]` and `r peat6_yearly$tCH4[peat6_yearly$year == 2011]` g CH~4~ m^-2^ yr^-1^ for the alluvium and young peat wetland, respectively, and year one budgets were `r alluvium_yearly$tCH4[alluvium_yearly$year == 2015]` and `r peat6_yearly$tCH4[peat6_yearly$year == 2012]` g CH~4~ m^-2^ yr^-1^ for the alluvium and young peat wetland, respectively. This gap began to close during year two (days 731-1095), when annual fluxes were `r alluvium_yearly$tCH4[alluvium_yearly$year == 2016]` and `r peat6_yearly$tCH4[peat6_yearly$year == 2013]` g CH~4~ m^-2^ yr^-1^ from the alluvium and young peat wetland, respectively. During year three (days > 1095), fluxes from the young peat and alluvium wetlands were roughly equivalent, and differences observed in previous years were no longer apparent (Fig. 5). Similarly, CH~4~ fluxes from the old peat and alluvium wetlands were roughly equivalent during the 2017 growing season (Fig. 4d). Methane fluxes from the young peat wetland were lower and unstable for most of 2017, but by mid-summer reached a similar magnitude as the other sites (Fig. 4d). Reduced CH~4~ fluxes at the young peat site were likely due to multiple sources of disturbance, namely insect outbreak and freshwater flushing, which also impacted CO~2~ fluxes in 2017 (Fig. 4).
 
-```{r fig6, fig.cap="Methane fluxes (*F~CH4~*) at the young peat and alluvium wetland from time since initial restoration. Day zero is 2011-01-01 for the young peat wetland and 2014-01-01 for the alluvium wetland.", fig.width=3.5, fig.height=2, warning=FALSE}
+```{r fig5, fig.cap="Methane fluxes (*F~CH4~*) at the young peat and alluvium wetland from time since initial restoration. Day zero is 2011-01-01 for the young peat wetland and 2014-01-01 for the alluvium wetland.", fig.width=3.5, fig.height=2, warning=FALSE}
 #subset and index data
 trajectory <- subset(all_daily, site != "Old Peat") #remove old peat site
 
@@ -435,9 +354,9 @@ ks.test(alluvium4$wm, peat4$wm)
 
 ```
 
-We also measured CH~4~ fluxes from two temporary tower sites within the same wetland complex as the alluvium site, where age was held constant (four years old) but the underlying soil properties vary (Fig. 1). Simultaneous measurements across all three sites took place between July 1 and August 15, 2017. Methane fluxes from the core and temporary alluvium site generally overlapped in range, and mean flux rates were `r mean(alluvium4$wm, na.rm=T)` $\pm$ `r sd(alluvium4$wm, na.rm=T)` and `r mean(alluvium2_4$wm, na.rm=T)` $\pm$ `r sd(alluvium2_4$wm, na.rm=T)` nmol CH~4~ m^-2^ s^-1^ (mean $\pm$ SD) from the core and temporary alluvium site, respectively (Fig. 7). Despite overlapping ranges, CH~4~ fluxes magnitudes were larger (Mann-Whitney U, *P* < 0.0001) and more broadly distributed (Kolmogorov-Smirnov, *P* < 0.0001) at the temporary alluvium site compared to the core alluvium site (Fig. 7). Mean CH~4~ fluxes from the temporary peat site were `r mean(peat4$wm, na.rm=T)` $\pm$ `r sd(peat4$wm, na.rm=T)` nmol CH~4~ m^-2^ s^-1^, much larger than fluxes from the core alluvium site (Mann-Whitney U, *P* < 0.0001), and their distributions exhibited little overlap in range (Kolmogorov-Smirnov, *P* < 0.0001) (Fig. 7). In general, CH~4~ fluxes from the core alluvium site were more similar to the temporary alluvium site than the temporary peat site (Fig. 7).
+We also measured CH~4~ fluxes from two temporary tower sites within the same wetland complex as the alluvium site, where age was held constant (four years old) but the underlying soil properties vary (Fig. 1). Simultaneous measurements across all three sites took place between July 1 and August 15, 2017. Methane fluxes from the core and temporary alluvium site generally overlapped in range, and mean flux rates were `r mean(alluvium4$wm, na.rm=T)` $\pm$ `r sd(alluvium4$wm, na.rm=T)` and `r mean(alluvium2_4$wm, na.rm=T)` $\pm$ `r sd(alluvium2_4$wm, na.rm=T)` nmol CH~4~ m^-2^ s^-1^ (mean $\pm$ SD) from the core and temporary alluvium site, respectively (Fig. 6). Despite overlapping ranges, CH~4~ fluxes magnitudes were larger (Mann-Whitney U, *P* < 0.0001) and more broadly distributed (Kolmogorov-Smirnov, *P* < 0.0001) at the temporary alluvium site compared to the core alluvium site (Fig. 6). Mean CH~4~ fluxes from the temporary peat site were `r mean(peat4$wm, na.rm=T)` $\pm$ `r sd(peat4$wm, na.rm=T)` nmol CH~4~ m^-2^ s^-1^, much larger than fluxes from the core alluvium site (Mann-Whitney U, *P* < 0.0001), and their distributions exhibited little overlap in range (Kolmogorov-Smirnov, *P* < 0.0001) (Fig. 6). In general, CH~4~ fluxes from the core alluvium site were more similar to the temporary alluvium site than the temporary peat site (Fig. 6).
 
-```{r fig7, fig.cap="Distribution of methane fluxes (*F~CH4~*) from the three sites on Twitchell Island where wetland age is held constant and parent soil type varies. All measurements were made during the 2017 growing season between July 1 and August 15. All sites were restored in 2014. The temporary peat site measured fluxes from a Rindge peat soil series, and the temporary alluvium tower measured fluxes from the same Scribner alluvium soil as the core alluvium site. Both temporary towers were located within 500m of the core alluvium tower.", fig.height=3, fig.width=3.5}
+```{r fig6, fig.cap="Distribution of methane fluxes (*F~CH4~*) from the three sites on Twitchell Island where wetland age is held constant and parent soil type varies. All measurements were made during the 2017 growing season between July 1 and August 15. All sites were restored in 2014. The temporary peat site measured fluxes from a Rindge peat soil series, and the temporary alluvium tower measured fluxes from the same Scribner alluvium soil as the core alluvium site. Both temporary towers were located within 500m of the core alluvium tower.", fig.height=3, fig.width=3.5}
 ggplot(data=twitchell, aes(wm, color=site, fill=site)) +
   geom_density(alpha=0.1) +
   xlab(expression(F[CH4]~" "~"("~nmol~CH[4]~m^{-2}~s^{-1}~")")) + 
@@ -450,7 +369,7 @@ ggplot(data=twitchell, aes(wm, color=site, fill=site)) +
 ```
 
 ## Methane flux patterns and biophysical drivers
-During the first year post-restoration, when differences in CH~4~ flux magnitudes between the young peat and alluvium wetland were largest (Fig. 6), CH~4~ flux patterns and their relations to biophysical drivers were notably different across sites. At the young peat wetland in 2012, CH~4~ fluxes peaked between 10:00 to 12:00 local time (LT) coinciding with the period of peak *NEE* (Fig. S1). Similar diel CH~4~ flux patterns were also observed from the old peat wetland, and these mid-day CH~4~ flux peaks were consistent across years at the old peat site (Fig. S1). Methane fluxes from the young peat wetland were strongly coupled to plant processes (*NEE*, *GEP*, and *ET*) across multiple time scales during year one (Fig. 8a,c,e). At the hourly time scale, CH~4~ flux shared most information with *ET* (Fig. 8a), and at the diel scale, dominant interactions were synchronous and related to multiple plant processes, such as *ET*, *GEP*, and *NEE*, as well as wind direction (*WD*) (Fig. 8c). At the multiday time scale, CH~4~ flux only shared significant levels of information with *ET* and *WD* (Fig. 8e). In total, 51.5% of total CH~4~ flux variability occurred at the diel scale, 33.4% occurred the multiday scale, and 15.1% occurred at the hourly time scale (Fig. 8a,c,e).
+During the first year post-restoration, when differences in CH~4~ flux magnitudes between the young peat and alluvium wetland were largest (Fig. 5), CH~4~ flux patterns and their relations to biophysical drivers were notably different across sites. At the young peat wetland in 2012, CH~4~ fluxes peaked between 10:00 to 12:00 local time (LT) coinciding with the period of peak *NEE* (Fig. S1). Similar diel CH~4~ flux patterns were also observed from the old peat wetland, and these mid-day CH~4~ flux peaks were consistent across years at the old peat site (Fig. S1). Methane fluxes from the young peat wetland were strongly coupled to plant processes (*NEE*, *GEP*, and *ET*) across multiple time scales during year one (Fig. 7a,c,e). At the hourly time scale, CH~4~ flux shared most information with *ET* (Fig. 7a), and at the diel scale, dominant interactions were synchronous and related to multiple plant processes, such as *ET*, *GEP*, and *NEE*, as well as wind direction (*WD*) (Fig. 7c). At the multiday time scale, CH~4~ flux only shared significant levels of information with *ET* and *WD* (Fig. 7e). In total, 51.5% of total CH~4~ flux variability occurred at the diel scale, 33.4% occurred the multiday scale, and 15.1% occurred at the hourly time scale (Fig. 7a,c,e).
 
 ![Mutual information (*I^R^*) shared between methane flux (*F~CH4~*) and biophysical variables at multiple time scales for the young peat and alluvium wetland one year post-restoration (a-f) and during the 2016 growing season (g-l). Black bars indicate *I^R^* at zero time lag, and colored extension indicates maximum *I^R^* observed at the time lag illustrated by the color scale. Vertical grey bars represent 95% confidence intervals generated from 1000 Monte Carlo random walks. Italicized percentage inset on each panel indicates the percent of total wavelet variance occurring at each time scale. Biophysical variables include net ecosystem exchange (*NEE*), gross ecosystem photosynthesis (*GEP*), evapotranspiration (*ET*), air temperature (*T~a~*), air pressure (*PA*), friction velocity (*u$^\ast$*), wind direction (*WD*), soil temperature (*T~s~*), and water temperature (*T~w~*).](fig8.png)
 
@@ -504,13 +423,143 @@ During the first year post-restoration, when differences in CH~4~ flux magnitude
 <!-- # grid.arrange(a, b, c, ncol=1) -->
 <!-- # ``` -->
 
-Alluvium wetland CH~4~ flux patterns and interactions were notably different from to the young peat wetland one year post-restoration. Alluvium wetland CH~4~ fluxes were dominantly coupled to physical processes, such as temperature and atmospheric pressure fluctuations (Fig. 8b,d,f), in contrast to the young peat site where fluxes were primarily coupled to plant processes (Fig. 8a,c,e). At the hourly scale, CH~4~ fluxes also shared most information with *ET* (Fig. 8b). At the diel scale, dominant interactions were observed with *PA* and *T~w~* at no time lag, and with *T~a~* at a three hour lag (Fig. 8d). This dominant diel *PA* interaction was not observed at the peat site (Fig. 8c), and at the alluvium wetland maximum CH~4~ fluxes were observed during late afternoon (17:00 to 19:00 LT) pressure lows (Fig. S2). Strong interactions were also observed between CH~4~ flux and *GEP*/*NEE*/*ET*, but these interactions occurred at a four to five hour time lag (Fig. 8d). These interactions can be intuitively seen through the timing of fluxes, where peak *NEE* and *ET* were observed mid-day, while peak CH~4~ flux occurred many hours later in the afternoon (Fig. S1). At the multiday scale, alluvium CH~4~ fluxes only shared significant information with temperature variables (*T~a~* and *T~w~*) (Fig. 8f). Hourly scale CH~4~ flux variability was more dominant at the alluvium wetland in year one, as 57% of total CH~4~ flux signal variability occurred at the diel scale, 30.5% occurred at the hourly scale, and only 12.5% occurred at the multiday time scale (Fig. 8).
+Alluvium wetland CH~4~ flux patterns and interactions were notably different from to the young peat wetland one year post-restoration. Alluvium wetland CH~4~ fluxes were dominantly coupled to physical processes, such as temperature and atmospheric pressure fluctuations (Fig. 7b,d,f), in contrast to the young peat site where fluxes were primarily coupled to plant processes (Fig. 7a,c,e). At the hourly scale, CH~4~ fluxes also shared most information with *ET* (Fig. 7b). At the diel scale, dominant interactions were observed with *PA* and *T~w~* at no time lag, and with *T~a~* at a three hour lag (Fig. 7d). This dominant diel *PA* interaction was not observed at the peat site (Fig. 7c), and at the alluvium wetland maximum CH~4~ fluxes were observed during late afternoon (17:00 to 19:00 LT) pressure lows (Fig. S2). Strong interactions were also observed between CH~4~ flux and *GEP*/*NEE*/*ET*, but these interactions occurred at a four to five hour time lag (Fig. 7d). These interactions can be intuitively seen through the timing of fluxes, where peak *NEE* and *ET* were observed mid-day, while peak CH~4~ flux occurred many hours later in the afternoon (Fig. S1). At the multiday scale, alluvium CH~4~ fluxes only shared significant information with temperature variables (*T~a~* and *T~w~*) (Fig. 7f). Hourly scale CH~4~ flux variability was more dominant at the alluvium wetland in year one, as 57% of total CH~4~ flux signal variability occurred at the diel scale, 30.5% occurred at the hourly scale, and only 12.5% occurred at the multiday time scale (Fig. 7).
 
 By the 2016 growing season, CH~4~ flux patterns and interactions had converged across the recently restored wetland sites. Peak CH~4~ flux was observed at roughly 15:00 LT at both sites by 2016. This shift to an afternoon peak flux occurred in 2013 at the young peat wetland, and patterns in flux timing were similar for each year thereafter (Fig. S1). Both alluvium and young peat sites were quite different in terms of flux timing compared to the old peat site, where peak CH~4~ flux occurred around noon most years (Fig. S1). 
 
-Scale-emergent controls of CH~4~ flux were also very similar between the alluvium and young peat site during the 2016 growing season (Fig. 8). For both sites, hourly CH~4~ fluxes exhibited dominant synchronous couplings to *ET* and *u$^\ast$* (Fig. 8g,h), and at the diel scale, dominant interactions with CH~4~ flux included *T~a~*, *ET*, *GEP*, and *NEE* at both wetlands (Fig. 8i,j). By 2016, dominant synchronous *PA* interactions observed at the alluvium site (Fig. 8d) were no longer apparent, though *PA* shared similar levels of information with CH~4~ flux at a 5-6 hour time lag (Fig. 8j). Multiday scale interactions were also similar, as significant interactions with temperature variables (*T~a~*, *T~w~*, and *T~s~*), as well as *ET*, were observed across both recently restored wetlands (Fig. 8k,l). There were some notable differences between sites at the multiday scale, as CH~4~ flux also shared information with *NEE* at the young peat site (Fig. 8k), and CH~4~ flux shared information with *PA* at the alluvium site (Fig. 8l). At the young peat wetland, most variability still occurred at the diel scale (48.1%), followed by the multiday (29.2%), and hourly (22.7%) time scales. Most variability at the alluvium wetland still occurred at the diel scale (44.6%), followed closely by the hourly scale (41.4%), and much less variability occurred at the multiday scale (14%) (Fig. 8).
+Scale-emergent controls of CH~4~ flux were also very similar between the alluvium and young peat site during the 2016 growing season (Fig. 7). For both sites, hourly CH~4~ fluxes exhibited dominant synchronous couplings to *ET* and *u$^\ast$* (Fig. 7g,h), and at the diel scale, dominant interactions with CH~4~ flux included *T~a~*, *ET*, *GEP*, and *NEE* at both wetlands (Fig. 7i,j). By 2016, dominant synchronous *PA* interactions observed at the alluvium site (Fig. 7d) were no longer apparent, though *PA* shared similar levels of information with CH~4~ flux at a 5-6 hour time lag (Fig. 7j). Multiday scale interactions were also similar, as significant interactions with temperature variables (*T~a~*, *T~w~*, and *T~s~*), as well as *ET*, were observed across both recently restored wetlands (Fig. 7k,l). There were some notable differences between sites at the multiday scale, as CH~4~ flux also shared information with *NEE* at the young peat site (Fig. 7k), and CH~4~ flux shared information with *PA* at the alluvium site (Fig. 7l). At the young peat wetland, most variability still occurred at the diel scale (48.1%), followed by the multiday (29.2%), and hourly (22.7%) time scales. Most variability at the alluvium wetland still occurred at the diel scale (44.6%), followed closely by the hourly scale (41.4%), and much less variability occurred at the multiday scale (14%) (Fig. 7).
 
-<!-- ![Mutual information (*I^R^*) shared between methane flux (*F~CH4~*) and biophysical variables at multiple time scales for the young peat and alluvium wetland during the 2016 growing season. Black bars indicate *I^R^* at zero time lag, and colored extension indicates maximum *I^R^* observed at time lag illustrated by the color. Biophysical variable abbreviations are the same used in Fig. 8. Vertical grey bars represent 95% confidence interval generated from 1000 Monte Carlo random walks. Italicized percentage inset on each panel indicates the percent of total wavelet variance occurring at each time scale.](fig9.png) -->
+## Soil Properties
+```{r soils, echo=FALSE, include=FALSE}
+source("R/soils.R") #process soils data into summary dataframe
+
+#Computation of signficant differences among sites. These output are reported by hand in the following section, where significance is reported at 0.05, 0.001, and 0.0001 levels for all values where P < 0.05. In all cases, the maximum P value is reported when multiple Tukey HSD comparisons are cited.  Data were normally distrubuted within each site/horizon combination, so ANOVA and Tukey's were used.
+
+#Accreted comparisons
+accreted <- subset(soils_df, horizon == "Accreted")
+
+hclfe_A <- aov(accreted$FeT_mg.g ~ accreted$site) #hcl fe
+summary(hclfe_A); TukeyHSD(hclfe_A)
+
+feII_A <- aov(accreted$FeII_mg.g ~ accreted$site) #feII
+summary(feII_A); TukeyHSD(feII_A)
+
+pcfe_A <- aov(accreted$FePC_mg.g ~ accreted$site) #fe PC
+summary(pcfe_A); TukeyHSD(pcfe_A)
+
+oxfe_A <- aov(accreted$percent_ox ~ accreted$site) #percent oxidized
+summary(oxfe_A); TukeyHSD(oxfe_A)
+
+pH_A <- aov(accreted$pH ~ accreted$site) #pH
+summary(pH_A); TukeyHSD(pH_A)
+
+percentC_A <- aov(accreted$C ~ accreted$site) #percent C
+summary(percentC_A); TukeyHSD(percentC_A)
+
+## Parent comparisons
+parent <- subset(soils_df, horizon == "Parent")
+
+hclfe_P <- aov(parent$FeT_mg.g ~ parent$site) #hcl fe
+summary(hclfe_P); TukeyHSD(hclfe_P)
+
+feII_P <- aov(parent$FeII_mg.g ~ parent$site) #feII
+summary(feII_P); TukeyHSD(feII_P)
+
+pcfe_P <- aov(parent$FePC_mg.g ~ parent$site) #fe PC
+summary(pcfe_P); TukeyHSD(pcfe_P)
+
+oxfe_P <- aov(parent$percent_ox ~ parent$site) #percent oxidized
+summary(oxfe_P); TukeyHSD(oxfe_P)
+
+pH_P <- aov(parent$pH ~ parent$site) #pH
+summary(pH_P); TukeyHSD(pH_P)
+
+percentC_P <- aov(parent$C ~ parent$site) #percent C
+summary(percentC_P); TukeyHSD(percentC_P)
+```
+
+Extractable Fe concentrations were significantly higher at the alluvium site compared to both peat sites in the recently accreted (Tukey's HSD, *P* < 0.0001) and parent soil horizons (Tukey's HSD, *P* < 0.001) (Fig. 8a). Extractable Fe did not vary between parent horizons of the two peat sites (Tukey's HSD, *P* = 0.14), but was significantly lower in the recently accreted horizon of the old peat sites compared to the young peat site (*P* = 0.0001) (Fig. 8a). At the alluvium site, extractable Fe concentrations did not vary with depth; however, extractable Fe concentrations were lower in the accreted horizon at both old peat (Tukey's HSD, *P* < 0.0001) and young peat sites (Tukey's HSD, *P* < 0.01) (Fig. 8a). Mean Fe concentrations were `r mean(soils_df$FeT_mg.g[which(soils_df$site == "Young Peat" & soils_df$horizon == "Parent")]) - mean(soils_df$FeT_mg.g[which(soils_df$site == "Young Peat" & soils_df$horizon == "Accreted")])` and `r mean(soils_df$FeT_mg.g[which(soils_df$site == "Old Peat" & soils_df$horizon == "Parent")]) - mean(soils_df$FeT_mg.g[which(soils_df$site == "Old Peat" & soils_df$horizon == "Accreted")])` mg Fe g^-1^ soil lower in accreted compared to parent horizons at the young and old peat sites, respectively (Fig. 8a). Extractable Fe concentrations were close to zero in the accreted horizon at the old peat site (median = `r median(soils_df$FeT_mg.g[which(soils_df$site == "Old Peat" & soils_df$horizon == "Accreted")])` mg Fe g^-1^), where the accreted layer was predominantly poorly decomposed organic matter. Appreciable quantities of Fe^3+^ were present in all other site horizons, and `r mean(soils_df$percent_ox[which(soils_df$site == "Alluvium")])`%, `r mean(soils_df$percent_ox[which(soils_df$site == "Young Peat")])`%, and `r mean(soils_df$percent_ox[which(soils_df$site == "Old Peat" & soils_df$horizon == "Parent")], na.rm=T)`% of extractable Fe was in Fe^3+^ form at the alluvium site, young peat site, and parent horizon of the old peat site, respectively. Most Fe was in the reduced Fe^2+^ form across all sites, and statistical trends in Fe^2+^ concentrations were similar to those of total extractable Fe (Fig. 8b). While total extractable Fe concentrations did not vary between horizons at the alluvium site, Fe^2+^ concentrations were significantly higher in the accreted horizon compared to the underlying parent soil (Tukey's HSD, *P* < 0.05).
+
+Poorly crystalline Fe concentrations were roughly two orders of magnitude lower than HCl-extractable Fe across all three sites (Fig. 8c), and trends were similar to extractable Fe. Poorly crystalline Fe concentrations were significantly higher at the alluvium site compared to both peat sites in the recently accreted (Tukey's HSD, *P* < 0.0001) and parent soil horizons (Tukey's HSD, *P* < 0.0001), and did not vary between accreted (Tukey's HSD, *P* = 0.31) or parent horizons (Tukey's HSD, *P* = 0.74) at the peat sites (Fig. 8c. Poorly crystalline Fe concentrations trended lower in accreted horizons of all sites, but these differences were only significant at the old peat wetland (*P* < 0.001). Mean poorly crystalline Fe concentrations were over an order of magnitude higher in alluvium soils (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "Alluvium")])` $\pm$ `r sd(soils_df$FePC_mg.g[which(soils_df$site == "Alluvium")])` mg Fe g^-1^ soil; mean $\pm$ SD) compared to the young (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "Young Peat")])` $\pm$ `r sd(soils_df$FePC_mg.g[which(soils_df$site == "Young Peat")])` mg Fe g^-1^ soil) and old (`r mean(soils_df$FePC_mg.g[which(soils_df$site == "Old Peat")])` $\pm$ `r sd(soils_df$FePC_mg.g[which(soils_df$site == "Old Peat")])` mg Fe g^-1^ soil) peat soils (Fig. 8c).
+
+Soil pH also varied across wetland sites (ANOVA, *P* < 0.05), where pH was lowest at the alluvium site (`r mean(soils_df$pH[which(soils_df$site == "Alluvium")])` $\pm$ `r sd(soils_df$pH[which(soils_df$site == "Alluvium")])`), intermediate at the old peat site (`r mean(soils_df$pH[which(soils_df$site == "Old Peat")])` $\pm$ `r sd(soils_df$pH[which(soils_df$site == "Old Peat")])`), and near-neutral at the young peat site (`r mean(soils_df$pH[which(soils_df$site == "Young Peat")], na.rm=T)` $\pm$ `r sd(soils_df$pH[which(soils_df$site == "Young Peat")], na.rm=T)`) (Fig. 8d). pH did not vary by depth at either the old or young peat wetlands; however, pH varied significantly with depth at the alluvium wetland (*P* < 0.0001) where the parent horizon was more acidic (Fig. 8d).
+
+Soil %C in the parent horizon did not vary between the young peat and alluvium wetlands (Tukey's HSD, *P* = 0.50), but was higher at the old peat wetland compared to either other site (Tukey's HSD, *P* < 0.01) (Fig. 8e). Significant differences in %C were observed across all sites in the accreted horizon (Tukey's HSD, *P* < 0.0001), where %C was highest at the old peat site (`r mean(soils_df$C[which(soils_df$site == "Old Peat")])` $\pm$ `r sd(soils_df$C[which(soils_df$site == "Old Peat")])`%), intermediate at the young peat site (`r mean(soils_df$C[which(soils_df$site == "Young Peat")], na.rm=T)` $\pm$ `r sd(soils_df$C[which(soils_df$site == "Young Peat")], na.rm=T)`%), and lowest at the alluvium site (`r mean(soils_df$C[which(soils_df$site == "Alluvium")])` $\pm$ `r sd(soils_df$C[which(soils_df$site == "Alluvium")])`%). Percent C was higher in the recently accreted horizon at both peat sites (t-test, *P* < 0.001), but no differences in C content were observed between horizons at the alluvium wetland (Fig. 8e).
+
+As shown in figures 4d and 5, growing season CH~4~ fluxes from the alluvium wetland increased with time since restoration until the were the same magnitude as either peat site in 2017. If we consider growing season fluxes from year one as indicative of CH~4~ emissions from the underlying parent soil only and fluxes from 2017 as indicative of CH~4~ emissions from the combined accreted and parent soil profile, we observe a significant increase in daily CH~4~ flux between these time periods (t-test, *P* < 0.0001) (Fig. 8f). Similar comparisons are not suitable for the young and old peat sites because the young peat site experienced multiple disturbances that reduced ecosystem CH~4~ flux in 2017 and we have no CH~4~ flux measurements from the old peat site at the time of restoration. Significant increases in alluvium CH~4~ flux from the parent to accreted soil phase (Fig. 8f) also correspond to significant increases in Fe^2+^ (t-test, *P* < 0.05) and decreases in acidity (t-test, *P* < 0.0001) within the accreted alluvium soil horizon (Fig. 8).
+
+```{r fig8, fig.cap="Soil (a) HCl-extractable iron (Fe), (b) ferrous iron (Fe^2+^), (c) poorly crystalline Fe (PC Fe), (d) pH, and (e) percent carbon (%C) in accreted and parent horizons across the three core wetland sites (*n* $\\geq$ 14 per depth). Panel (f) shows daily methane fluxes (*F~CH4~*) for the early growing season (April-July) first year post-restoration and 2017 to represent *F~CH4~* when only the parent horizon was present and after accretted soil had developed, respectively. Solid horizontal lines are medians, boxes are the interquartile range (IQR), whiskers are the 95% confidence interval, and points denote measured outliers. Significance levels are shown for pairwise comparisons between soil horizons at each site (t-tests), where ns denotes no significant differences and increasing asterisks denotes significance levels from *P* < 0.05, 0.01, 0.001, and 0.0001.", warning=FALSE, fig.width=7.0, fig.height=4}
+source("R/soils.R") #process soils data into summary dataframe
+#theme
+boxplot_theme <- theme(axis.text.x = element_text(size=8),
+                 axis.title.y = element_text(size=9),
+                 axis.title.x = element_blank())
+
+#add panel showing change from 1st year to 2017 alluvium fluxes
+alluvium_daily$horizon <- ifelse(alluvium_daily$year == 2015, "Parent",
+                            ifelse(alluvium_daily$year == 2017, "Accreted",
+                            NA))
+
+alluvium_s <- alluvium_daily[!is.na(alluvium_daily$horizon),]
+all_s <- subset(all_daily, site != "Alluvium"); all_s$horizon <- NA
+all_s <- rbind(alluvium_s, all_s)
+
+all_s <- subset(all_s, month < 8 & month > 3)
+
+a <- ggplot(soils_df, aes(x=site, y=FeT_mg.g, fill=horizon)) +
+  geom_boxplot() +
+  ylab(expression("Extractable Fe (mg "~g^{-1}~"soil)")) +
+  stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
+  scale_y_continuous(limits=c(0,32)) +
+  annotate("text",x=0.6,y=32,label="(a)") +
+  boxplot_theme + theme(legend.position="none")
+
+b <- ggplot(soils_df, aes(x=site, y=FeII_mg.g, fill=horizon)) +
+  geom_boxplot() +
+  ylab(expression("Fe2+ (mg "~g^{-1}~"soil)")) +
+  stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
+  scale_y_continuous(limits=c(0,25)) +
+  annotate("text",x=0.6,y=25,label="(b)") +
+  boxplot_theme + theme(legend.position="none")
+
+c <- ggplot(soils_df, aes(x=site, y=FePC_mg.g, fill=horizon)) +
+  geom_boxplot() +
+  ylab(expression("PC Fe (mg "~g^{-1}~"soil)")) +
+  stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
+  scale_y_continuous(limits=c(0,0.5)) +
+  annotate("text",x=0.6,y=0.5,label="(c)") +
+  boxplot_theme + theme(legend.position="none")
+
+d <- ggplot(soils_df, aes(x=site, y=pH, fill=horizon)) +
+  geom_boxplot() +
+  stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
+  scale_y_continuous(limits=c(4.5,7.6)) +
+  ylab(expression("pH")) +
+  annotate("text",x=0.6,y=7.6,label="(d)") +
+  boxplot_theme +
+  theme(legend.position=c(.75,.2), legend.title = element_blank(), 
+        legend.margin = margin(0, 0, 0, 0), 
+        legend.background = element_rect(fill = "white"))
+
+e <- ggplot(soils_df, aes(x=site, y=C, fill=horizon)) +
+  geom_boxplot() +
+  stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
+  ylab(expression("%C")) +
+  scale_y_continuous(limits=c(10,50)) +
+  annotate("text",x=0.6,y=50,label="(e)") +
+  boxplot_theme + theme(legend.position="none")
+
+f <- ggplot(alluvium_s, aes(x=site, y=mgCH4, fill=horizon)) +
+  geom_boxplot() +
+  stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
+  ylab(expression(F[CH4]~" ("~mg~CH[4]-C~m^{-2}~d^{-1}~")")) + 
+  scale_y_continuous(limits=c(0,400)) +
+  annotate("text",x=0.6,y=400,label="(f)") +
+  boxplot_theme + theme(legend.position="none")
+
+grid.arrange(a, b, c, d, e, f, ncol=3)
+```
+
 
 # Discussion
 
