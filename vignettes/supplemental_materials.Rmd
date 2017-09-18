@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>")
 
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning=FALSE)
 ```
 
 ```{r packages, message=FALSE}
@@ -29,10 +29,7 @@ library(scales)
 library(zoo)
 ```
 
-
-## Supplemental Results
-
-```{r figS1, fig.height = 8, fig.width = 7, fig.cap="Diel patterns of mean (a) methane flux (*F~CH4~*), (b) net ecosystem exchange (*NEE*), and (c) evapotranspiration (*ET*) by year.", echo=FALSE}
+```{r figS1, fig.height = 8, fig.width = 7, fig.cap="Diel patterns of mean (a) methane flux (*F~CH4~*), (b) net ecosystem exchange (*NEE*), and (c) evapotranspiration (*ET*) by year."}
 source("R/Diel_patterns.R") #process the data
 
 a <- ggplot(diel_all, aes(x=time, y=CH4, color=factor(year))) +
