@@ -18,11 +18,14 @@ alluvium_all$TW_10cm <- na.approx(alluvium_all$TW_10cm, na.rm=F) # linear interp
 daily <- alluvium_all %>%
   group_by(dday, site) %>%
   summarise(mNEE = mean(wc_gf),         #NEE (umol m-2 s-1)
+            vNEE = mean(wc_gf_var),     #NEE variance (umol m-2 s-1)^2
             c_obs = sum(!is.na(wc)),    #num of non-filled observations (applies all _obs)
             mCH4 = mean(wm_gf),         #CH4 flux (nmol m-2 s-1)
+            vCH4 = mean(wm_gf_var),     #CH4 variance (nmol m-2 s-1)^2
             m_obs = sum(!is.na(wm)),
             GPP = mean(gpp_ANNnight),   #partitioned GPP (umol m-2 s-1)
             ER = mean(er_ANNnight),     #partitioned respiration (umol m-2 s-1)
+            vER = mean(er_ANN_var),     #partitioned respiration variance (umol m-2 s-1)^2
             ET = mean(wq_gf),           #evapotranspiration (umol m-2 s-1)
             q_obs = sum(!is.na(wq)),
             H = mean(H_gf),                    #sensible heat flux (W m-2)
@@ -53,8 +56,11 @@ daily$gGEP <- (daily$GPP*12.01*3600*24)/1000000   #g C m-2 d-1
 yearly <- daily %>%
   group_by(year, site) %>%
   summarise(tCH4 = mean(mgCH4)*365/1000, #gC m-2 yr-1 (same for all fluxes below)
+            ciCH4 = 1.96*(sqrt(mean(vCH4)*(12.01*3600*24*365/(10^9))^2)/sqrt(20)), #95% confidence interval from 20 ANNs cumulative
             tNEE = mean(gCO2)*365,
+            ciNEE = 1.96*(sqrt(mean(vNEE)*(12.01*3600*24*365/(10^6))^2)/sqrt(20)), #95% confidence interval from 20 ANNs cumulative
             tER = mean(gER)*365,
+            ciER = 1.96*(sqrt(mean(vER)*(12.01*3600*24*365/(10^6))^2)/sqrt(20)), #95% confidence interval from 20 ANNs cumulative
             tGEP = mean(gGEP)*365,
             Tair = mean(Tair, na.rm=T),
             GCC = mean(mGCC, na.rm=T),

@@ -256,7 +256,7 @@ grid.arrange(a, b, c, d, e, f, ncol=3)
 ## Weather and Hydrology
 The three core wetland sites on Sherman and Twitchell Islands experienced similar meteorologic and hydrologic conditions (Fig. 3). Incoming *PAR* and *T~a~* exhibited strong seasonality, where peak values were observed in summer months, and daily mean values were similar across all three wetland sites (Fig. 3a,b). Water temperature exhibited a similar seasonality across all three sites; however, *T~w~* was lower at the old peat compared to the two young wetland sites (Fig. 3c). Wetlands were similarly managed to maintain year-round inundation, where wetland *WTD* was maintained above the land surface across all years (Fig. 3d). In some cases, wetland water control structures would fail causing periods when the *WTD* would drop below the land surface. These events were common at the old peat wetland in summer 2013, when *WTD* dropped below the land surface 24 total days (Fig. 3d). A more detailed summary of meteorologic conditions across sites can be found in Eichelmann et al. (in review).
 
-```{r fig3, fig.cap="Daily mean (a) photosynthetically active radiation (*PAR*), (b) air temperature (*T~a~*), (c) water temperature (*T~w~*), and (d) water table depth (*WTD*) for the alluvium, young peat, and old peat wetland sites. The dashed horizontal line on panel d represents the ground surface elevation at water table well locations.", warning=FALSE, fig.width=7, fig.height=5}
+```{r fig2, fig.cap="Daily mean (a) photosynthetically active radiation (*PAR*), (b) air temperature (*T~a~*), (c) water temperature (*T~w~*), and (d) water table depth (*WTD*) for the alluvium, young peat, and old peat wetland sites. The dashed horizontal line on panel d represents the ground surface elevation at water table well locations.", warning=FALSE, fig.width=7, fig.height=5}
 #themes
 time_series <- theme_bw() +
   theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
@@ -376,60 +376,108 @@ GHG <- aov(all_sites$GHGbalance ~ all_sites$site); summary(GHG) #CO2-eq budget A
 # 
 # grid.arrange(a, b, c, d, ncol=1)
 
-# all_daily$DOY <- yday(all_daily$datetime)
-# test <- subset(all_daily, year == 2015 | year == 2016)
-# test <- subset(test, DOY > 200 & DOY < 300)
-# 
-# a <- ggplot(data=test, aes(mgCH4, color=site, fill=site)) +
-#   facet_grid(.~(year)) +
-#   geom_density(alpha=0.1) +
-#   xlab(expression(F[CH4]~" "~"("~nmol~CH[4]~m^{-2}~s^{-1}~")")) + 
-#   theme_bw() + 
-#   theme(legend.title=element_blank(), legend.position=c(.77, .89),
-#         legend.margin = margin(0, 0, 0, 0), legend.background = element_rect(fill = "transparent"),
-#         axis.title = element_text(size=10), 
-#         panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
-#         legend.key.size =  unit(0.17, "in"), legend.text = element_text(size=8))
-# 
-# b <- ggplot(data=test, aes(gER, color=site, fill=site)) +
-#   facet_grid(.~(year)) +
-#   geom_density(alpha=0.1) +
-#   xlab(expression(F[CH4]~" "~"("~nmol~CH[4]~m^{-2}~s^{-1}~")")) + 
-#   theme_bw() + 
-#   theme(legend.title=element_blank(), legend.position=c(.77, .89),
-#         legend.margin = margin(0, 0, 0, 0), legend.background = element_rect(fill = "transparent"),
-#         axis.title = element_text(size=10), 
-#         panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
-#         legend.key.size =  unit(0.17, "in"), legend.text = element_text(size=8))
-# 
-# c <- ggplot(data=test, aes(gGEP, color=site, fill=site)) +
-#   facet_grid(.~(year)) +
-#   geom_density(alpha=0.1) +
-#   xlab(expression(F[CH4]~" "~"("~nmol~CH[4]~m^{-2}~s^{-1}~")")) + 
-#   theme_bw() + 
-#   theme(legend.title=element_blank(), legend.position=c(.77, .89),
-#         legend.margin = margin(0, 0, 0, 0), legend.background = element_rect(fill = "transparent"),
-#         axis.title = element_text(size=10), 
-#         panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
-#         legend.key.size =  unit(0.17, "in"), legend.text = element_text(size=8))
-# 
-# d <- ggplot(data=test, aes(mgCH4, color=site, fill=site)) +
-#   facet_grid(.~(year)) +
-#   geom_density(alpha=0.1) +
-#   xlab(expression(F[CH4]~" "~"("~nmol~CH[4]~m^{-2}~s^{-1}~")")) + 
-#   theme_bw() + 
-#   theme(legend.title=element_blank(), legend.position=c(.77, .89),
-#         legend.margin = margin(0, 0, 0, 0), legend.background = element_rect(fill = "transparent"),
-#         axis.title = element_text(size=10), 
-#         panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
-#         legend.key.size =  unit(0.17, "in"), legend.text = element_text(size=8))
-# 
-# 
-# 
-# grid.arrange(a, b, c, ncol=1)
+all_daily$DOY <- yday(all_daily$datetime)
+test <- subset(all_daily, year > 2014)
+test <- subset(test, DOY > 196 & DOY < 227)
 
-ggplot(all_sites, aes(x=year, y=tCH4, color=site)) +
-  geom_line()
+a <- select(alluvium_all, wm, wc, datetime, year, DOY.x, site) #core alluvium site
+yp <- select(peat6_all, wm, wc, datetime, year, DOY, site)
+op <- select(peat19_all, wm, wc, datetime, year, DOY.x, site)
+yp <- rename(yp, DOY.x = DOY)
+
+all <- rbind(a, yp); all <- rbind(all, op)
+test <- subset(all, year == 2017)
+test <- subset(test, DOY.x > 196 & DOY.x < 227)
+
+# #subset all Twitchell Island four year old sites and combine to single data set
+# a4 <- select(alluvium_all, wm, wc, datetime) #core alluvium site
+# a4$datetime <- round_date(a4$datetime, unit="minutes")
+# 
+# p19 <- select(peat19_all, wm, wc, datetime) #mobile peat site
+# p19$datetime <- round_date(p19$datetime, unit="minutes")
+# 
+# p6 <- select(peat6_all, wm, wc, datetime)#mobile alluvium site
+# p6$datetime <- round_date(p6$datetime, unit="minutes")
+# 
+# #merge by time and omit all points where measurements were not available at all three sites
+# core <- merge(a4, p19, by="datetime")
+# core <- merge(core, p6, by="datetime")
+# core <- na.omit(core)
+# coreCH4 <- gather(select(core, datetime, wm.x, wm.y, wm), site, CH4, -datetime)
+# coreCO2 <- gather(select(core, datetime, wc.x, wc.y, wc), site, CO2, -datetime)
+# coreCH4$year <- year(coreCH4$datetime); coreCO2$year <- year(coreCO2$datetime)
+# 
+# #fix site names
+# coreCH4$site <- ifelse(coreCH4$site == "wm.x", "Alluvium",
+#                     ifelse(coreCH4$site == "wm.y", "Old Peat",
+#                            "Young Peat"))
+# 
+# coreCO2$site <- ifelse(coreCO2$site == "wm.x", "Alluvium",
+#                     ifelse(coreCO2$site == "wm.y", "Old Peat",
+#                            "Young Peat"))
+
+
+a <- ggplot(data=test, aes(wm, color=site, fill=site)) +
+  facet_grid(.~(year)) +
+  geom_density(alpha=0.1) +
+  xlab(expression(F[CH4]~" (mg C"~m^{-2}~d^{-1}~")")) + 
+  theme_bw() +
+  scale_x_continuous(limits=c(0,500)) +
+  theme(legend.title=element_blank(), legend.position=c(.25, .82),
+        legend.margin = margin(0, 0, 0, 0), legend.background = element_rect(fill = "transparent"),
+        axis.title = element_text(size=10),
+        panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
+        legend.key.size =  unit(0.17, "in"), legend.text = element_text(size=8))
+
+b <- ggplot(data=test, aes(wc, color=site, fill=site)) +
+  facet_grid(.~(year)) +
+  geom_density(alpha=0.1) +
+  ylab(expression(F[CH4]~" ("~g~CH[4]-C~m^{-2}~yr^{-1}~")")) +   theme_bw() +
+  theme(legend.position="none",
+        axis.title = element_text(size=10),
+        panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
+        legend.key.size =  unit(0.17, "in"), legend.text = element_text(size=8))
+
+
+grid.arrange(a, b, ncol=1)
+
+a <- ggplot(subset(all_sites, year > 2013), aes(x=year, y=tCH4, color=site)) +
+  geom_point() +
+  geom_errorbar(aes(ymin=tCH4-ciCH4, ymax=tCH4+ciCH4), width=0.1) +
+  ylab(expression(F[CH4]~" (mg C"~m^{-2}~d^{-1}~")")) + 
+  scale_x_continuous(breaks=c(2014, 2015, 2016)) +
+  theme_bw() +  theme(legend.position="none",
+        axis.title = element_text(size=10), panel.grid.minor=element_blank(), 
+        panel.grid.major.x = element_blank(), axis.title.x = element_blank())
+
+b <- ggplot(test, aes(x=wm, color=site, fill=site)) +
+  geom_density(alpha=0.1) + theme_bw() +
+  xlab(expression(F[CH4]~"- 2017 "~"("~nmol~CH[4]~m^{-2}~s^{-1}~")")) + 
+  theme(legend.title=element_blank(), legend.position=c(.80, .80),
+        legend.margin = margin(0, 0, 0, 0), legend.background = element_rect(fill = "transparent"),
+        axis.title = element_text(size=10), 
+        panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
+        legend.key.size =  unit(0.17, "in"), legend.text = element_text(size=8))
+
+c <- ggplot(subset(all_sites, year > 2013), aes(x=year, y=tNEE, color=site)) +
+  geom_point() +
+  geom_errorbar(aes(ymin=tNEE-ciNEE, ymax=tNEE+ciNEE), width=0.1) +
+  ylab(expression(NEE~" ("~g~CO[2]-C~m^{-2}~yr^{-1}~")")) +
+  scale_x_continuous(breaks=c(2014, 2015, 2016)) +
+  theme_bw() +  theme(legend.position="none",
+        axis.title = element_text(size=10), panel.grid.minor=element_blank(), 
+        panel.grid.major.x = element_blank(), axis.title.x = element_blank())
+
+d <- ggplot(test, aes(x=wc, color=site, fill=site)) +
+  geom_density(alpha=0.1) + theme_bw() +
+  xlab(expression(NEE~"- 2017 "~"("~mu~mol~CO[2]~m^{-2}~s^{-1}~")")) + 
+  theme(legend.position="none",
+        axis.title = element_text(size=10), 
+        panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
+        legend.key.size =  unit(0.17, "in"), legend.text = element_text(size=8))
+
+grid.arrange(a, b, c, d, ncol=2)
+
 
 ```
 
@@ -492,7 +540,7 @@ grid.arrange(iA, iB, iC, iD, ncol=1)
 ## Flux patterns at recently restored sites
 Methane flux trajectories from the young peat and alluvium wetlands were quite different following initial restoration (Fig. 5). General flux patterns were similar across sites, where CH~4~ fluxes peaked late-season during year zero (days 1-365), and peak CH~4~ fluxes occurred mid-summer in the following growing seasons (Fig. 5). Flux magnitudes were considerably lower from the alluvium site for the first three years following restoration (Fig. 5). Alluvium wetland fluxes increased with each year, whereas CH~4~ fluxes from the young peat wetland peaked during year one and decreased with subsequent years (Figs. 4d and 5). Differences in daily fluxes across wetlands were largest during year one (days 366-730) when alluvium wetland fluxes were increasing and young peat wetland emissions were peaking (Fig. 5). Annual CH~4~ budgets for the young peat site were over two times larger than the alluvium site during year zero and one. Year zero budgets were `r alluvium_yearly$tCH4[alluvium_yearly$year == 2014]` and `r peat6_yearly$tCH4[peat6_yearly$year == 2011]` g CH~4~ m^-2^ yr^-1^ for the alluvium and young peat wetland, respectively, and year one budgets were `r alluvium_yearly$tCH4[alluvium_yearly$year == 2015]` and `r peat6_yearly$tCH4[peat6_yearly$year == 2012]` g CH~4~ m^-2^ yr^-1^ for the alluvium and young peat wetland, respectively. This gap began to close during year two (days 731-1095), when annual fluxes were `r alluvium_yearly$tCH4[alluvium_yearly$year == 2016]` and `r peat6_yearly$tCH4[peat6_yearly$year == 2013]` g CH~4~ m^-2^ yr^-1^ from the alluvium and young peat wetland, respectively. During year three (days > 1095), fluxes from the young peat and alluvium wetlands were roughly equivalent, and differences observed in previous years were no longer apparent (Fig. 5). Methane fluxes from the old peat and alluvium wetlands were also similar during the 2017 growing season (Fig. 4d). Methane fluxes from the young peat wetland were lower and unstable for most of 2017, but by mid-summer reached the same magnitude as the other sites (Fig. 4d). Reduced CH~4~ fluxes at the young peat site in 2017 were likely due to multiple sources of disturbance, namely insect outbreak and freshwater flushing, which also impacted CO~2~ fluxes (Fig. 4).
 
-```{r fig5, fig.cap="Methane fluxes (*F~CH4~*) at the young peat and alluvium wetland from time since initial restoration. Day zero is 2011-01-01 for the young peat wetland and 2014-01-01 for the alluvium wetland.", fig.width=3.5, fig.height=2, warning=FALSE}
+```{r fig5, fig.cap="Methane fluxes (*F~CH4~*) at the young peat and alluvium wetland from time since initial restoration. Day zero is 2011-01-01 for the young peat wetland and 2014-01-01 for the alluvium wetland.", fig.width=3.5, fig.height=7, warning=FALSE}
 #subset and index data
 trajectory <- subset(all_daily, site != "Old Peat") #remove old peat site
 
@@ -504,7 +552,7 @@ trajectory$rest_year <- ifelse(trajectory$site == "Alluvium",
 trajectory <- subset(trajectory, rest_year < 5)
 
 #Early restoration time series
-ggplot(trajectory, aes(x=(dday-365), y=mgCH4, color=site)) +
+a <- ggplot(trajectory, aes(x=(dday-365), y=mgCH4, color=site)) +
   geom_point(aes(fill=site), colour="black", pch=21, size=0.9) +
   ylab(expression(F[CH4]~" "~"("~mg~C~m^{-2}~day^{-1}~")")) + 
   xlab("Day since restoration") +  theme_bw() + 
@@ -512,24 +560,52 @@ ggplot(trajectory, aes(x=(dday-365), y=mgCH4, color=site)) +
   theme(legend.title=element_blank(), legend.position=c(.18, .82),
         legend.margin = margin(0, 0, 0, 0), legend.background = element_rect(fill = "transparent"),
         axis.title = element_text(size=10), panel.grid.minor=element_blank(), 
+        panel.grid.major.y = element_blank(), axis.title.x = element_blank())
+
+b <- ggplot(trajectory, aes(x=(dday-365), y=gGEP, color=site)) +
+  geom_point(aes(fill=site), colour="black", pch=21, size=0.9) +
+  ylab(expression("GEP "~"("~g~C~m^{-2}~day^{-1}~")")) + 
+  xlab("Day since restoration") +  theme_bw() + 
+  scale_x_continuous(breaks=c(0, 365, 730, 1095)) +
+  theme(legend.position="none",
+        axis.title = element_text(size=10), panel.grid.minor=element_blank(), 
+        panel.grid.major.y = element_blank(), axis.title.x = element_blank())
+
+c <- ggplot(trajectory, aes(x=(dday-365), y=gER, color=site)) +
+  geom_point(aes(fill=site), colour="black", pch=21, size=0.9) +
+  ylab(expression("ER "~"("~g~C~m^{-2}~day^{-1}~")")) + 
+  xlab("Day since restoration") +  theme_bw() + 
+  scale_x_continuous(breaks=c(0, 365, 730, 1095)) +
+  theme(legend.title=element_blank(), legend.position=c(.18, .82),
+        legend.margin = margin(0, 0, 0, 0), legend.background = element_rect(fill = "transparent"),
+        axis.title = element_text(size=10), panel.grid.minor=element_blank(), 
+        panel.grid.major.y = element_blank(), axis.title.x = element_blank())
+
+d <- ggplot(trajectory, aes(x=(dday-365), y=gCO2, color=site)) +
+  geom_point(aes(fill=site), colour="black", pch=21, size=0.9) +
+  ylab(expression("NEE "~"("~g~C~m^{-2}~day^{-1}~")")) + 
+  xlab("Day since restoration") +  theme_bw() + 
+  scale_x_continuous(breaks=c(0, 365, 730, 1095)) +
+  theme(legend.title=element_blank(), legend.position=c(.18, .82),
+        legend.margin = margin(0, 0, 0, 0), legend.background = element_rect(fill = "transparent"),
+        axis.title = element_text(size=10), panel.grid.minor=element_blank(), 
         panel.grid.major.y = element_blank())
+
+grid.arrange(a,b,c,d, ncol=1)
 
 ```
 
 ```{r mobile_towers, include=FALSE}
 #subset all Twitchell Island four year old sites and combine to single data set
 alluvium4 <- select(alluvium_all, wm, datetime) #core alluvium site
-alluvium4$site <- "Alluvium (core site)"
 alluvium4$datetime <- round_date(alluvium4$datetime, unit="minutes")
 alluvium4 <- subset(alluvium4, datetime > "2017-06-30" & datetime <= "2017-08-15")
 
 peat4 <- select(mobile_peat, wm, datetime) #mobile peat site
-peat4$site <- "Peat (temporary)"
 peat4$datetime <- round_date(peat4$datetime, unit="minutes")
 peat4 <- subset(peat4, datetime > "2017-06-30" & datetime <= "2017-08-15")
 
 alluvium2_4 <- select(mobile_alluvium, wm, datetime)#mobile alluvium site
-alluvium2_4$site <- "Alluvium (temporary)"
 alluvium2_4$datetime <- round_date(alluvium2_4$datetime, unit="minutes")
 alluvium2_4 <- subset(alluvium2_4, datetime > "2017-06-30" & datetime <= "2017-08-15")
 
