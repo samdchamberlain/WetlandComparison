@@ -8,7 +8,7 @@
 soils_df <- read.csv("data/soils.csv")
 
 #create site variable based on 'Area' site names
-soils_df$site <- ifelse(soils_df$Area == "East End", "Alluvium",
+soils_df$site <- ifelse(soils_df$Area == "East End", "Peat-Alluvium",
                         ifelse(soils_df$Area == "West Pond", "Old Peat",
                                "Young Peat"))
 
@@ -23,3 +23,6 @@ soils_df$horizon <- ifelse(soils_df$Depth == "0-15", "Accreted", "Parent")
 #Also, need to fix West Pond point 1 where 15-30 was also 'surface' litter
 soils_df$horizon <- ifelse(soils_df$Area == "West Pond" & soils_df$Point == "P1",
                            "Accreted", soils_df$horizon)
+
+#re-order factors to group peat sites in legend
+soils_df$site <- factor(soils_df$site, levels=c("Peat-Alluvium", "Old Peat", "Young Peat"))
