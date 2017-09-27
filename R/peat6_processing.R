@@ -63,7 +63,8 @@ yearly <- daily %>%
 
 #Ecosystem C balance and GHG (CO2eq) balance
 yearly$Cbalance <- yearly$tNEE + yearly$tCH4 #C m-2 yr-1
-yearly$GHGbalance <- (yearly$tNEE*44/12) + (25*yearly$tCH4*16/12) #CO2-eq m-2 yr-1
+yearly$GHGbalance <- (yearly$tNEE*44/12) + (45*yearly$tCH4*16/12)  #CO2-eq m-2 yr-1 using 45x SGWP (Neubauer and Megonigal 2015)
+yearly$ciGHG <- (yearly$ciNEE*44/12) + (45*yearly$ciCH4*16/12)
 
 #resave with specific names, and add a site name variable
 peat6_yearly <- yearly

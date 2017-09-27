@@ -64,8 +64,50 @@ iA$widths[2:5] <- as.list(maxWidth); iB$widths[2:5] <- as.list(maxWidth); iC$wid
 grid.arrange(a, b, c, ncol=1)
 ```
 
-```{r figS2, fig.height = 3, fig.width = 4, fig.cap="Mean methane flux (*F~CH4~*) and atmospheric pressure across all half-hourly periods in the 2015 growing season (DOY 100-300). Color scale on each dot denotes the time of day for each paired datapoint. Peak *F~CH4~* occurs late in the afternoon during atmopsheric pressure lows, and this relationship displays notable hysteresis."}
-ggplot(data=subset(diel_all, site == "Alluvium" & year == 2015), aes(x=PA, y=CH4, color=time)) +
+```{r figS2, fig.cap="Distribution of net ecosystem exchange (*NEE*) from the three sites on Twitchell Island where wetland age is held constant and parent soil type varies. All measurements were made during the 2017 growing season between July 1 and August 15. Measurements were only used if simultaneous half-hourly fluxes were available across all three sites (n = 991). All sites were restored in 2014. The temporary peat tower measured fluxes from a Rindge peat soil series, and the temporary peat-alluvium tower measured fluxes from the same Scribner alluvium soil as the core peat-alluvium site. Both temporary towers were located within 500m of the core peat-alluvium tower.", fig.height=3.2, fig.width=3.5}
+#load datasets
+source("R/alluvium_processing.R") #peat-alluvium site
+load("data/mobile_alluvium.Rdata")
+load("data/mobile_peat.Rdata")
+
+#subset all Twitchell Island four year old sites and combine to single data set
+alluvium4 <- select(alluvium_all, wc, datetime) #core peat-alluvium site
+alluvium4$datetime <- round_date(alluvium4$datetime, unit="minutes")
+alluvium4 <- subset(alluvium4, datetime > "2017-06-30" & datetime <= "2017-08-15")
+
+peat4 <- select(mobile_peat, wc, datetime) #mobile peat site
+peat4$datetime <- round_date(peat4$datetime, unit="minutes")
+peat4 <- subset(peat4, datetime > "2017-06-30" & datetime <= "2017-08-15")
+
+alluvium2_4 <- select(mobile_alluvium, wc, datetime)#mobile alluvium site
+alluvium2_4$datetime <- round_date(alluvium2_4$datetime, unit="minutes")
+alluvium2_4 <- subset(alluvium2_4, datetime > "2017-06-30" & datetime <= "2017-08-15")
+
+#merge by time and omit all points where measurements were not available at all three sites
+twitchell <- merge(alluvium2_4, alluvium4, by="datetime")
+twitchell <- merge(twitchell, peat4, by="datetime")
+twitchell <- na.omit(twitchell)
+twitchell <- gather(select(twitchell, datetime, wc.x, wc.y, wc), site, CH4, -datetime)
+
+#fix site names
+twitchell$site <- ifelse(twitchell$site == "wc.x", "Peat-Alluvium (temp)",
+                    ifelse(twitchell$site == "wc.y", "Peat-Alluvium (core)",
+                           "Peat (temp)"))
+
+
+ggplot(data=twitchell, aes(CH4, color=site, fill=site)) +
+  geom_density(alpha=0.1) +
+  xlab(expression(NEE~" "~"("~nmol~CO[2]~m^{-2}~s^{-1}~")")) + 
+  theme_bw() + 
+  theme(legend.title=element_blank(), legend.position=c(.25, .90),
+        legend.margin = margin(0, 0, 0, 0), legend.background = element_rect(fill = "transparent"),
+        axis.title = element_text(size=10), 
+        panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
+        legend.key.size =  unit(0.17, "in"), legend.text = element_text(size=8))
+```
+
+```{r figS3, fig.height = 3, fig.width = 4, fig.cap="Mean methane flux (*F~CH4~*) and atmospheric pressure across all half-hourly periods in the 2015 growing season (DOY 100-300). Color scale on each dot denotes the time of day for each paired datapoint. Peak *F~CH4~* occurs late in the afternoon during atmopsheric pressure lows, and this relationship displays notable hysteresis."}
+ggplot(data=subset(diel_all, site == "Peat-Alluvium" & year == 2015), aes(x=PA, y=CH4, color=time)) +
   geom_point(size=1.5) +
   xlab("Atmospheric pressure (kPA)") +
   ylab(expression(F[CH4]~" ("~nmol~m^{-2}~s^{-1}~")")) +
