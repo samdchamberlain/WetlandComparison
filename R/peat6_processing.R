@@ -18,6 +18,7 @@ daily <- peat6_all %>%
             vCH4 = mean(wm_gf_var),     #CH4 variance (nmol m-2 s-1)^2
             m_obs = sum(!is.na(wm)),
             GPP = mean(gpp_ANNnight),   #partitioned GPP (umol m-2 s-1)
+            vGPP = mean(wc_gf_var)+mean(er_ANN_var), #error propogation for calculated GPP (NEE-ER)
             ER = mean(er_ANNnight),     #partitioned respiration (umol m-2 s-1)
             vER = mean(er_ANN_var),     #partitioned respiration variance (umol m-2 s-1)^2
             ET = mean(wq_gf),           #evapotranspiration (umol m-2 s-1)
@@ -56,6 +57,7 @@ yearly <- daily %>%
             tER = mean(gER)*365,
             ciER = 1.96*(sqrt(mean(vER)*(12.01*3600*24*365/(10^6))^2)/sqrt(20)), #95% confidence interval from 20 ANNs cumulative
             tGEP = mean(gGEP)*365,
+            ciGEP = 1.96*(sqrt(mean(vGPP)*(12.01*3600*24*365/(10^6))^2)/sqrt(20)), #95% confidence interval from 20 ANN (NEE-ER) differences
             Tair = mean(Tair, na.rm=T),
             GCC = mean(mGCC, na.rm=T),
             Days = sum(!is.na(mgCH4))) %>%
@@ -64,7 +66,7 @@ yearly <- daily %>%
 #Ecosystem C balance and GHG (CO2eq) balance
 yearly$Cbalance <- yearly$tNEE + yearly$tCH4 #C m-2 yr-1
 yearly$GHGbalance <- (yearly$tNEE*44/12) + (45*yearly$tCH4*16/12)  #CO2-eq m-2 yr-1 using 45x SGWP (Neubauer and Megonigal 2015)
-yearly$ciGHG <- (yearly$ciNEE*44/12) + (45*yearly$ciCH4*16/12)
+yearly$ciGHG <- (yearly$ciNEE*44/12) + (45*yearly$ciCH4*16/12) #GHG balance 95% confidence interval
 
 #resave with specific names, and add a site name variable
 peat6_yearly <- yearly
