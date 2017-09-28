@@ -1,12 +1,18 @@
 ---
-title: "Supplemental Materials"
+title: "Supplemental Materials:  Effect of soil iron content and sediment accretion on methane fluxes from wetlands
+  restored on degraded peatlands in the Sacramento-San Joaquin Delta of California"
 author: Samuel D Chamberlain^1^, Tyler Anthony^1^, Whendee L Silver^1^, Elke Eichelmann^1^,
-  Kyle S Hemes^1^, Patricia Y Oikawa^2^, Cove Sturtevant^3^, Sara H Knox^4^, Jaclyn
-  Hatala Matthes^5^, Daphne J Szutu^1^, Joseph G Verfaillie^1^, Dennis D Baldocchi^1^
+  Kyle S Hemes^1^, Cove Sturtevant^2^, Daphne J Szutu^1^, Joseph G Verfaillie^1^, Dennis D Baldocchi^1^
 date: '`r Sys.Date()`'
 output:
   pdf_document: default
 ---
+
+^1^Department of Environmental Science, Policy, and Management, University of California, Berkeley, California USA
+
+^2^National Ecological Observatory Network, Boulder, Colorado, USA
+
+\newpage
 
 ```{r setup, include=FALSE}
 #setwd to main package directory
@@ -29,42 +35,7 @@ library(scales)
 library(zoo)
 ```
 
-```{r figS1, fig.height = 8, fig.width = 7, fig.cap="Diel patterns of mean (a) methane flux (*F~CH4~*), (b) net ecosystem exchange (*NEE*), and (c) evapotranspiration (*ET*) by year."}
-source("R/Diel_patterns.R") #process the data
-
-a <- ggplot(diel_all, aes(x=time, y=CH4, color=factor(year))) +
-  geom_line(size=0.5) + facet_grid(.~site) +
-  ylab(expression(F[CH4]~" ("~nmol~m^{-2}~s^{-1}~")")) +
-  xlab("Time of day (hr)") + labs(color='Year')  +
-  theme_bw() +
-  theme(panel.grid.minor = element_blank(), panel.grid.major.y = element_blank())
-
-b <- ggplot(diel_all, aes(x=time, y=NEE, color=factor(year))) +
-  geom_line(size=0.5) + facet_grid(.~site) +
-  ylab(expression(NEE~" ("~mu~mol~m^{-2}~s^{-1}~")")) +
-  xlab("Time of day (hr)") + labs(color='Year')  +
-  theme_bw() +
-  theme(panel.grid.minor = element_blank(), panel.grid.major.y = element_blank())
-
-c <- ggplot(diel_all, aes(x=time, y=ET, color=factor(year))) +
-  geom_line(size=0.5) + facet_grid(.~site) +
-  ylab(expression(ET~" ("~mmol~m^{-2}~s^{-1}~")")) +
-  xlab("Time of day (hr)") + labs(color='Year')  +
-  theme_bw() +
-  theme(panel.grid.minor = element_blank(), panel.grid.major.y = element_blank())
-
-#Multiple plots aligned
-iA <- ggplotGrob(a)
-iB <- ggplotGrob(b)
-iC <- ggplotGrob(c)
-
-maxWidth = grid::unit.pmax(iA$widths[2:5], iB$widths[2:5], iC$widths[2:5])
-iA$widths[2:5] <- as.list(maxWidth); iB$widths[2:5] <- as.list(maxWidth); iC$widths[2:5] <- as.list(maxWidth);
-
-grid.arrange(a, b, c, ncol=1)
-```
-
-```{r figS2, fig.cap="Distribution of net ecosystem exchange (*NEE*) from the three sites on Twitchell Island where wetland age is held constant and parent soil type varies. All measurements were made during the 2017 growing season between July 1 and August 15. Measurements were only used if simultaneous half-hourly fluxes were available across all three sites (n = 991). All sites were restored in 2014. The temporary peat tower measured fluxes from a Rindge peat soil series, and the temporary peat-alluvium tower measured fluxes from the same Scribner alluvium soil as the core peat-alluvium site. Both temporary towers were located within 500m of the core peat-alluvium tower.", fig.height=3.2, fig.width=3.5}
+```{r figS1, fig.cap="Distribution of net ecosystem exchange (*NEE*) from the three sites on Twitchell Island where wetland age is held constant and parent soil type varies. All measurements were made during the 2017 growing season between July 1 and August 15. Measurements were only used if simultaneous half-hourly fluxes were available across all three sites (n = 991). All sites were restored in 2014. The temporary peat tower measured fluxes from a Rindge peat soil series, and the temporary peat-alluvium tower measured fluxes from the same Scribner alluvium soil as the core peat-alluvium site. Both temporary towers were located within 500m of the core peat-alluvium tower.", fig.height=3.2, fig.width=3.5}
 #load datasets
 source("R/alluvium_processing.R") #peat-alluvium site
 load("data/mobile_alluvium.Rdata")
@@ -104,6 +75,41 @@ ggplot(data=twitchell, aes(CH4, color=site, fill=site)) +
         axis.title = element_text(size=10), 
         panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
         legend.key.size =  unit(0.17, "in"), legend.text = element_text(size=8))
+```
+
+```{r figS2, fig.height = 8, fig.width = 7, fig.cap="Diel patterns of mean (a) methane flux (*F~CH4~*), (b) net ecosystem exchange (*NEE*), and (c) evapotranspiration (*ET*) by year."}
+source("R/Diel_patterns.R") #process the data
+
+a <- ggplot(diel_all, aes(x=time, y=CH4, color=factor(year))) +
+  geom_line(size=0.5) + facet_grid(.~site) +
+  ylab(expression(F[CH4]~" ("~nmol~m^{-2}~s^{-1}~")")) +
+  xlab("Time of day (hr)") + labs(color='Year')  +
+  theme_bw() +
+  theme(panel.grid.minor = element_blank(), panel.grid.major.y = element_blank())
+
+b <- ggplot(diel_all, aes(x=time, y=NEE, color=factor(year))) +
+  geom_line(size=0.5) + facet_grid(.~site) +
+  ylab(expression(NEE~" ("~mu~mol~m^{-2}~s^{-1}~")")) +
+  xlab("Time of day (hr)") + labs(color='Year')  +
+  theme_bw() +
+  theme(panel.grid.minor = element_blank(), panel.grid.major.y = element_blank())
+
+c <- ggplot(diel_all, aes(x=time, y=ET, color=factor(year))) +
+  geom_line(size=0.5) + facet_grid(.~site) +
+  ylab(expression(ET~" ("~mmol~m^{-2}~s^{-1}~")")) +
+  xlab("Time of day (hr)") + labs(color='Year')  +
+  theme_bw() +
+  theme(panel.grid.minor = element_blank(), panel.grid.major.y = element_blank())
+
+#Multiple plots aligned
+iA <- ggplotGrob(a)
+iB <- ggplotGrob(b)
+iC <- ggplotGrob(c)
+
+maxWidth = grid::unit.pmax(iA$widths[2:5], iB$widths[2:5], iC$widths[2:5])
+iA$widths[2:5] <- as.list(maxWidth); iB$widths[2:5] <- as.list(maxWidth); iC$widths[2:5] <- as.list(maxWidth);
+
+grid.arrange(a, b, c, ncol=1)
 ```
 
 ```{r figS3, fig.height = 3, fig.width = 4, fig.cap="Mean methane flux (*F~CH4~*) and atmospheric pressure across all half-hourly periods in the 2015 growing season (DOY 100-300). Color scale on each dot denotes the time of day for each paired datapoint. Peak *F~CH4~* occurs late in the afternoon during atmopsheric pressure lows, and this relationship displays notable hysteresis."}
