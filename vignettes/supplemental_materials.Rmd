@@ -2,15 +2,18 @@
 title: "Supplemental Materials:  Effect of soil iron content and sediment accretion on methane fluxes from wetlands
   restored on degraded peatlands in the Sacramento-San Joaquin Delta of California"
 author: Samuel D Chamberlain^1^, Tyler Anthony^1^, Whendee L Silver^1^, Elke Eichelmann^1^,
-  Kyle S Hemes^1^, Cove Sturtevant^2^, Daphne J Szutu^1^, Joseph G Verfaillie^1^, Dennis D Baldocchi^1^
+  Kyle S Hemes^1^, Patricia Y Oikawa^2^, Cove Sturtevant^3^, Daphne J Szutu^1^, Joseph G Verfaillie^1^,
+  and Dennis D Baldocchi^1^
 date: '`r Sys.Date()`'
 output:
   pdf_document: default
 ---
 
-^1^Department of Environmental Science, Policy, and Management, University of California, Berkeley, California USA
+^1^Department of Environmental Science, Policy, and Management, University of California, Berkeley, California, USA
 
-^2^National Ecological Observatory Network, Boulder, Colorado, USA
+^2^Department of Earth and Environmental Sciences, California State University, East Bay, California, USA
+
+^3^National Ecological Observatory Network, Boulder, Colorado, USA
 
 \newpage
 
