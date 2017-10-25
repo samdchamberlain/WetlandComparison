@@ -1,5 +1,5 @@
 ---
-title: Effect of soil iron content and sediment accretion on methane fluxes from wetlands
+title: Efffect of soil iron content and sediment accretion on methane fluxes from wetlands
   restored on degraded peatlands in the Sacramento-San Joaquin Delta of California
 author: Samuel D Chamberlain^1^, Tyler Anthony^1^, Whendee L Silver^1^, Elke Eichelmann^1^,
   Kyle S Hemes^1^, Patricia Y Oikawa^2^, Cove Sturtevant^3^, Daphne J Szutu^1^, Joseph G Verfaillie^1^,
