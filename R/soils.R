@@ -5,24 +5,24 @@
 #' @importFrom dplyr "%>%"
 
 #load soils data
-soils_df <- read.csv("data/soils.csv")
+load("data/soils.Rdata")
 
 #create site variable based on 'Area' site names
-soils_df$site <- ifelse(soils_df$Area == "East End", "Peat-Alluvium",
-                        ifelse(soils_df$Area == "West Pond", "Old Peat",
+soils$site <- ifelse(soils$Area == "East End", "Peat-Alluvium",
+                        ifelse(soils$Area == "West Pond", "Old Peat",
                                "Young Peat"))
 
 #What percent of iron is in oxidized form?
-soils_df$percent_ox <- (soils_df$FeIII_mg.g/soils_df$FeT_mg.g)*100
-soils_df$percent_ox <- ifelse(soils_df$FeT_mg.g <= 1, NA, soils_df$percent_ox) #if no measurable Fe set to zero
+soils$percent_ox <- (soils$FeIII_mg.g/soils$FeT_mg.g)*100
+soils$percent_ox <- ifelse(soils$FeT_mg.g <= 1, NA, soils$percent_ox) #if no measurable Fe set to zero
 
 #New surface v. deep column represents more accurately that we are comparing a recent muck layer
 # to a deep older soil layer. This deep layer at the peat site is actually ~0.7m below surface
-soils_df$horizon <- ifelse(soils_df$Depth == "0-15", "Accreted", "Parent")
+soils$horizon <- ifelse(soils$Depth == "0-15", "Accreted", "Parent")
 
 #Also, need to fix West Pond point 1 where 15-30 was also 'surface' litter
-soils_df$horizon <- ifelse(soils_df$Area == "West Pond" & soils_df$Point == "P1",
-                           "Accreted", soils_df$horizon)
+soils$horizon <- ifelse(soils$Area == "West Pond" & soils$Point == "P1",
+                           "Accreted", soils$horizon)
 
 #re-order factors to group peat sites in legend
-soils_df$site <- factor(soils_df$site, levels=c("Peat-Alluvium", "Old Peat", "Young Peat"))
+soils$site <- factor(soils$site, levels=c("Peat-Alluvium", "Old Peat", "Young Peat"))

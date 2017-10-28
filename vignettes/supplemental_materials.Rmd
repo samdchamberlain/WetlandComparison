@@ -1,11 +1,21 @@
 ---
-title: Supplemental Materials:  Soil iron content and sediment accretion drive methane fluxes in restored wetlands""
+title: "Supplemental Materials: Soil iron content and sediment accretion drive methane fluxes in restored wetlands"
 author: Samuel D Chamberlain^1^, Tyler Anthony^1^, Whendee L Silver^1^, Elke Eichelmann^1^,
-  Kyle S Hemes^1^, Patricia Y Oikawa^2^, Cove Sturtevant^3^, Daphne J Szutu^1^, Joseph G Verfaillie^1^,
-  and Dennis D Baldocchi^1^
+  Kyle S Hemes^1^, Patricia Y Oikawa^2^, Cove Sturtevant^3^, Daphne J Szutu^1^, Joseph
+  G Verfaillie^1^, and Dennis D Baldocchi^1^
 date: '`r Sys.Date()`'
 output:
   pdf_document: default
+  html_document: default
+  word_document: default
+fontsize: 12pt
+header-includes:
+- \usepackage{setspace}
+- \doublespacing
+- \usepackage{hyperref}
+link-citations: yes
+csl: global-change-biology.csl
+bibliography: library.bib
 ---
 
 ^1^Department of Environmental Science, Policy, and Management, University of California, Berkeley, California, USA
@@ -61,14 +71,17 @@ $$H_Y=-\sum_{y_t}p(y_t)log_2p(y_t)$$
 $$H_{X,Y}=-\sum_{x_t}\sum_{y_t}p(x_t,y_t)log_2p(x_t,y_t)$$
 where *x~t~* and *y~t~* are states within the overall distribution of *X* and *Y*. Here, we bin our continuous data into discrete states to calculate *H~X~*, *H~Y~*, and *H~X,Y~*. We follow the same processing methodology in @sturtevant_identifying_2016 for calculating *I*. Briefly, we first wavelet decomposed variables of interest into hourly, diel, and multiday scales, and following wavelet decomposition, original data gaps were reinserted into the wavelet detail reconstructions. Analyses for each year were confined to the growing season (DOY 100-300), and time series border periods were removed to avoid wavelet-induced distortions. We then calculated joint and marginal Shannon entropies using 10 fixed-interval bins for the probability distributions of each variable, and calculated *I* for a number of time lags of *X*. We calculated *I* at lags up to 5 hours for the hourly and diel time scales, and up to 8 days for the multiday time scale. In all cases, CH~4~ flux (*F~CH4~*) was treated as the *Y* variable, as we were interested in the response of *F~CH4~* to external drivers. Statistical significance was then calculated at a 95% threshold using 1000 Monte Carlo random walks that underwent the same processing steps described above. A more detailed description of this entire processing methodology can be found in @sturtevant_identifying_2016, and all wavelet decomposition and entropy calculations were conducted using the ProcessNetwork Software (http://www.mathworks.com/matlabcentral/fileexchange/41515-processnetwork-processnetwork-software). Here, we present relative mutual information (*I^R^*) where *I* is divided by the Shannon entropy of the *Y* variable (*F~CH4~*). 
 
+\newpage
+
 # Results
-```{r figS1, fig.height = 3.5, fig.width = 3.5, fig.cap="Soil percent nitrogen (%N) in accreted and parent horizons across the three core wetland sites (*n* $\\geq$ 12 per depth).}
+
+```{r figS1, fig.height = 3, fig.width = 3.5, fig.cap="Soil percent nitrogen (%N) in accreted and parent horizons across the three core wetland sites (*n* $\\geq$ 12 per depth)."}
 source("R/soils.R") #process soils data into summary dataframe
 boxplot_theme <- theme(axis.text.x = element_text(size=8),
                  axis.title.y = element_text(size=9),
                  axis.title.x = element_blank())
 
-ggplot(soils_df, aes(x=site, y=N, fill=horizon)) +
+ggplot(soils, aes(x=site, y=N, fill=horizon)) +
   geom_boxplot() +
   ylab(expression("Extractable Fe (mg "~g^{-1}~"soil)")) +
   stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
@@ -163,67 +176,5 @@ ggplot(data=subset(diel_all, site == "Peat-Alluvium" & year == 2015), aes(x=PA, 
 
 ```
 
-<!-- Ecosystem CH~4~ fluxes followed similar seasonal patterns across all three wetland sites, where peak fluxes occurred during the summer (Fig. 4a) when temperature and incoming radiation were highest (Fig. 3). Methane fluxes were generally stable across the growing season, with the exception of periods when the water table would drop below the land surface. These events occurred at the old peat wetland in 2013 and 2014 (Fig. 3d), and were associated with marked reductions in daily CH~4~ flux (Fig. 4a). Ecosystem CO~2~ fluxes (*NEE*, *GEP*, and *ER*) were also highest in summer and the lowest during January to February of each year (Fig. 4b,c,d). Daily *NEE* magnitudes were similar across the three wetlands, particularly in 2015, though the young peat wetland had highly variable fluxes across years (Fig. 4b). At this site, large *GEP* and *ER* fluxes were observed one-year post-restoration when the vegetation was completely established, and fluxes were attenuated mid-growing season in 2014 and 2016 due to insect outbreaks and salinization, respectively (Fig. 4b,c). Young peat CO~2~ and CH~4~ fluxes were similarly reduced in the 2017 growing season, coincident with an insect outbreak and large-scale flushing event to reduce salinity (Fig. 4). CO~2~ fluxes from the old peat wetland were much more consistent across time (Fig. 4b,c,d), and once the peat-alluvium wetland was fully vegetated (2015 onward), *NEE*, *GEP*, and *ER* fluxes from this system were very similar to the old peat wetland site (Fig. 4b,c,d). Additionally, CO~2~ flux patterns from the young peat and peat-alluvium wetland were similar during the initial flooding phase when wetland vegetation cover was not fully established. Here, peak CO~2~ fluxes were observed late in the growing season when plant cover became established within the flux footprints (Fig. 4b,c,d). -->
+# References
 
-# ```{r combine_annual, echo=FALSE}
-# #Add age since restoration variable
-# peat19_yearly$age <- peat19_yearly$year - 1997
-# peat6_yearly$age <- peat6_yearly$year - 2011
-# alluvium_yearly$age <- alluvium_yearly$year - 2014
-# 
-# peat19_s <- subset(peat19_yearly, year != 2013) # remove year with draw down disturbance at WP
-# 
-# #merge to single dataset
-# all_sites <- rbind(peat19_s, peat6_yearly); all_sites <- rbind(all_sites, alluvium_yearly)
-# 
-# #remove incomplete years
-# all_sites <- subset(all_sites, Days >= 365)
-# ```
-
-# ```{r figx, fig.cap="Monthly methane (*F~CH4~*), gross ecosystem photosynthesis (*GEP*), and ecosystem respiration (*ER*) budgets for years when the three wetlands were fully vegetated.", warning=FALSE, fig.width=7, fig.height=5.2, dpi=600}
-# #monthly mean calculations
-# monthly <- all_daily %>%
-#   group_by(site, year, month) %>%
-#   summarise(CH4 = mean(mgCH4)*length(mgCH4)/1000,
-#             GPP = mean(gGEP)*length(gGEP),
-#             NEE = mean(gCO2)*length(gCO2),
-#             ER = mean(gER)*length(gER),
-#             ET = mean(ET)*length(ET),
-#             days = length(mgCH4),
-#             date = mean(datetime)) %>%
-#   filter(days >= 28 & year > 2014) #only full months after all wetlands are fully vegetated
-# 
-# #theme
-# time_series <- theme_bw() +
-#   theme(panel.grid.minor=element_blank(), panel.grid.major = element_blank(),
-#         axis.title.y = element_text(size=9))
-# 
-# a <- ggplot(monthly, aes(x=month, y=CH4, color=site)) +
-#   geom_line() +
-#   scale_x_continuous(breaks=c(2,4,6,8,10,12)) +
-#   facet_grid(.~(year)) + 
-#   ylab(expression(F[CH4]~" (g C"~m^{-2}~month^{-1}~")")) + 
-#   time_series + theme(axis.title.x = element_blank(), 
-#                       legend.title=element_blank(),
-#                       legend.position=c(.92, .75), 
-#                       legend.margin = margin(0, 0, 0, 0),
-#                       legend.key.size =  unit(0.17, "in"), legend.text = element_text(size=8),
-#                       legend.background = element_rect(fill = "transparent"))
-#   
-# b <- ggplot(monthly, aes(x=month, y=GPP*-1, color=site)) +
-#   geom_line() +
-#   scale_x_continuous(breaks=c(2,4,6,8,10,12)) +
-#   facet_grid(.~(year)) + 
-#   ylab(expression(GEP~" (g C"~m^{-2}~month^{-1}~")")) + 
-#   time_series + theme(axis.title.x = element_blank(), legend.position = "none")
-# 
-# c <- ggplot(monthly, aes(x=month, y=ET, color=site)) +
-#   geom_line() +
-#   scale_x_continuous(breaks=c(2,4,6,8,10,12)) + xlab("Month") +
-#   ylab(expression(ER~" (g C"~m^{-2}~month^{-1}~")")) + 
-#   facet_grid(.~(year)) + 
-#   time_series + theme(legend.position = "none")
-# 
-# grid.arrange(a, b, c, ncol=1)
-# 
-# ```
