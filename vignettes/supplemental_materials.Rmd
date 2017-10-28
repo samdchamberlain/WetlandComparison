@@ -1,6 +1,5 @@
 ---
-title: "Supplemental Materials:  Effect of soil iron content and sediment accretion on methane fluxes from wetlands
-  restored on degraded peatlands in the Sacramento-San Joaquin Delta of California"
+title: Supplemental Materials:  Soil iron content and sediment accretion drive methane fluxes in restored wetlands""
 author: Samuel D Chamberlain^1^, Tyler Anthony^1^, Whendee L Silver^1^, Elke Eichelmann^1^,
   Kyle S Hemes^1^, Patricia Y Oikawa^2^, Cove Sturtevant^3^, Daphne J Szutu^1^, Joseph G Verfaillie^1^,
   and Dennis D Baldocchi^1^
@@ -13,7 +12,7 @@ output:
 
 ^2^Department of Earth and Environmental Sciences, California State University, East Bay, California, USA
 
-^3^National Ecological Observatory Network, Boulder, Colorado, USA
+^3^National Ecological Observatory Network, Battelle, Boulder, Colorado, USA
 
 \newpage
 
@@ -37,6 +36,26 @@ library(gridExtra)
 library(scales)
 library(zoo)
 ```
+
+# Methods
+## Eddy Covariance Instrumentation and Processing
+Fluxes of CH~4~, CO~2~, H~2~O, and sensible heat were measured from the three core and two temporary wetland sites by eddy covariance. We measured high-frequency three-dimensional wind speed (*u*,*v*,*w*) and temperature with sonic anemometers (WindMaster; Gill Instruments, Hampshire, UK) and CH~4~, CO~2~, and H~2~O concentrations with open-path infrared gas analyzers (LI-7500A and LI-7700; LI-COR Inc., Lincoln, Nebraska, USA). High-frequency data from the peat-alluvium, old peat, young peat, and temporary peat site were logged to LI-7550 dataloggers (LI-COR Inc., Lincoln, Nebraska, USA) at 20 Hz interval, and high-frequency data from the temporary peat-alluvium site were logged to a CR1000 datalogger (Campbell Scientific, Logan, Utah, USA) at 10 Hz interval. Measurements took place at a height of 5.44m, 4.64m, 5.36m, 4.70m, and 3.88m for the young peat, old peat, peat-alluvium, temporary peat-alluvium, and temporary peat site, respectively. Corrections were applied to vertical wind speed data prior to flux processing for sonic anemometers affected by the 'w bug', which causes an underestimate in vertical wind speeds. Half-hourly fluxes were calculated from the covariance between vertical wind speed (*w*) and gas concentrations using in-house MATLAB software [@detto_scaling_2010; @hatala_greenhouse_2012; @knox_agricultural_2015]. Flux corrections and quality control were applied as described in detail in @knox_agricultural_2015, @chamberlain_evaluation_2017, and Eichelmann et al. (*in review*), and included high-frequency data despiking, 2-D coordinate rotations, density corrections, and site-specific friction velocity (*u$^\ast$*) filtering. At the old peat site, we reject fluxes from wind directions 290$^\circ$-240$^\circ$ because fluxes from these directions were from other wetland types; however, we did not apply wind direction filtering to the other sites where flux footprints were more homogeneous. Footprints at all sites were calculated using a two-dimensional analytical model [@detto_soil_2006; @hsieh_approximate_2000]. We then filled all gaps in the half-hourly flux time series using artificial neural networks (ANNs) as described in detail in @knox_biophysical_2016 and Eichelmann et al. (*in review*). Separate ANNs were trained for daytime and nighttime CO~2~ fluxes, and the nighttime CO~2~ flux ANN was used to model *ER* at all times. Gross ecosystem photosynthesis (*GEP*) was then estimated as the difference between the gap-filled CO~2~ flux and modeled *ER* [@baldocchi_does_2015]. More detail on this partitioning strategy can be found in @baldocchi_does_2015 and @knox_biophysical_2016, and our partitioning method performs well against independent verification methods in agricultural systems [@oikawa_revisiting_2017]. We did not gap fill or partition fluxes for the temporary tower sites and only present their observed fluxes.
+
+We also measured a number of auxiliary atmospheric and soil environmental variables averaged at half-hourly intervals and logged to CR1000 dataloggers (Campbell Scientific, Logan, Utah, USA). Atmospheric variables included air temperature (*T~a~*) and relative humidity (*RH*) using shielded and aspirated thermistor and capacitance sensors (HMP45C or HMP60; Viasala, Vantaa, Finland), atmospheric pressure (*PA*) using capacitance sensors (PTB110; Viasala, Vantaa, Finland), photosynthetically active radiation (*PAR*) using quantum sensors (PAR-LITE or PQS 1; Kipp and Zonen, Delft, Netherlands), and net radiation (*R~net~*) using four-component and double-sided net-radiometers (CNR1 or NR Lite; Hukseflux & Kipp and Zonen, Delft, Netherlands). We measured soil (*T~s~*) and water (*T~w~*) temperature at various depths using copper constant thermocouples, and water table depth (*WTD*) using pressure transducers (CS450 or CS451; Campbell Scientific, Logan, Utah, USA). A detailed description of the measurements made and instruments used at each core tower site can be found in Eichelmann et al. (*in review*).
+
+## Wavelet-Information Theory Analysis
+Flux and environmental variable time series were decomposed into major time scales of interest using maximal-overlap discrete wavelet transforms [@percival_estimation_1995], where we isolate variation occurring at the hourly (1-2 h), diel (4 h to 1.3 days), and multiday time scales (2.7-21.3 days). We used the Least Symmetric 8 wavelet filter to decompose the original time series for all variables, and each time scale was reconstructed from the wavelet detail at multiple dyadic scales corresponding to 2^n^ measurement intervals. The hourly time scale was reconstructed from dyadic scales 1-2 (1-2h), diel scale from dyadic scales 3-6 (4h to 1.3 days), and multiday scale from dyadic scales 7-10 (2.7-21.3 days). 
+
+Once the time series were decomposed into the major scales of variation, we used mutual information (*I*) to identify relationships between variables. Mutual information between an *X* and *Y* variable can be described using the following equation:
+$$I_{X,Y}=H_X+H_Y-H_{X,Y}$$
+where *H~X~* and *H~Y~* are marginal Shannon entropies of each variable and *H~Y,X~* is the joint Shannon entropy of *X* and *Y*. These entropies are calculated from the marginal and joint probability distributions of the *X* and *Y* variables as follows:
+$$H_X=-\sum_{x_t}p(x_t)log_2p(x_t)$$
+$$H_Y=-\sum_{y_t}p(y_t)log_2p(y_t)$$
+
+$$H_{X,Y}=-\sum_{x_t}\sum_{y_t}p(x_t,y_t)log_2p(x_t,y_t)$$
+where *x~t~* and *y~t~* are states within the overall distribution of *X* and *Y*. Here, we bin our continuous data into discrete states to calculate *H~X~*, *H~Y~*, and *H~X,Y~*. We follow the same processing methodology in @sturtevant_identifying_2016 for calculating *I*. Briefly, we first wavelet decomposed variables of interest into hourly, diel, and multiday scales, and following wavelet decomposition, original data gaps were reinserted into the wavelet detail reconstructions. Analyses for each year were confined to the growing season (DOY 100-300), and time series border periods were removed to avoid wavelet-induced distortions. We then calculated joint and marginal Shannon entropies using 10 fixed-interval bins for the probability distributions of each variable, and calculated *I* for a number of time lags of *X*. We calculated *I* at lags up to 5 hours for the hourly and diel time scales, and up to 8 days for the multiday time scale. In all cases, CH~4~ flux (*F~CH4~*) was treated as the *Y* variable, as we were interested in the response of *F~CH4~* to external drivers. Statistical significance was then calculated at a 95% threshold using 1000 Monte Carlo random walks that underwent the same processing steps described above. A more detailed description of this entire processing methodology can be found in @sturtevant_identifying_2016, and all wavelet decomposition and entropy calculations were conducted using the ProcessNetwork Software (http://www.mathworks.com/matlabcentral/fileexchange/41515-processnetwork-processnetwork-software). Here, we present relative mutual information (*I^R^*) where *I* is divided by the Shannon entropy of the *Y* variable (*F~CH4~*). 
+
+# Results
 
 ```{r figS1, fig.cap="Distribution of net ecosystem exchange (*NEE*) from the three sites on Twitchell Island where wetland age is held constant and parent soil type varies. All measurements were made during the 2017 growing season between July 1 and August 15. Measurements were only used if simultaneous half-hourly fluxes were available across all three sites (n = 991). All sites were restored in 2014. The temporary peat tower measured fluxes from a Rindge peat soil series, and the temporary peat-alluvium tower measured fluxes from the same Scribner alluvium soil as the core peat-alluvium site. Both temporary towers were located within 500m of the core peat-alluvium tower.", fig.height=3.2, fig.width=3.5}
 #load datasets
@@ -124,3 +143,68 @@ ggplot(data=subset(diel_all, site == "Peat-Alluvium" & year == 2015), aes(x=PA, 
 
 
 ```
+
+<!-- Ecosystem CH~4~ fluxes followed similar seasonal patterns across all three wetland sites, where peak fluxes occurred during the summer (Fig. 4a) when temperature and incoming radiation were highest (Fig. 3). Methane fluxes were generally stable across the growing season, with the exception of periods when the water table would drop below the land surface. These events occurred at the old peat wetland in 2013 and 2014 (Fig. 3d), and were associated with marked reductions in daily CH~4~ flux (Fig. 4a). Ecosystem CO~2~ fluxes (*NEE*, *GEP*, and *ER*) were also highest in summer and the lowest during January to February of each year (Fig. 4b,c,d). Daily *NEE* magnitudes were similar across the three wetlands, particularly in 2015, though the young peat wetland had highly variable fluxes across years (Fig. 4b). At this site, large *GEP* and *ER* fluxes were observed one-year post-restoration when the vegetation was completely established, and fluxes were attenuated mid-growing season in 2014 and 2016 due to insect outbreaks and salinization, respectively (Fig. 4b,c). Young peat CO~2~ and CH~4~ fluxes were similarly reduced in the 2017 growing season, coincident with an insect outbreak and large-scale flushing event to reduce salinity (Fig. 4). CO~2~ fluxes from the old peat wetland were much more consistent across time (Fig. 4b,c,d), and once the peat-alluvium wetland was fully vegetated (2015 onward), *NEE*, *GEP*, and *ER* fluxes from this system were very similar to the old peat wetland site (Fig. 4b,c,d). Additionally, CO~2~ flux patterns from the young peat and peat-alluvium wetland were similar during the initial flooding phase when wetland vegetation cover was not fully established. Here, peak CO~2~ fluxes were observed late in the growing season when plant cover became established within the flux footprints (Fig. 4b,c,d). -->
+
+# ```{r combine_annual, echo=FALSE}
+# #Add age since restoration variable
+# peat19_yearly$age <- peat19_yearly$year - 1997
+# peat6_yearly$age <- peat6_yearly$year - 2011
+# alluvium_yearly$age <- alluvium_yearly$year - 2014
+# 
+# peat19_s <- subset(peat19_yearly, year != 2013) # remove year with draw down disturbance at WP
+# 
+# #merge to single dataset
+# all_sites <- rbind(peat19_s, peat6_yearly); all_sites <- rbind(all_sites, alluvium_yearly)
+# 
+# #remove incomplete years
+# all_sites <- subset(all_sites, Days >= 365)
+# ```
+
+# ```{r figx, fig.cap="Monthly methane (*F~CH4~*), gross ecosystem photosynthesis (*GEP*), and ecosystem respiration (*ER*) budgets for years when the three wetlands were fully vegetated.", warning=FALSE, fig.width=7, fig.height=5.2, dpi=600}
+# #monthly mean calculations
+# monthly <- all_daily %>%
+#   group_by(site, year, month) %>%
+#   summarise(CH4 = mean(mgCH4)*length(mgCH4)/1000,
+#             GPP = mean(gGEP)*length(gGEP),
+#             NEE = mean(gCO2)*length(gCO2),
+#             ER = mean(gER)*length(gER),
+#             ET = mean(ET)*length(ET),
+#             days = length(mgCH4),
+#             date = mean(datetime)) %>%
+#   filter(days >= 28 & year > 2014) #only full months after all wetlands are fully vegetated
+# 
+# #theme
+# time_series <- theme_bw() +
+#   theme(panel.grid.minor=element_blank(), panel.grid.major = element_blank(),
+#         axis.title.y = element_text(size=9))
+# 
+# a <- ggplot(monthly, aes(x=month, y=CH4, color=site)) +
+#   geom_line() +
+#   scale_x_continuous(breaks=c(2,4,6,8,10,12)) +
+#   facet_grid(.~(year)) + 
+#   ylab(expression(F[CH4]~" (g C"~m^{-2}~month^{-1}~")")) + 
+#   time_series + theme(axis.title.x = element_blank(), 
+#                       legend.title=element_blank(),
+#                       legend.position=c(.92, .75), 
+#                       legend.margin = margin(0, 0, 0, 0),
+#                       legend.key.size =  unit(0.17, "in"), legend.text = element_text(size=8),
+#                       legend.background = element_rect(fill = "transparent"))
+#   
+# b <- ggplot(monthly, aes(x=month, y=GPP*-1, color=site)) +
+#   geom_line() +
+#   scale_x_continuous(breaks=c(2,4,6,8,10,12)) +
+#   facet_grid(.~(year)) + 
+#   ylab(expression(GEP~" (g C"~m^{-2}~month^{-1}~")")) + 
+#   time_series + theme(axis.title.x = element_blank(), legend.position = "none")
+# 
+# c <- ggplot(monthly, aes(x=month, y=ET, color=site)) +
+#   geom_line() +
+#   scale_x_continuous(breaks=c(2,4,6,8,10,12)) + xlab("Month") +
+#   ylab(expression(ER~" (g C"~m^{-2}~month^{-1}~")")) + 
+#   facet_grid(.~(year)) + 
+#   time_series + theme(legend.position = "none")
+# 
+# grid.arrange(a, b, c, ncol=1)
+# 
+# ```
