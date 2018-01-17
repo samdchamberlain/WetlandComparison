@@ -185,7 +185,7 @@ new_wetlands$horizon <- ifelse(new_wetlands$rest_year == 0, "Parent",
 
 new_wetlands2 <- new_wetlands[!is.na(new_wetlands$horizon),]
 
-all_s <- subset(all_s, month < 8 & month > 3)
+all_s <- subset(all_s, month < 7 & month > 3)
 
 a <- ggplot(subset(soils, site != "Old Peat"), aes(x=site, y=FeT_mg.g, fill=horizon)) +
   geom_boxplot() +
