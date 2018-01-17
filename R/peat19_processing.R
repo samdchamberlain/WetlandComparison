@@ -21,7 +21,7 @@ daily <- peat19_all %>%
             vGPP = mean(wc_gf_var)+mean(er_ANN_var), #error propogation for calculated GPP (NEE-ER)
             ER = mean(er_ANNnight),     #partitioned respiration (umol m-2 s-1)
             vER = mean(er_ANN_var),     #partitioned respiration variance (umol m-2 s-1)^2
-            ET = mean(wq_gf),           #evapotranspiration (umol m-2 s-1)
+            ET = mean(wq_gf),           #evapotranspiration (mmol m-2 s-1)
             q_obs = sum(!is.na(wq)),
             H = mean(H_gf),             #sensible heat flux (W m-2)
             mGCC = mean(GCC, na.rm=T),  #green index
@@ -38,7 +38,7 @@ daily <- peat19_all %>%
             t_obs = length(wc_gf),      # total observations in the day
             month = round(median(month)),
             year = round(median(year))) %>%
-  filter(t_obs == 48)  #remove incomplete days at either end of time series
+  filter(t_obs == 48 & year > 2013)  #remove incomplete days at either end of time series
 
 #Time and unit conversions
 daily$datetime <- as.POSIXct(daily$dday*86400, origin="2012-01-01")
@@ -46,6 +46,7 @@ daily$mgCH4 <- (daily$mCH4*12.01*3600*24)/1000000 #mg C m-2 d-1
 daily$gCO2 <- (daily$mNEE*12.01*3600*24)/1000000  #g C m-2 d-1
 daily$gER <- (daily$ER*12.01*3600*24)/1000000     #g C m-2 d-1
 daily$gGEP <- (daily$GPP*12.01*3600*24)/1000000   #g C m-2 d-1
+daily$mET <- (daily$ET*18.01528*3600*24)/1000000  #mm H2O d-1
 
 #Annual fluxes from daily fluxes
 yearly <- daily %>%

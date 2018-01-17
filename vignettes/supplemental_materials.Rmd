@@ -177,5 +177,125 @@ ggplot(data=subset(diel_all, site == "Peat-Alluvium" & year == 2015), aes(x=PA, 
 
 ```
 
+```{r fig4, fig.cap="Daily (a) methane flux (*F~CH4~*), (b) net ecosystem exchange (*NEE*), (c) gross ecosystem photosynthesis (*GEP*), and (d) ecosystem respiration (*ER*) from the alluvium, old peat, and young peat wetlands when measurements were available across all three sites and all sites were fully vegetated.", fig.width=7, fig.height=5.2, dpi=600}
+#themes
+time_series <- theme_bw() +
+  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
+        axis.title.x = element_blank(), axis.title.y = element_text(size=9))
+
+#plot objects, complete years only
+a <- ggplot(subset(all_daily, year > 2014), aes(x=date, y=mgCH4, color=site)) +
+  geom_line() + theme_bw() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab(expression(F[CH4]~" (mg C"~m^{-2}~d^{-1}~")")) + 
+  annotate("text", x=as.Date("2015-01-01"), y=Inf, label="a", vjust=1, hjust=1) +
+  time_series + theme(legend.position = "none", axis.text.x = element_blank())
+
+b <- ggplot(subset(all_daily, year > 2014), aes(x=date, y=gCO2, color=site)) +
+  geom_line() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab(expression(NEE~" (g C"~m^{-2}~d^{-1}~")")) + 
+  annotate("text", x=as.Date("2015-01-01"), y=Inf, label="b", vjust=1, hjust=1) +
+  time_series + theme(axis.text.x = element_blank(), legend.position = "none")
+
+c <- ggplot(subset(all_daily, year > 2014), aes(x=date, y=gGEP, color=site)) +
+  geom_line() + theme_bw() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab(expression(GEP~" (g C"~m^{-2}~d^{-1}~")")) + 
+  annotate("text", x=as.Date("2015-01-01"), y=Inf, label="c", vjust=1, hjust=1) +
+  time_series + theme(axis.text.x = element_blank(), legend.position = "none")
+
+d <- ggplot(subset(all_daily, year > 2014), aes(x=date, y=gER, color=site)) +
+  geom_line() + theme_bw() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  #scale_y_continuous(limits=c(0,15)) +
+  ylab(expression(ER~" (g C"~m^{-2}~d^{-1}~")")) + 
+  annotate("text", x=as.Date("2015-01-01"), y=Inf, label="d", vjust=1, hjust=1) +
+  time_series + theme(legend.title=element_blank(),
+                       legend.position=c(.76, .75), 
+                       legend.margin = margin(0, 0, 0, 0),
+                       legend.key.size =  unit(0.17, "in"), legend.text = element_text(size=8),
+                       legend.background = element_rect(fill = "transparent"))
+
+#Multiple plots aligned
+iA <- ggplotGrob(a)
+iB <- ggplotGrob(b)
+iC <- ggplotGrob(c)
+iD <- ggplotGrob(d)
+
+maxWidth = grid::unit.pmax(iA$widths[2:5], iB$widths[2:5], iC$widths[2:5], iD$widths[2:5])
+iA$widths[2:5] <- as.list(maxWidth); iB$widths[2:5] <- as.list(maxWidth); iC$widths[2:5] <- as.list(maxWidth);
+iD$widths[2:5] <- as.list(maxWidth);
+
+grid.arrange(iA, iB, iC, iD, ncol=1)
+```
+
+```{r fig5, fig.cap="Daily mean (a) photosynthetically active radiation (*PAR*), (b) air temperature (*T~a~*), (c) water temperature (*T~w~*), and (d) water table depth (*WTD*) for the alluvium, young peat, and old peat wetland sites. The dashed horizontal line on panel d represents the ground surface elevation at water table well locations.", fig.width=7, fig.height=5, dpi=600}
+#themes
+time_series <- theme_bw() +
+  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
+        axis.title.x = element_blank(), axis.title.y = element_text(size=9))
+
+#re-order factors to group peat sites in legend
+all_daily$site <- factor(all_daily$site, levels=c("Alluvium", "Old Peat", "Young Peat"))
+
+#create plot objects
+a <- ggplot(subset(all_daily, year > 2014), aes(x=date, y=PAR, color=site)) +
+  geom_line(size=0.5) + theme_bw() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab(expression(PAR~" ("~mu~mol~m^{-2}~s^{-1}~")")) + 
+  annotate("text", x=as.Date("2015-01-01"), y=Inf, label="a", vjust=1, hjust=1) +
+  time_series + theme(axis.text.x = element_blank(), legend.position="none")
+
+b <- ggplot(subset(all_daily, year > 2014), aes(x=date, y=Tair, color=site)) +
+  geom_line(size=0.5) + theme_bw() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab(expression(T[a]~" ("~degree~C~")")) +
+  annotate("text", x=as.Date("2015-01-01"), y=Inf, label="b", vjust=1, hjust=1) +
+  time_series + theme(axis.text.x = element_blank(), legend.position="none")
+
+c <- ggplot(subset(all_daily, year > 2014), aes(x=date, y=Tw, color=site)) +
+  geom_line(size=0.5) + theme_bw() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab(expression(T[w]~" ("~degree~C~")")) +
+  annotate("text", x=as.Date("2015-01-01"), y=Inf, label="c", vjust=1, hjust=1) +
+  time_series + theme(axis.text.x = element_blank(), legend.position="none")
+
+d <- ggplot(subset(all_daily, year > 2014), aes(x=date, y=WTD, color=site)) +
+  geom_line(size=0.5) + theme_bw() + 
+  geom_hline(yintercept=0, linetype="dashed") +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab("WTD (cm)") +
+  annotate("text", x=as.Date("2015-01-01"), y=Inf, label="d", vjust=1, hjust=1) +
+  time_series + theme(legend.title=element_blank(), legend.position=c(.09, .40),
+                      legend.margin = margin(0, 0, 0, 0), 
+                      legend.key.size =  unit(0.17, "in"), legend.text = element_text(size=8),
+                      legend.background = element_rect(fill = "white"))
+
+#Multiple plots aligned
+iA <- ggplotGrob(a)
+iB <- ggplotGrob(b)
+iC <- ggplotGrob(c)
+iD <- ggplotGrob(d)
+
+maxWidth = grid::unit.pmax(iA$widths[2:5], iB$widths[2:5], iC$widths[2:5], iD$widths[2:5])
+iA$widths[2:5] <- as.list(maxWidth); iB$widths[2:5] <- as.list(maxWidth); iC$widths[2:5] <- as.list(maxWidth);
+iD$widths[2:5] <- as.list(maxWidth);
+
+grid.arrange(iA, iB, iC, iD, ncol=1)
+```
+
+
+Site          | Year |   *F~CH4~*   |      *NEE*     |       *ER*     |       *GEP*     |      *GHG*     |
+-------------:|:----:|:------------:|:--------------:|:--------------:|:---------------:|:--------------:|
+Alluvium | 2015 | 28 $\pm$ 2.1 | -553 $\pm$ 107 | 1098 $\pm$ 164 | -1651 $\pm$ 196 | -355 $\pm$ 517 |
+Young Peat    | 2015 | 58 $\pm$ 3.6 | -359 $\pm$ 128 | 1085 $\pm$ 135 | -1444 $\pm$ 186 | 2171 $\pm$ 684 |
+Old Peat      | 2015 | 56 $\pm$ 4.2 | -234 $\pm$ 113 | 1133 $\pm$ 68  | -1367 $\pm$ 132 | 2481 $\pm$ 665 |
+Alluvium | 2016 | 35 $\pm$ 2.1 | -547 $\pm$ 106 | 1124 $\pm$ 192 | -1670 $\pm$ 219 | 77 $\pm$ 515   |
+Young Peat    | 2016 | 45 $\pm$ 3.3 | -1.9 $\pm$ 113 |  977 $\pm$ 147 | -979  $\pm$ 185 | 2715 $\pm$ 614 |
+Old Peat      | 2016 | 47 $\pm$ 3.5 | -404 $\pm$ 105 | 1082 $\pm$ 69  | -1487 $\pm$ 125 | 1339 $\pm$ 593 |
+
+Table: Annual methane (*F~CH4~*; g CH~4~-C m^-2^ yr^-1^), net ecosystem exchange (*NEE*; g CO~2~-C m^-2^ yr^-1^), ecosystem respiration (*ER*; g CO~2~-C m^-2^ yr^-1^), gross ecosystem photosynthesis (*GEP*; g CO~2~-C m^-2^ yr^-1^), and greenhouse gas equivalent emission (*GHG*; g CO~2eq~ m^-2^ yr^-1^) budgets for the alluvium, young peat, and old peat wetlands for 2015 and 2016 when all wetlands were fully vegetated. *GHG* budgets were calculated using the 100-year 45x sustained global warming potential for CH~4~ from @neubauer_moving_2015. Error for all budgets is $\pm$ 95% confidence interval calculated from the variance of 20 artifical neural network gap-filling runs. Confidence intervals for *GEP* and *GHG* budgets were calculated from the additive variance of *NEE*,*ER* and *F~CH4~*,*NEE* budgets respectively, as *GEP* and *GHG* budgets are calculated from combinations of these flux time series. 
+
 # References
 
