@@ -3,10 +3,13 @@
 #' Site: Peat 19 yr old
 #'
 #' @import dplyr
+#' @import lubridate
 #' @importFrom dplyr "%>%"
 
 # load eddy flux and met dataset
 load("data/peat19_all.Rdata")
+peat19_all$dday <- floor(peat19_all$decday)
+peat19_all$site <- "Old Peat"
 
 #Simple average of daily fluxes for gapfilled values
 daily <- peat19_all %>%
@@ -36,12 +39,12 @@ daily <- peat19_all %>%
             WTD = mean(WT, na.rm=T),    #water table (m from surface)
             Cond = mean(conductivity, na.rm=T), #conductivity (mS)
             t_obs = length(wc_gf),      # total observations in the day
-            month = round(median(month)),
             year = round(median(year))) %>%
-  filter(t_obs == 48 & year > 2013)  #remove incomplete days at either end of time series
+  filter(t_obs == 48 & year > 2013)  #remove incomplete days at either end of time series and year with water table drop issues
 
 #Time and unit conversions
 daily$datetime <- as.POSIXct(daily$dday*86400, origin="2012-01-01")
+daily$month <- month(daily$datetime)
 daily$mgCH4 <- (daily$mCH4*12.01*3600*24)/1000000 #mg C m-2 d-1
 daily$gCO2 <- (daily$mNEE*12.01*3600*24)/1000000  #g C m-2 d-1
 daily$gER <- (daily$ER*12.01*3600*24)/1000000     #g C m-2 d-1
@@ -62,7 +65,7 @@ yearly <- daily %>%
             Tair = mean(Tair, na.rm=T),
             GCC = mean(mGCC, na.rm=T),
             Days = sum(!is.na(mgCH4))) %>%
-  filter(year < 2017 & Days >= 365) #only keep annual budgets for full years
+  filter(Days >= 365) #only keep annual budgets for full years
 
 #Ecosystem C balance and GHG (CO2eq) balance
 yearly$Cbalance <- yearly$tNEE + yearly$tCH4 #C m-2 yr-1

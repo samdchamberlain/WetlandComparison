@@ -3,12 +3,13 @@
 #' Site: Alluvium
 #'
 #' @import dplyr
+#' @import lubridate
 #' @importFrom dplyr "%>%"
 #' @importFrom zoo na.approx
 
 # load eddy flux and met dataset
 load("data/alluvium_all.Rdata")
-alluvium_all$site <- "Alluvium"
+alluvium_all$dday <- floor(alluvium_all$decday)
 
 # create a long-term water temperature measure, as the probes have changed over time
 # when we don't have a 10cm water temp measurement, add 8cm depth in place
@@ -43,12 +44,12 @@ daily <- alluvium_all %>%
             WTD = mean(WT, na.rm=T),           #water table (m from surface)
             Cond = mean(Cond, na.rm=T),        #conductivity (mS)
             t_obs = length(wc_gf),      # total observations in the day
-            month = round(median(month)),
             year = round(median(year))) %>%
   filter(year > 2013 & t_obs == 48) #cut out pre-wetland measures, and incomplete days at edge of time series
 
 #Time and unit conversions
 daily$datetime <- as.POSIXct(daily$dday*86400, origin="2013-01-01")
+daily$month <- month(daily$datetime)
 daily$mgCH4 <- (daily$mCH4*12.01*3600*24)/1000000 #mg C m-2 d-1
 daily$gCO2 <- (daily$mNEE*12.01*3600*24)/1000000  #g C m-2 d-1
 daily$gER <- (daily$ER*12.01*3600*24)/1000000     #g C m-2 d-1
@@ -69,7 +70,7 @@ yearly <- daily %>%
             Tair = mean(Tair, na.rm=T),
             GCC = mean(mGCC, na.rm=T),
             Days = sum(!is.na(mgCH4))) %>%
-  filter(year < 2017 & Days >= 365) #only keep annual budgets for full years
+  filter(Days >= 365) #only keep annual budgets for full years
 
 #Ecosystem C balance and GHG (CO2eq) balance
 yearly$Cbalance <- yearly$tNEE + yearly$tCH4 #C m-2 yr-1
