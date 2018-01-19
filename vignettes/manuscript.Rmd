@@ -294,7 +294,7 @@ e <- ggplot(subset(soils, site != "Old Peat"), aes(x=site, y=C, fill=horizon)) +
   stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
   ylab(expression("%C")) +
   scale_y_continuous(limits=c(10,30)) +
-  annotate("text",x=0.6,y=50,label="(e)") +
+  annotate("text",x=0.6,y=30,label="(e)") +
   boxplot_theme + theme(legend.position="none")
 
 f <- ggplot(subset(soils, site != "Old Peat"), aes(x=site, y=N, fill=horizon)) +
@@ -382,7 +382,7 @@ peat <- peat %>%
 
 To determine whether long-term changes in CH~4~ flux with time at the alluvium wetland could be explained by common biophysical drivers, we constructed empirical models based on ten common biophysical drivers identified in @sturtevant_identifying_2016 and this study, including *PAR*, *T~a~*, *PA*, *u$^\ast$*, *WTD*, *NEE*, *GEP*, *ER*, and vapor pressure deficit. Cross-validated elastic net regularized linear models were used to prevent overfitting, and models were trained on the first three years of data at both sites. Model predictions were then compared to new data, when wetlands were over three years old, to assess whether variation in these common biophysical drivers could explain more recent observed patterns in CH~4~ flux. Tuned elastic net models explained `r  max(glmnet_alluvium$results$Rsquared)*100`% and `r  max(glmnet_alluvium$results$Rsquared)*100`% (*r^2^*) of the training data variance based on 10-fold cross-validation (alluvium tuning parameters - $$\alpha$$ = `r glmnet_alluvium$bestTune$alpha` & $$\lambda$$ = `r glmnet_alluvium$bestTune$lambda`; peat tuning parameters - $$\alpha$$ = `r glmnet_peat$bestTune$alpha` & $$\lambda$$ = `r glmnet_peat$bestTune$lambda`).
 
-For the model training period (first three years post-restoration), residuals were distrubuted evenly around zero and displayed little positive or negative bias (Fig. 5). The peat wetland model performed well on the test data (> three years post-restoration) where again model residuals were evenly distributed around zero (Fig. 5). The alluvium model (trained on 2013-2016 fluxes) did not perform well on 2017 data (test set), and fluxes were substantially underestimated by the empirical model, as demonstrated by positively skewed residuals in the test set (Fig. 5). These findings suggest that dominant biophysical drivers alone cannot account for recent increases in CH~4~ flux at the alluvium wetland.
+For the model training period (first three years post-restoration), residuals were evenly distrubuted around zero and displayed little positive or negative bias across both wetlands (Fig. 5). The peat wetland model performed well on the test data (> three years post-restoration) where model residuals were evenly distributed around zero (Fig. 5). The alluvium model (trained on 2013-2016 fluxes) did not perform well on 2017 data (test set). Modeled fluxes were substantially underestimated, as demonstrated by positively skewed residuals (`r median(alluvium$resid[alluvium$period == "Test (> 3 yrs old)"])` $\pm$ `r IQR(alluvium$resid[alluvium$period == "Test (> 3 yrs old)"])`; median $\pm$ interquartile range) in the test set (Fig. 5). These findings suggest that dominant biophysical drivers alone cannot account for recent increases in CH~4~ flux at the alluvium wetland.
 
 Though our soil data was collected during a single sampling in summer 2017, we can subsitute depth (parent v. accretted horizons) for time to understand what changes in soil properties might explain these increases in CH~4~ flux that cannot be explained by dominant environmental drivers alone (Fig. 5). If we assume the parent horizon is indicative of soil properties at the time of restoration and the accreted horizon is indicative of the current state of wetland soils, we observe a signficantly decrease in soil acidity (Fig. 3d) and shift towards more reduced soil conditions over time, as seen by the significant shift towards more Fe in its reduced form (Fe^2+^) within the accreted soil horizon (Fig. 3b).
 
@@ -404,7 +404,10 @@ grid.arrange(a, b, nrow=1)
 ```
 
 ## Implications for restored wetland GHG emissions
-We observed a steady increase in annual CH~4~ flux from the alluvium wetland, and by 2017 annual CH~4~ fluxes from the alluvium wetland exceeded those from the peat site and a third old peat wetland restored in 1999 (Fig. 5a). This increasing pattern stands in contrast to the two peat sites, where annual CH~4~ fluxes statistically similar across all site years (Fig. 5a). As discussed previously, these observed differences in CH~4~ flux across wetland types was not driven by differences in productivity, as annual *NEE* was often higher at the alluvium wetland yet CH~4~ fluxes were reduced (Fig. 5b).
+We observed a steady increase in annual CH~4~ flux from the alluvium wetland, and by 2017 annual CH~4~ fluxes from the alluvium wetland exceeded those from the recently restored peat wetland and an additional peat wetland ('old peat' wetland) restored in 1999 (Fig. 6a). For periods when the wetland was fully vegetated (2015+ or year 1+ on Fig. 2), this initially corresponded to neutral GHG emissions from the alluvium wetland (Fig. 6b); however, by 2017 annual GHG budgets were larger than both peat sites yet budgets from the peat and alluvium sites overlapped (Fig. 6b). These wetlands experienced similar climatic and hydrologic conditions over this time period (Fig. SX), and a more detailed summary of meteorologic conditions can be found in Eichelmann et al. (*in review*). 
+
+Annual CH~4~ budgets from the peat and old peat wetland covaried and were not statistically different from 2014 to 2017 (Fig. 6a). Reduced CH~4~ fluxes from the old peat wetland were observed during 2013 when multiple water table drawdowns were observed (data not shown). Both peat wetlands were GHG sources from 2014 to 2016, and these sites were GHG neutral during 2017 due to reduced CH~4~ fluxes (Fig. 6) and high *NEE* (Fig. SX). Soil iron content was similar across the two peat wetlands, though soil %C was significantly higher at the old peat wetland compared to the peat site ()
+
 
 ```{r fig6, fig.cap="Annual CH~4~ flux (*F~CH4~*) and greenhouse gas budget (*GHG*) across the two recently restored peat and alluvium wetlands, as well as an additional 19 year old wetland restored on peat soils. Annual GHG balance is computed from annual *F~CH4~* and *NEE* budgets using the sustained global warming potential for CH~4~ [@neubauer_moving_2015].", fig.width=5, fig.height=4, dpi=600}
 time_series <- theme_bw() +
@@ -415,6 +418,11 @@ pd <- position_dodge(width = 0.0) #dodge parameter
 
 all_annual$site <- factor(all_annual$site, levels=c("Alluvium", "Peat", "Old Peat"))
 all_pst14 <- subset(all_annual, year > 2013)
+
+# only show years when wetlands are fully vegetated (developed fluxes)
+all_pst14$tCH4 <- ifelse(all_pst14$site == "Alluvium" & all_pst14$year == 2014, NA, all_pst14$tCH4)
+all_pst14$GHGbalance <- ifelse(all_pst14$site == "Alluvium" & all_pst14$year == 2014, NA, all_pst14$GHGbalance)
+
 
 a <- ggplot(all_pst14, aes(x=year, y=tCH4, color=site)) +
         geom_point(position = pd) + geom_line() +
