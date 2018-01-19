@@ -8,9 +8,9 @@
 load("data/soils.Rdata")
 
 #create site variable based on 'Area' site names
-soils$site <- ifelse(soils$Area == "East End", "Peat-Alluvium",
+soils$site <- ifelse(soils$Area == "East End", "Alluvium",
                         ifelse(soils$Area == "West Pond", "Old Peat",
-                               "Young Peat"))
+                               "Peat"))
 
 #What percent of iron is in oxidized form?
 soils$percent_ox <- (soils$FeIII_mg.g/soils$FeT_mg.g)*100
@@ -25,4 +25,4 @@ soils$horizon <- ifelse(soils$Area == "West Pond" & soils$Point == "P1",
                            "Accreted", soils$horizon)
 
 #re-order factors to group peat sites in legend
-soils$site <- factor(soils$site, levels=c("Peat-Alluvium", "Old Peat", "Young Peat"))
+soils$site <- factor(soils$site, levels=c("Alluvium", "Peat", "Old Peat"))
