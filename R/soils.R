@@ -9,7 +9,7 @@ load("data/soils.Rdata")
 
 #create site variable based on 'Area' site names
 soils$site <- ifelse(soils$Area == "East End", "Alluvium",
-                        ifelse(soils$Area == "West Pond", "Old Peat",
+                        ifelse(soils$Area == "West Pond", "Mature",
                                "Peat"))
 
 #What percent of iron is in oxidized form?

@@ -9,7 +9,7 @@
 # load eddy flux and met dataset
 load("data/peat19_all.Rdata")
 peat19_all$dday <- floor(peat19_all$decday)
-peat19_all$site <- "Old Peat"
+peat19_all$site <- "Mature"
 
 #Simple average of daily fluxes for gapfilled values
 daily <- peat19_all %>%
