@@ -3,7 +3,7 @@
 #' Site: Alluvium
 #'
 #' @import dplyr
-#' @import lubridate
+#' @importFrom lubridate month
 #' @importFrom dplyr "%>%"
 #' @importFrom zoo na.approx
 

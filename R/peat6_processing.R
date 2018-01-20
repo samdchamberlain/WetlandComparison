@@ -3,7 +3,7 @@
 #' Site: Peat 6 yr old
 #'
 #' @import dplyr
-#' @import lubridate
+#' @importFrom lubridate month
 #' @importFrom dplyr "%>%"
 
 # load eddy flux and met dataset

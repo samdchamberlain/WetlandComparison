@@ -2,4 +2,5 @@
 
 import(dplyr)
 importFrom(dplyr,"%>%")
+importFrom(lubridate,month)
 importFrom(zoo,na.approx)
