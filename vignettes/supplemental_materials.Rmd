@@ -6,9 +6,9 @@ author: Samuel D Chamberlain^1^, Tyler Anthony^1^, Whendee L Silver^1^, Elke Eic
   G Verfaillie^1^, and Dennis D Baldocchi^1^
 date: '`r Sys.Date()`'
 output:
-  word_document: default
   pdf_document: default
   html_document: default
+  word_document: default
 fontsize: 12pt
 header-includes:
 - \usepackage{setspace}
@@ -76,63 +76,7 @@ where *x~t~* and *y~t~* are states within the overall distribution of *X* and *Y
 
 # Results
 
-```{r figS1, fig.height = 2.5, fig.width = 3.5, dpi=600, fig.cap="Soil percent nitrogen (%N) in accreted and parent horizons across the three core wetland sites (*n* $\\geq$ 12 per depth). Significance levels are shown for pairwise comparisons between soil horizons at each site (Welch's t-test), where ns denotes no significant differences and increasing asterisks denotes significance levels from *P* < 0.05, 0.01, 0.001, to 0.0001."}
-source("R/soils.R") #process soils data into summary dataframe
-boxplot_theme <- theme(axis.text.x = element_text(size=8),
-                 axis.title.y = element_text(size=9),
-                 axis.title.x = element_blank())
-
-ggplot(soils, aes(x=site, y=N, fill=horizon)) +
-  geom_boxplot() +
-  ylab(expression("Extractable Fe (mg "~g^{-1}~"soil)")) +
-  stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
-  boxplot_theme + theme(legend.position="none")
-```
-
-
-```{r figS2, fig.cap="Distribution of net ecosystem exchange (*NEE*) from the three sites on Twitchell Island where wetland age is held constant and parent soil type varies. All measurements were made during the 2017 growing season between July 1 and August 15. Measurements were only used if simultaneous half-hourly fluxes were available across all three sites (n = 991). All sites were restored in 2014. The temporary peat tower measured fluxes from a Rindge peat soil series, and the temporary peat-alluvium tower measured fluxes from the same Scribner alluvium soil as the core peat-alluvium site. Both temporary towers were located within 500m of the core peat-alluvium tower.", fig.height=3.2, fig.width=3.5, dpi=600}
-#load datasets
-source("R/alluvium_processing.R") #peat-alluvium site
-load("data/mobile_alluvium.Rdata")
-load("data/mobile_peat.Rdata")
-
-#subset all Twitchell Island four year old sites and combine to single data set
-alluvium4 <- select(alluvium_all, wc, datetime) #core peat-alluvium site
-alluvium4$datetime <- round_date(alluvium4$datetime, unit="minutes")
-alluvium4 <- subset(alluvium4, datetime > "2017-06-30" & datetime <= "2017-08-15")
-
-peat4 <- select(mobile_peat, wc, datetime) #mobile peat site
-peat4$datetime <- round_date(peat4$datetime, unit="minutes")
-peat4 <- subset(peat4, datetime > "2017-06-30" & datetime <= "2017-08-15")
-
-alluvium2_4 <- select(mobile_alluvium, wc, datetime)#mobile alluvium site
-alluvium2_4$datetime <- round_date(alluvium2_4$datetime, unit="minutes")
-alluvium2_4 <- subset(alluvium2_4, datetime > "2017-06-30" & datetime <= "2017-08-15")
-
-#merge by time and omit all points where measurements were not available at all three sites
-twitchell <- merge(alluvium2_4, alluvium4, by="datetime")
-twitchell <- merge(twitchell, peat4, by="datetime")
-twitchell <- na.omit(twitchell)
-twitchell <- gather(select(twitchell, datetime, wc.x, wc.y, wc), site, CH4, -datetime)
-
-#fix site names
-twitchell$site <- ifelse(twitchell$site == "wc.x", "Peat-Alluvium (temp)",
-                    ifelse(twitchell$site == "wc.y", "Peat-Alluvium (core)",
-                           "Peat (temp)"))
-
-
-ggplot(data=twitchell, aes(CH4, color=site, fill=site)) +
-  geom_density(alpha=0.1) +
-  xlab(expression(NEE~" "~"("~nmol~CO[2]~m^{-2}~s^{-1}~")")) + 
-  theme_bw() + 
-  theme(legend.title=element_blank(), legend.position=c(.25, .90),
-        legend.margin = margin(0, 0, 0, 0), legend.background = element_rect(fill = "transparent"),
-        axis.title = element_text(size=10), 
-        panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
-        legend.key.size =  unit(0.17, "in"), legend.text = element_text(size=8))
-```
-
-```{r figS3, fig.height = 8, fig.width = 7, dpi=600, fig.cap="Diel patterns of mean (a) methane flux (*F~CH4~*), (b) net ecosystem exchange (*NEE*), and (c) evapotranspiration (*ET*) by year."}
+```{r figS1, fig.height = 8, fig.width = 7, dpi=600, fig.cap="Diel patterns of mean (a) methane flux (*F~CH4~*), (b) net ecosystem exchange (*NEE*), and (c) evapotranspiration (*ET*) by year."}
 source("R/Diel_patterns.R") #process the data
 
 a <- ggplot(diel_all, aes(x=time, y=CH4, color=factor(year))) +
@@ -167,8 +111,8 @@ iA$widths[2:5] <- as.list(maxWidth); iB$widths[2:5] <- as.list(maxWidth); iC$wid
 grid.arrange(a, b, c, ncol=1)
 ```
 
-```{r figS4, fig.height = 3, fig.width = 4, dpi=600, fig.cap="Mean methane flux (*F~CH4~*) and atmospheric pressure across all half-hourly periods in the 2015 growing season (DOY 100-300). Color scale on each dot denotes the time of day for each paired datapoint. Peak *F~CH4~* occurs late in the afternoon during atmopsheric pressure lows, and this relationship displays notable hysteresis."}
-ggplot(data=subset(diel_all, site == "Peat-Alluvium" & year == 2015), aes(x=PA, y=CH4, color=time)) +
+```{r figS2, fig.height = 3, fig.width = 4, dpi=600, fig.cap="Mean methane flux (*F~CH4~*) and atmospheric pressure across all half-hourly periods in the 2015 growing season (DOY 100-300). Color scale on each dot denotes the time of day for each paired datapoint. Peak *F~CH4~* occurs late in the afternoon during atmopsheric pressure lows, and this relationship displays notable hysteresis."}
+ggplot(data=subset(diel_all, site == "Alluvium" & year == 2015), aes(x=PA, y=CH4, color=time)) +
   geom_point(size=1.5) +
   xlab("Atmospheric pressure (kPA)") +
   ylab(expression(F[CH4]~" ("~nmol~m^{-2}~s^{-1}~")")) +
@@ -177,7 +121,72 @@ ggplot(data=subset(diel_all, site == "Peat-Alluvium" & year == 2015), aes(x=PA, 
 
 ```
 
-```{r fig4, fig.cap="Daily (a) methane flux (*F~CH4~*), (b) net ecosystem exchange (*NEE*), (c) gross ecosystem photosynthesis (*GEP*), and (d) ecosystem respiration (*ER*) from the alluvium, old peat, and young peat wetlands when measurements were available across all three sites and all sites were fully vegetated.", fig.width=7, fig.height=5.2, dpi=600}
+```{r figS3, fig.cap="Daily mean (a) photosynthetically active radiation (*PAR*), (b) air temperature (*T~a~*), (c) water temperature (*T~w~*), and (d) water table depth (*WTD*) for the alluvium, peat, and mature wetland sites. The dashed horizontal line on panel d represents the ground surface elevation at water table well locations.", fig.width=7, fig.height=5, dpi=600}
+
+#load and process wetland sites into half-hourly, daily, and annual sums
+source("R/peat19_processing.R") #19yr old 'mature' peat site
+source("R/peat6_processing.R") #6yr old peat site
+source("R/alluvium_processing.R") #alluvium site
+
+#merge daily sums to single dataset
+all_daily <- rbind(alluvium_daily, peat6_daily); all_daily <- rbind(all_daily, peat19_daily)
+all_daily$date <- as.Date(all_daily$datetime) #data plotting variable
+
+#themes
+time_series <- theme_bw() +
+  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
+        axis.title.x = element_blank(), axis.title.y = element_text(size=9))
+
+#re-order factors to group peat sites in legend
+all_daily$site <- factor(all_daily$site, levels=c("Alluvium", "Peat", "Mature"))
+
+#create plot objects
+a <- ggplot(subset(all_daily, year > 2014), aes(x=date, y=PAR, color=site)) +
+  geom_line(size=0.5) + theme_bw() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab(expression(PAR~" ("~mu~mol~m^{-2}~s^{-1}~")")) + 
+  annotate("text", x=as.Date("2015-01-01"), y=Inf, label="a", vjust=1, hjust=1) +
+  time_series + theme(axis.text.x = element_blank(), legend.position="none")
+
+b <- ggplot(subset(all_daily, year > 2014), aes(x=date, y=Tair, color=site)) +
+  geom_line(size=0.5) + theme_bw() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab(expression(T[a]~" ("~degree~C~")")) +
+  annotate("text", x=as.Date("2015-01-01"), y=Inf, label="b", vjust=1, hjust=1) +
+  time_series + theme(axis.text.x = element_blank(), legend.position="none")
+
+c <- ggplot(subset(all_daily, year > 2014), aes(x=date, y=Tw, color=site)) +
+  geom_line(size=0.5) + theme_bw() +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab(expression(T[w]~" ("~degree~C~")")) +
+  annotate("text", x=as.Date("2015-01-01"), y=Inf, label="c", vjust=1, hjust=1) +
+  time_series + theme(axis.text.x = element_blank(), legend.position="none")
+
+d <- ggplot(subset(all_daily, year > 2014), aes(x=date, y=WTD, color=site)) +
+  geom_line(size=0.5) + theme_bw() + 
+  geom_hline(yintercept=0, linetype="dashed") +
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
+  ylab("WTD (cm)") +
+  annotate("text", x=as.Date("2015-01-01"), y=Inf, label="d", vjust=1, hjust=1) +
+  time_series + theme(legend.title=element_blank(), legend.position=c(.09, .40),
+                      legend.margin = margin(0, 0, 0, 0), 
+                      legend.key.size =  unit(0.17, "in"), legend.text = element_text(size=8),
+                      legend.background = element_rect(fill = "white"))
+
+#Multiple plots aligned
+iA <- ggplotGrob(a)
+iB <- ggplotGrob(b)
+iC <- ggplotGrob(c)
+iD <- ggplotGrob(d)
+
+maxWidth = grid::unit.pmax(iA$widths[2:5], iB$widths[2:5], iC$widths[2:5], iD$widths[2:5])
+iA$widths[2:5] <- as.list(maxWidth); iB$widths[2:5] <- as.list(maxWidth); iC$widths[2:5] <- as.list(maxWidth);
+iD$widths[2:5] <- as.list(maxWidth);
+
+grid.arrange(iA, iB, iC, iD, ncol=1)
+```
+
+```{r figS4, fig.cap="Daily (a) methane flux (*F~CH4~*), (b) net ecosystem exchange (*NEE*), (c) gross ecosystem photosynthesis (*GEP*), and (d) ecosystem respiration (*ER*) from the alluvium, peat, and mature wetlands when measurements were available across all three sites and all sites were fully vegetated.", fig.width=7, fig.height=5.2, dpi=600}
 #themes
 time_series <- theme_bw() +
   theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
@@ -230,60 +239,8 @@ iD$widths[2:5] <- as.list(maxWidth);
 grid.arrange(iA, iB, iC, iD, ncol=1)
 ```
 
-```{r fig5, fig.cap="Daily mean (a) photosynthetically active radiation (*PAR*), (b) air temperature (*T~a~*), (c) water temperature (*T~w~*), and (d) water table depth (*WTD*) for the alluvium, young peat, and old peat wetland sites. The dashed horizontal line on panel d represents the ground surface elevation at water table well locations.", fig.width=7, fig.height=5, dpi=600}
-#themes
-time_series <- theme_bw() +
-  theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
-        axis.title.x = element_blank(), axis.title.y = element_text(size=9))
 
-#re-order factors to group peat sites in legend
-all_daily$site <- factor(all_daily$site, levels=c("Alluvium", "Old Peat", "Young Peat"))
 
-#create plot objects
-a <- ggplot(subset(all_daily, year > 2014), aes(x=date, y=PAR, color=site)) +
-  geom_line(size=0.5) + theme_bw() +
-  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
-  ylab(expression(PAR~" ("~mu~mol~m^{-2}~s^{-1}~")")) + 
-  annotate("text", x=as.Date("2015-01-01"), y=Inf, label="a", vjust=1, hjust=1) +
-  time_series + theme(axis.text.x = element_blank(), legend.position="none")
-
-b <- ggplot(subset(all_daily, year > 2014), aes(x=date, y=Tair, color=site)) +
-  geom_line(size=0.5) + theme_bw() +
-  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
-  ylab(expression(T[a]~" ("~degree~C~")")) +
-  annotate("text", x=as.Date("2015-01-01"), y=Inf, label="b", vjust=1, hjust=1) +
-  time_series + theme(axis.text.x = element_blank(), legend.position="none")
-
-c <- ggplot(subset(all_daily, year > 2014), aes(x=date, y=Tw, color=site)) +
-  geom_line(size=0.5) + theme_bw() +
-  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
-  ylab(expression(T[w]~" ("~degree~C~")")) +
-  annotate("text", x=as.Date("2015-01-01"), y=Inf, label="c", vjust=1, hjust=1) +
-  time_series + theme(axis.text.x = element_blank(), legend.position="none")
-
-d <- ggplot(subset(all_daily, year > 2014), aes(x=date, y=WTD, color=site)) +
-  geom_line(size=0.5) + theme_bw() + 
-  geom_hline(yintercept=0, linetype="dashed") +
-  scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
-  ylab("WTD (cm)") +
-  annotate("text", x=as.Date("2015-01-01"), y=Inf, label="d", vjust=1, hjust=1) +
-  time_series + theme(legend.title=element_blank(), legend.position=c(.09, .40),
-                      legend.margin = margin(0, 0, 0, 0), 
-                      legend.key.size =  unit(0.17, "in"), legend.text = element_text(size=8),
-                      legend.background = element_rect(fill = "white"))
-
-#Multiple plots aligned
-iA <- ggplotGrob(a)
-iB <- ggplotGrob(b)
-iC <- ggplotGrob(c)
-iD <- ggplotGrob(d)
-
-maxWidth = grid::unit.pmax(iA$widths[2:5], iB$widths[2:5], iC$widths[2:5], iD$widths[2:5])
-iA$widths[2:5] <- as.list(maxWidth); iB$widths[2:5] <- as.list(maxWidth); iC$widths[2:5] <- as.list(maxWidth);
-iD$widths[2:5] <- as.list(maxWidth);
-
-grid.arrange(iA, iB, iC, iD, ncol=1)
-```
 
 
 Site          | Year |   *F~CH4~*   |      *NEE*     |       *ER*     |       *GEP*     |      *GHG*     |
