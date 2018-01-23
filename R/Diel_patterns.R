@@ -10,6 +10,8 @@ load("data/peat6_all.Rdata")
 load("data/peat19_all.Rdata")
 load("data/alluvium_all.Rdata")
 
+peat19_all$site <- "Mature"
+
 ## Process each core site into diel values then we will merge them into a single file for visualization
 # diel fluxes from 6yr old peat site
 diel_peat6 <- peat6_all %>%

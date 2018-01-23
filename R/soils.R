@@ -25,4 +25,4 @@ soils$horizon <- ifelse(soils$Area == "West Pond" & soils$Point == "P1",
                            "Accreted", soils$horizon)
 
 #re-order factors to group peat sites in legend
-soils$site <- factor(soils$site, levels=c("Alluvium", "Peat", "Old Peat"))
+soils$site <- factor(soils$site, levels=c("Alluvium", "Peat", "Mature"))
