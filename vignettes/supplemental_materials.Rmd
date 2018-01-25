@@ -6,9 +6,9 @@ author: Samuel D Chamberlain^1^, Tyler Anthony^1^, Whendee L Silver^1^, Elke Eic
   G Verfaillie^1^, and Dennis D Baldocchi^1^
 date: '`r Sys.Date()`'
 output:
-  word_document: default
   pdf_document: default
   html_document: default
+  word_document: default
 fontsize: 12pt
 header-includes:
 - \usepackage{setspace}
