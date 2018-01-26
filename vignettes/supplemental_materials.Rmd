@@ -1,14 +1,14 @@
 ---
-title: 'Supplemental Materials: Soil iron content and sediment accretion drive methane
-  fluxes in restored wetlands'
+title: 'Supplemental Materials: Soil properties and sediment accretion modulate methane
+  fluxes from restored wetlands'
 author: Samuel D Chamberlain^1^, Tyler Anthony^1^, Whendee L Silver^1^, Elke Eichelmann^1^,
   Kyle S Hemes^1^, Patricia Y Oikawa^2^, Cove Sturtevant^3^, Daphne J Szutu^1^, Joseph
   G Verfaillie^1^, and Dennis D Baldocchi^1^
 date: '`r Sys.Date()`'
 output:
+  word_document: default
   pdf_document: default
   html_document: default
-  word_document: default
 fontsize: 12pt
 header-includes:
 - \usepackage{setspace}
@@ -51,9 +51,9 @@ library(ggpubr)
 # Methods
 
 ## Eddy Covariance Instrumentation and Processing
-Fluxes of CH~4~, CO~2~, H~2~O, and sensible heat were measured from the three sites by eddy covariance. We measured high-frequency three-dimensional wind speed (*u*,*v*,*w*) and temperature with sonic anemometers (WindMaster; Gill Instruments, Hampshire, UK) and CH~4~, CO~2~, and H~2~O concentrations with open-path infrared gas analyzers (LI-7500A and LI-7700; LI-COR Inc., Lincoln, Nebraska, USA). High-frequency data from all sites were logged to LI-7550 dataloggers (LI-COR Inc., Lincoln, Nebraska, USA) at 20 Hz interval. Measurements took place at a height of 5.44 m, 4.64 m, and 5.36 m for the peat, mature, and alluvium site, respectively. Corrections were applied to vertical wind speed data prior to flux processing for sonic anemometers affected by the 'w bug', which causes an underestimate in vertical wind speeds. Half-hourly fluxes were calculated from the covariance between vertical wind speed (*w*) and gas concentrations using in-house MATLAB software [@detto_scaling_2010; @hatala_greenhouse_2012; @knox_agricultural_2015]. Flux corrections and quality control were applied as described in detail in @knox_agricultural_2015, @chamberlain_evaluation_2017, and Eichelmann et al. (*in review*), and included high-frequency data despiking, 2-D coordinate rotations, density corrections, and site-specific friction velocity (*u$^\ast$*) filtering. At the mature site, we reject fluxes from wind directions 290$^\circ$-240$^\circ$ because fluxes from these directions were from other wetland types; however, we did not apply wind direction filtering to the other sites where flux footprints were more homogeneous. Footprints at all sites were calculated using a two-dimensional analytical model [@detto_soil_2006; @hsieh_approximate_2000]. We then filled all gaps in the half-hourly flux time series using artificial neural networks (ANNs) as described in detail in @knox_biophysical_2016. Separate ANNs were trained for daytime and nighttime CO~2~ fluxes, and the nighttime CO~2~ flux ANN was used to model *ER* at all times. Gross ecosystem photosynthesis (*GEP*) was then estimated as the difference between the gap-filled CO~2~ flux and modeled *ER* [@baldocchi_does_2015]. More detail on this partitioning strategy can be found in @baldocchi_does_2015 and @knox_biophysical_2016, and our partitioning method performs well against independent verification methods in agricultural systems [@oikawa_revisiting_2017]. We did not gap fill or partition fluxes for the temporary tower sites and only present their observed fluxes.
+Fluxes of CH~4~, CO~2~, H~2~O, and sensible heat were measured from the three sites by eddy covariance. We measured high-frequency three-dimensional wind speed (*u*,*v*,*w*) and temperature with sonic anemometers (WindMaster; Gill Instruments, Hampshire, UK) and CH~4~, CO~2~, and H~2~O concentrations with open-path infrared gas analyzers (LI-7500A and LI-7700; LI-COR Inc., Lincoln, Nebraska, USA). High-frequency data from all sites were logged to LI-7550 dataloggers (LI-COR Inc., Lincoln, Nebraska, USA) at 20 Hz interval. Measurements took place at a height of 5.44 m, 4.64 m, and 5.36 m for the peat, mature, and alluvium site, respectively. Corrections were applied to vertical wind speed data prior to flux processing for sonic anemometers affected by the 'w bug', which causes an underestimate in vertical wind speeds. Half-hourly fluxes were calculated from the covariance between vertical wind speed (*w*) and gas concentrations using in-house MATLAB software [@detto_scaling_2010; @hatala_greenhouse_2012; @knox_agricultural_2015]. Flux corrections and quality control were applied as described in detail in @knox_agricultural_2015 and @chamberlain_evaluation_2017, and included high-frequency data despiking, 2-D coordinate rotations, density corrections, and site-specific friction velocity (*u$^\ast$*) filtering. At the mature site, we reject fluxes from wind directions 290$^\circ$-240$^\circ$ because fluxes from these directions were from other wetland types; however, we did not apply wind direction filtering to the other sites where flux footprints were more homogeneous. Footprints at all sites were calculated using a two-dimensional analytical model [@detto_soil_2006; @hsieh_approximate_2000]. We then filled all gaps in the half-hourly flux time series using artificial neural networks (ANNs) as described in detail in @knox_biophysical_2016. Separate ANNs were trained for daytime and nighttime CO~2~ fluxes, and the nighttime CO~2~ flux ANN was used to model *ER* at all times. Gross ecosystem photosynthesis (*GEP*) was then estimated as the difference between the gap-filled CO~2~ flux and modeled *ER* [@baldocchi_does_2015]. More detail on this partitioning strategy can be found in @baldocchi_does_2015 and @knox_biophysical_2016, and our partitioning method performs well against independent verification methods in agricultural systems [@oikawa_revisiting_2017].
 
-We also measured a number of auxiliary atmospheric and soil environmental variables averaged at half-hourly intervals and logged to CR1000 dataloggers (Campbell Scientific, Logan, Utah, USA). Atmospheric variables included air temperature (*T~a~*) and relative humidity (*RH*) using shielded and aspirated thermistor and capacitance sensors (HMP45C or HMP60; Viasala, Vantaa, Finland), atmospheric pressure (*PA*) using capacitance sensors (PTB110; Viasala, Vantaa, Finland), photosynthetically active radiation (*PAR*) using quantum sensors (PAR-LITE or PQS 1; Kipp and Zonen, Delft, Netherlands), and net radiation (*R~net~*) using four-component and double-sided net-radiometers (CNR1 or NR Lite; Hukseflux & Kipp and Zonen, Delft, Netherlands). We measured soil (*T~s~*) and water (*T~w~*) temperature at various depths using copper constant thermocouples, and water table depth (*WTD*) using pressure transducers (CS450 or CS451; Campbell Scientific, Logan, Utah, USA). We used 10 cm above the sediment surface *T~w~* measurements at the peat and alluvium wetland, and 8 cm *T~w~* measurements for the mature wetland. All *T~s~* measurements were 8 cm below the sediment surface.
+We also measured a number of auxiliary atmospheric and soil environmental variables averaged at half-hourly intervals and logged to CR1000 dataloggers (Campbell Scientific, Logan, Utah, USA). Atmospheric variables included air temperature (*T~a~*) and relative humidity (*RH*) using shielded and aspirated thermistor and capacitance sensors (HMP45C or HMP60; Viasala, Vantaa, Finland), atmospheric pressure (*PA*) using capacitance sensors (PTB110; Viasala, Vantaa, Finland), photosynthetically active radiation (*PAR*) using quantum sensors (PAR-LITE or PQS 1; Kipp and Zonen, Delft, Netherlands), and net radiation (*R~net~*) using four-component and double-sided net-radiometers (CNR1 or NR Lite; Hukseflux & Kipp and Zonen, Delft, Netherlands). We measured the canopy greenness index (*GCC*) using digital cameras. We measured soil (*T~s~*) and water (*T~w~*) temperature at various depths using copper constant thermocouples, and water table depth (*WTD*) using pressure transducers (CS450 or CS451; Campbell Scientific, Logan, Utah, USA). We used 10 cm above the sediment surface *T~w~* measurements at the peat and alluvium wetland, and 8 cm *T~w~* measurements for the mature wetland. All *T~s~* measurements were 8 cm below the sediment surface.
 
 ## Wavelet-Information Theory Analysis
 Flux and environmental variable time series were decomposed into major time scales of interest using maximal-overlap discrete wavelet transforms [@percival_estimation_1995], where we isolate variation occurring at the hourly (1-2 h), diel (4 h to 1.3 days), and multiday time scales (2.7-21.3 days). We used the Least Symmetric 8 wavelet filter to decompose the original time series for all variables, and each time scale was reconstructed from the wavelet detail at multiple dyadic scales corresponding to 2^n^ measurement intervals. The hourly time scale was reconstructed from dyadic scales 1-2 (1-2 h), diel scale from dyadic scales 3-6 (4 h to 1.3 days), and multiday scale from dyadic scales 7-10 (2.7-21.3 days). 
@@ -71,7 +71,7 @@ where *x~t~* and *y~t~* are states within the overall distribution of *X* and *Y
 
 # Results
 
-```{r figS1, fig.height = 8, fig.width = 7, dpi=600, fig.cap="Diel patterns of mean (a) methane flux (*F~CH4~*), (b) net ecosystem exchange (*NEE*), and (c) evapotranspiration (*ET*) by year."}
+```{r figS1, fig.height = 8, fig.width = 7, dpi=600, fig.cap="Diel patterns of mean (a) methane flux (*F~CH4~*), (b) net ecosystem exchange (*NEE*), and (c) evapotranspiration (*ET*) by year across all sites."}
 source("R/Diel_patterns.R") #process the data
 
 a <- ggplot(diel_all, aes(x=time, y=CH4, color=factor(year))) +
@@ -106,12 +106,11 @@ iA$widths[2:5] <- as.list(maxWidth); iB$widths[2:5] <- as.list(maxWidth); iC$wid
 grid.arrange(a, b, c, ncol=1)
 ```
 
-```{r figS2, fig.height = 3, fig.width = 4, dpi=600, fig.cap="Mean methane flux (*F~CH4~*) and atmospheric pressure across all half-hourly periods in the 2015 growing season (DOY 100-300). Color scale on each dot denotes the time of day for each paired datapoint. Peak *F~CH4~* occurs late in the afternoon during atmopsheric pressure lows, and this relationship displays notable hysteresis."}
+```{r figS2, fig.height = 3, fig.width = 4, dpi=600, fig.cap="Alluvium wetland mean methane flux (*F~CH4~*) and atmospheric pressure across all half-hourly periods in the 2015 growing season (DOY 100-300). Color scale on each dot denotes the time of day for each paired datapoint. Peak *F~CH4~* occurs late in the afternoon during atmopsheric pressure lows, and this relationship displays notable hysteresis."}
 ggplot(data=subset(diel_all, site == "Alluvium" & year == 2015), aes(x=PA, y=CH4, color=time)) +
   geom_point(size=1.5) +
   xlab("Atmospheric pressure (kPA)") +
   ylab(expression(F[CH4]~" ("~nmol~m^{-2}~s^{-1}~")")) +
-  #scale_x_continuous(breaks=c(101.1,101.5)) +
   theme_bw()
 
 
@@ -182,40 +181,39 @@ iD$widths[2:5] <- as.list(maxWidth);
 grid.arrange(iA, iB, iC, iD, ncol=1)
 ```
 
-```{r figS4, fig.cap="Daily (a) methane flux (*F~CH4~*), (b) net ecosystem exchange (*NEE*), (c) gross ecosystem photosynthesis (*GEP*), and (d) ecosystem respiration (*ER*) from the alluvium, peat, and mature wetlands when measurements were available across all three sites and all sites were fully vegetated.", fig.width=7, fig.height=5.2, dpi=600}
+```{r figS4, fig.cap="Daily (a) methane flux (*F~CH4~*), (b) net ecosystem exchange (*NEE*), (c) gross ecosystem photosynthesis (*GEP*), and (d) ecosystem respiration (*ER*) from the alluvium, peat, and mature wetlands when measurements were available across all three sites.", fig.width=7, fig.height=5.2, dpi=600}
 #themes
 time_series <- theme_bw() +
   theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
         axis.title.x = element_blank(), axis.title.y = element_text(size=9))
 
 #plot objects, complete years only
-a <- ggplot(subset(all_daily, year > 2014), aes(x=date, y=mgCH4, color=site)) +
+a <- ggplot(subset(all_daily, year > 2013), aes(x=date, y=mgCH4, color=site)) +
   geom_line() + theme_bw() +
   scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
   ylab(expression(F[CH4]~" (mg C"~m^{-2}~d^{-1}~")")) + 
-  annotate("text", x=as.Date("2015-01-01"), y=Inf, label="a", vjust=1, hjust=1) +
+  annotate("text", x=as.Date("2018-01-01"), y=Inf, label="a", vjust=1, hjust=1) +
   time_series + theme(legend.position = "none", axis.text.x = element_blank())
 
-b <- ggplot(subset(all_daily, year > 2014), aes(x=date, y=gCO2, color=site)) +
+b <- ggplot(subset(all_daily, year > 2013), aes(x=date, y=gCO2, color=site)) +
   geom_line() +
   scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
   ylab(expression(NEE~" (g C"~m^{-2}~d^{-1}~")")) + 
-  annotate("text", x=as.Date("2015-01-01"), y=Inf, label="b", vjust=1, hjust=1) +
+  annotate("text", x=as.Date("2018-01-01"), y=Inf, label="b", vjust=1, hjust=1) +
   time_series + theme(axis.text.x = element_blank(), legend.position = "none")
 
-c <- ggplot(subset(all_daily, year > 2014), aes(x=date, y=gGEP, color=site)) +
+c <- ggplot(subset(all_daily, year > 2013), aes(x=date, y=gGEP, color=site)) +
   geom_line() + theme_bw() +
   scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
   ylab(expression(GEP~" (g C"~m^{-2}~d^{-1}~")")) + 
-  annotate("text", x=as.Date("2015-01-01"), y=Inf, label="c", vjust=1, hjust=1) +
+  annotate("text", x=as.Date("2018-01-01"), y=Inf, label="c", vjust=1, hjust=1) +
   time_series + theme(axis.text.x = element_blank(), legend.position = "none")
 
-d <- ggplot(subset(all_daily, year > 2014), aes(x=date, y=gER, color=site)) +
+d <- ggplot(subset(all_daily, year > 2013), aes(x=date, y=gER, color=site)) +
   geom_line() + theme_bw() +
   scale_x_date(date_breaks = "1 year", labels = date_format("%Y-%m")) +
-  #scale_y_continuous(limits=c(0,15)) +
   ylab(expression(ER~" (g C"~m^{-2}~d^{-1}~")")) + 
-  annotate("text", x=as.Date("2015-01-01"), y=Inf, label="d", vjust=1, hjust=1) +
+  annotate("text", x=as.Date("2018-01-01"), y=Inf, label="d", vjust=1, hjust=1) +
   time_series + theme(legend.title=element_blank(),
                        legend.position=c(.76, .75), 
                        legend.margin = margin(0, 0, 0, 0),
@@ -235,7 +233,7 @@ iD$widths[2:5] <- as.list(maxWidth);
 grid.arrange(iA, iB, iC, iD, ncol=1)
 ```
 
-```{r figS5, fig.cap="Soil (a) HCl-extractable iron (Fe), (b) ferrous iron (Fe^2+^), (c) poorly crystalline Fe oxides (Fe~ca~), (d) pH, and (e) percent carbon (%C) in accreted and parent horizons across the three wetland sites (*n* $\\geq$ 12 per depth). Panel (f) shows average daily methane fluxes (*F~CH4~*) for the early growing season (April-July) first year post-restoration and 2017 to represent *F~CH4~* when only the parent horizon was present and after accreted soil had developed, respectively. Solid horizontal lines are medians, boxes are the interquartile range, whiskers are the 95% confidence interval, and points denote measured outliers. Significance levels are shown for pairwise comparisons between soil horizons at each site (Welch's t-test), where ns denotes no significant differences and increasing asterisks denotes significance levels from *P* < 0.05, 0.01, 0.001, to 0.0001.", fig.width=8, fig.height=4, dpi=600}
+```{r figS5, fig.cap="Soil (a) HCl-extractable Fe, (b) ferrous iron (Fe^2+^), (c) poorly crystalline Fe oxides (Fe~ca~), (d) pH, (e) C concentration (%), and N concentration (%) in accreted and parent horizons across the three wetland sites (*n* $\\geq$ 12 per depth). Panel (f) shows average daily methane fluxes (*F~CH4~*) for the early growing season (April-July) first year post-restoration and 2017 to represent *F~CH4~* when only the parent horizon was present and after accreted soil had developed, respectively. Solid horizontal lines are medians, boxes are the interquartile range, whiskers are the 95% confidence interval, and points denote measured outliers. Significance levels are shown for pairwise comparisons between soil horizons at each site (Welch's t-test), where ns denotes no significant differences and increasing asterisks denotes significance levels from *P* < 0.05, 0.01, 0.001, to 0.0001.", fig.width=8, fig.height=4, dpi=600}
 source("R/soils.R") #process soils data into summary dataframe
 #theme
 boxplot_theme <- theme(axis.text.x = element_text(size=8),
