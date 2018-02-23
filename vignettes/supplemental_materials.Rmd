@@ -25,8 +25,6 @@ bibliography: library.bib
 
 ^3^National Ecological Observatory Network, Battelle, Boulder, Colorado, USA
 
-\newpage
-
 ```{r setup, include=FALSE}
 #setwd to main package directory
 knitr::opts_knit$set(root.dir = normalizePath("../"))
@@ -51,7 +49,7 @@ library(ggpubr)
 # Methods
 
 ## Eddy Covariance Instrumentation and Processing
-Fluxes of CH~4~, CO~2~, H~2~O, and sensible heat were measured from the three sites by eddy covariance. We measured high-frequency three-dimensional wind speed (*u*,*v*,*w*) and temperature with sonic anemometers (WindMaster; Gill Instruments, Hampshire, UK) and CH~4~, CO~2~, and H~2~O concentrations with open-path infrared gas analyzers (LI-7500A and LI-7700; LI-COR Inc., Lincoln, Nebraska, USA). High-frequency data from all sites were logged to LI-7550 dataloggers (LI-COR Inc., Lincoln, Nebraska, USA) at 20 Hz interval. Measurements took place at a height of 5.44 m, 4.64 m, and 5.36 m for the peat, mature, and alluvium site, respectively. Corrections were applied to vertical wind speed data prior to flux processing for sonic anemometers affected by the 'w bug', which causes an underestimate in vertical wind speeds. Half-hourly fluxes were calculated from the covariance between vertical wind speed (*w*) and gas concentrations using in-house MATLAB software [@detto_scaling_2010; @hatala_greenhouse_2012; @knox_agricultural_2015]. Flux corrections and quality control were applied as described in detail in @knox_agricultural_2015 and @chamberlain_evaluation_2017, and included high-frequency data despiking, 2-D coordinate rotations, density corrections, and site-specific friction velocity (*u$^\ast$*) filtering. At the mature site, we reject fluxes from wind directions 290$^\circ$-240$^\circ$ because fluxes from these directions were from other wetland types; however, we did not apply wind direction filtering to the other sites where flux footprints were more homogeneous. Footprints at all sites were calculated using a two-dimensional analytical model [@detto_soil_2006; @hsieh_approximate_2000]. We then filled all gaps in the half-hourly flux time series using artificial neural networks (ANNs) as described in detail in @knox_biophysical_2016. Separate ANNs were trained for daytime and nighttime CO~2~ fluxes, and the nighttime CO~2~ flux ANN was used to model *ER* at all times. Gross ecosystem photosynthesis (*GEP*) was then estimated as the difference between the gap-filled CO~2~ flux and modeled *ER* [@baldocchi_does_2015]. More detail on this partitioning strategy can be found in @baldocchi_does_2015 and @knox_biophysical_2016, and our partitioning method performs well against independent verification methods in agricultural systems [@oikawa_revisiting_2017].
+Fluxes of CH~4~, CO~2~, H~2~O, and sensible heat were measured from the three sites by eddy covariance. We measured high-frequency three-dimensional wind speed (*u*,*v*,*w*) and temperature with sonic anemometers (WindMaster; Gill Instruments, Hampshire, UK) and CH~4~, CO~2~, and H~2~O concentrations with open-path infrared gas analyzers (LI-7500A and LI-7700; LI-COR Inc., Lincoln, Nebraska, USA). High-frequency data from all sites were logged to LI-7550 dataloggers (LI-COR Inc., Lincoln, Nebraska, USA) at 20 Hz interval. Measurements took place at a height of 5.44 m, 4.64 m, and 5.36 m for the peat, mature, and alluvium site, respectively. Corrections were applied to vertical wind speed data prior to flux processing for sonic anemometers affected by the 'w bug', which causes an underestimate in vertical wind speeds. Half-hourly fluxes were calculated from the covariance between vertical wind speed (*w*) and gas concentrations using in-house MATLAB software [@detto_scaling_2010; @hatala_greenhouse_2012; @knox_agricultural_2015].
 
 We also measured a number of auxiliary atmospheric and soil environmental variables averaged at half-hourly intervals and logged to CR1000 dataloggers (Campbell Scientific, Logan, Utah, USA). Atmospheric variables included air temperature (*T~a~*) and relative humidity (*RH*) using shielded and aspirated thermistor and capacitance sensors (HMP45C or HMP60; Viasala, Vantaa, Finland), atmospheric pressure (*PA*) using capacitance sensors (PTB110; Viasala, Vantaa, Finland), photosynthetically active radiation (*PAR*) using quantum sensors (PAR-LITE or PQS 1; Kipp and Zonen, Delft, Netherlands), and net radiation (*R~net~*) using four-component and double-sided net-radiometers (CNR1 or NR Lite; Hukseflux & Kipp and Zonen, Delft, Netherlands). We measured the canopy greenness index (*GCC*) using digital cameras. We measured soil (*T~s~*) and water (*T~w~*) temperature at various depths using copper constant thermocouples, and water table depth (*WTD*) using pressure transducers (CS450 or CS451; Campbell Scientific, Logan, Utah, USA). We used 10 cm above the sediment surface *T~w~* measurements at the peat and alluvium wetland, and 8 cm *T~w~* measurements for the mature wetland. All *T~s~* measurements were 8 cm below the sediment surface.
 
@@ -106,7 +104,7 @@ iA$widths[2:5] <- as.list(maxWidth); iB$widths[2:5] <- as.list(maxWidth); iC$wid
 grid.arrange(a, b, c, ncol=1)
 ```
 
-```{r figS2, fig.height = 3, fig.width = 4, dpi=600, fig.cap="Alluvium wetland mean methane flux (*F~CH4~*) and atmospheric pressure across all half-hourly periods in the 2015 growing season (DOY 100-300). Color scale on each dot denotes the time of day for each paired datapoint. Peak *F~CH4~* occurs late in the afternoon during atmopsheric pressure lows, and this relationship displays notable hysteresis."}
+```{r figS2, fig.height = 3, fig.width = 4, dpi=600, fig.cap="Alluvium wetland mean methane flux (*F~CH4~*) and atmospheric pressure across all half-hourly periods in the 2015 growing season (DOY 100-300). Color scale for each dot denotes the time of day. Peak *F~CH4~* occurs late in the afternoon during atmopsheric pressure lows, and this relationship displays hysteresis."}
 ggplot(data=subset(diel_all, site == "Alluvium" & year == 2015), aes(x=PA, y=CH4, color=time)) +
   geom_point(size=1.5) +
   xlab("Atmospheric pressure (kPA)") +
@@ -293,19 +291,6 @@ f <- ggplot(soils, aes(x=site, y=N, fill=horizon)) +
 
 grid.arrange(a, b, c, d, e, f, ncol=3)
 ```
-
-<!-- Site          | Year |   *F~CH4~*   |      *NEE*     |       *ER*     |       *GEP*     |      *GHG*     | -->
-<!-- -------------:|:----:|:------------:|:--------------:|:--------------:|:---------------:|:--------------:| -->
-<!-- Alluvium | 2015 | 28 $\pm$ 2.1 | -553 $\pm$ 107 | 1098 $\pm$ 164 | -1651 $\pm$ 196 | -355 $\pm$ 517 | -->
-<!-- Young Peat    | 2015 | 58 $\pm$ 3.6 | -359 $\pm$ 128 | 1085 $\pm$ 135 | -1444 $\pm$ 186 | 2171 $\pm$ 684 | -->
-<!-- Old Peat      | 2015 | 56 $\pm$ 4.2 | -234 $\pm$ 113 | 1133 $\pm$ 68  | -1367 $\pm$ 132 | 2481 $\pm$ 665 | -->
-<!-- Alluvium | 2016 | 35 $\pm$ 2.1 | -547 $\pm$ 106 | 1124 $\pm$ 192 | -1670 $\pm$ 219 | 77 $\pm$ 515   | -->
-<!-- Young Peat    | 2016 | 45 $\pm$ 3.3 | -1.9 $\pm$ 113 |  977 $\pm$ 147 | -979  $\pm$ 185 | 2715 $\pm$ 614 | -->
-<!-- Old Peat      | 2016 | 47 $\pm$ 3.5 | -404 $\pm$ 105 | 1082 $\pm$ 69  | -1487 $\pm$ 125 | 1339 $\pm$ 593 | -->
-
-<!-- Table: Annual methane (*F~CH4~*; g CH~4~-C m^-2^ yr^-1^), net ecosystem exchange (*NEE*; g CO~2~-C m^-2^ yr^-1^), ecosystem respiration (*ER*; g CO~2~-C m^-2^ yr^-1^), gross ecosystem photosynthesis (*GEP*; g CO~2~-C m^-2^ yr^-1^), and greenhouse gas equivalent emission (*GHG*; g CO~2eq~ m^-2^ yr^-1^) budgets for the alluvium, young peat, and old peat wetlands for 2015 and 2016 when all wetlands were fully vegetated. *GHG* budgets were calculated using the 100-year 45x sustained global warming potential for CH~4~ from @neubauer_moving_2015. Error for all budgets is $\pm$ 95% confidence interval calculated from the variance of 20 artifical neural network gap-filling runs. Confidence intervals for *GEP* and *GHG* budgets were calculated from the additive variance of *NEE*,*ER* and *F~CH4~*,*NEE* budgets respectively, as *GEP* and *GHG* budgets are calculated from combinations of these flux time series.  -->
-
-\newpage
 
 # References
 
