@@ -259,7 +259,7 @@ trajectory <- subset(new_wetlands, rest_year < 4)
 a <- ggplot(trajectory, aes(x=dday/365, y=mgCH4, color=site)) +
   geom_point(aes(fill=site), colour="black", pch=21, size=0.9) +
   ylab(expression(F[CH4]~" "~"("~mg~C~m^{-2}~d^{-1}~")")) + 
-  #annotate("text", x=5, y=Inf, label="(a)", vjust=1, hjust=1) +
+  annotate("text", x=5, y=Inf, label="(a)", vjust=1, hjust=1) +
   theme_bw() + time_series +
   theme(legend.title=element_blank(), legend.margin = margin(0, 0, 0, 0),
         legend.position=c(.12, .80),
@@ -268,8 +268,8 @@ a <- ggplot(trajectory, aes(x=dday/365, y=mgCH4, color=site)) +
 
 b <- ggplot(trajectory, aes(x=dday/365, y=gCO2, color=site)) +
   geom_point(aes(fill=site), colour="black", pch=21, size=0.9) +
-  ylab(expression("NEE "~"("~g~C~m^{-2}~d^{-1}~")")) + xlab("Wetland age (years)") +
-  #annotate("text", x=5, y=Inf, label="(b)", vjust=1, hjust=1) +
+  ylab(expression("NEE "~"("~g~C~m^{-2}~d^{-1}~")")) +
+  annotate("text", x=5, y=Inf, label="(b)", vjust=1, hjust=1) +
   theme_bw() + 
   theme(legend.position = "none", panel.grid.minor=element_blank(), 
         panel.grid.major.y = element_blank(), axis.title.y = element_text(size=9))
@@ -314,7 +314,7 @@ maxWidth = grid::unit.pmax(iA$widths[2:5], iB$widths[2:5], iC$widths[2:5], iD$wi
 iA$widths[2:5] <- as.list(maxWidth); iB$widths[2:5] <- as.list(maxWidth); iC$widths[2:5] <- as.list(maxWidth); 
 iD$widths[2:5] <- as.list(maxWidth); iE$widths[2:5] <- as.list(maxWidth); iF$widths[2:5] <- as.list(maxWidth); 
 
-grid.arrange(iA, iB, ncol=1)
+grid.arrange(iA, iB, iC, iD, iE, iF, ncol=1)
 
 ```
 
