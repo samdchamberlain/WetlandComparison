@@ -104,7 +104,7 @@ iA$widths[2:5] <- as.list(maxWidth); iB$widths[2:5] <- as.list(maxWidth); iC$wid
 grid.arrange(a, b, c, ncol=1)
 ```
 
-```{r figS2, fig.height = 3, fig.width = 4, dpi=600, fig.cap="Alluvium wetland mean methane flux (*F~CH4~*) and atmospheric pressure across all half-hourly periods in the 2015 growing season (DOY 100-300). Color scale for each dot denotes the time of day. Peak *F~CH4~* occurs late in the afternoon during atmopsheric pressure lows, and this relationship displays hysteresis."}
+```{r figS2, fig.height = 3, fig.width = 4, dpi=600, fig.cap="Alluvium wetland mean methane flux (*F~CH4~*) and atmospheric pressure across all half-hourly periods in the 2015 growing season (DOY 100-300). Color scale for each dot denotes the time of day. Peak *F~CH4~* occurs late in the afternoon during atmospheric pressure lows, and this relationship displays hysteresis."}
 ggplot(data=subset(diel_all, site == "Alluvium" & year == 2015), aes(x=PA, y=CH4, color=time)) +
   geom_point(size=1.5) +
   xlab("Atmospheric pressure (kPA)") +
@@ -231,7 +231,7 @@ iD$widths[2:5] <- as.list(maxWidth);
 grid.arrange(iA, iB, iC, iD, ncol=1)
 ```
 
-```{r figS5, fig.cap="Soil (a) HCl-extractable Fe, (b) ferrous iron (Fe^2+^), (c) poorly crystalline Fe oxides (Fe~ca~), (d) pH, (e) C concentration (%), and N concentration (%) in accreted and parent horizons across the three wetland sites (*n* $\\geq$ 12 per depth). Panel (f) shows average daily methane fluxes (*F~CH4~*) for the early growing season (April-July) first year post-restoration and 2017 to represent *F~CH4~* when only the parent horizon was present and after accreted soil had developed, respectively. Solid horizontal lines are medians, boxes are the interquartile range, whiskers are the 95% confidence interval, and points denote measured outliers. Significance levels are shown for pairwise comparisons between soil horizons at each site (Welch's t-test), where ns denotes no significant differences and increasing asterisks denotes significance levels from *P* < 0.05, 0.01, 0.001, to 0.0001.", fig.width=8, fig.height=4, dpi=600}
+```{r figS5, fig.cap="Soil (a) HCl-extractable Fe, (b) ferrous iron (Fe^2+^), (c) poorly crystalline Fe oxides (Fe~ca~), (d) pH, (e) C concentration (%), and (f) N concentration (%) in accreted and parent horizons across the three wetland sites (*n* $\\geq$ 12 per depth). Solid horizontal lines are medians, boxes are the interquartile range, whiskers are the 95% confidence interval, and points denote measured outliers. Significance levels are shown for pairwise comparisons between soil horizons at each site (Welch's t-test), where ns denotes no significant differences and increasing asterisks denotes significance levels from *P* < 0.05, 0.01, 0.001, to 0.0001.", fig.width=8, fig.height=4, dpi=600}
 source("R/soils.R") #process soils data into summary dataframe
 #theme
 boxplot_theme <- theme(axis.text.x = element_text(size=8),
