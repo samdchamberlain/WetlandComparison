@@ -1,13 +1,14 @@
 ---
-title: "Soil properties and sediment accretion modulate methane fluxes from restored wetlands"
+title: Soil properties and sediment accretion modulate methane fluxes from restored
+  wetlands
 author: Samuel D Chamberlain^1^, Tyler Anthony^1^, Whendee L Silver^1^, Elke Eichelmann^1^,
   Kyle S Hemes^1^, Patricia Y Oikawa^2^, Cove Sturtevant^3^, Daphne J Szutu^1^, Joseph
   G Verfaillie^1^, and Dennis D Baldocchi^1^
 date: '`r Sys.Date()`'
 output:
-  word_document: default
   pdf_document: default
   html_document: default
+  word_document: default
 fontsize: 12pt
 header-includes:
 - \usepackage{setspace}
@@ -183,7 +184,7 @@ a <- ggplot(new_wetlands, aes(x=site, y=FeT_mg.g, fill=horizon)) +
   ylab(expression("Extractable Fe (mg "~g^{-1}~"soil)")) +
   stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
   scale_y_continuous(limits=c(0,32)) +
-  annotate("text",x=0.6,y=32,label="(a)") +
+  annotate("text",x=0.6,y=32,label="(a)", fontface = "bold") +
   boxplot_theme + theme(legend.position="none")
 
 b <- ggplot(new_wetlands, aes(x=site, y=FeII_mg.g, fill=horizon)) +
@@ -191,7 +192,7 @@ b <- ggplot(new_wetlands, aes(x=site, y=FeII_mg.g, fill=horizon)) +
   ylab(expression("Fe2+ (mg "~g^{-1}~"soil)")) +
   stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
   scale_y_continuous(limits=c(0,25)) +
-  annotate("text",x=0.6,y=25,label="(b)") +
+  annotate("text", x=0.6, y=25, label="(b)", fontface = "bold") +
   boxplot_theme + theme(legend.position="none")
 
 c <- ggplot(new_wetlands, aes(x=site, y=FePC_mg.g, fill=horizon)) +
@@ -199,7 +200,7 @@ c <- ggplot(new_wetlands, aes(x=site, y=FePC_mg.g, fill=horizon)) +
   ylab(expression(Fe[ca]~" (mg "~g^{-1}~"soil)")) +
   stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
   scale_y_continuous(limits=c(0,0.5)) +
-  annotate("text",x=0.6,y=0.5,label="(c)") +
+  annotate("text", x=0.6, y=0.5, label="(c)", fontface = "bold") +
   boxplot_theme + theme(legend.position="none")
 
 d <- ggplot(new_wetlands, aes(x=site, y=pH, fill=horizon)) +
@@ -207,7 +208,7 @@ d <- ggplot(new_wetlands, aes(x=site, y=pH, fill=horizon)) +
   stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
   scale_y_continuous(limits=c(4.5,7.6)) +
   ylab(expression("pH")) +
-  annotate("text",x=0.6,y=7.6,label="(d)") +
+  annotate("text", x=0.6, y=7.6, label="(d)", fontface = "bold") +
   boxplot_theme +
   theme(legend.position=c(.79,.2), legend.title = element_blank(), 
         legend.margin = margin(0, 0, 0, 0), 
@@ -218,7 +219,7 @@ e <- ggplot(new_wetlands, aes(x=site, y=C, fill=horizon)) +
   stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
   ylab(expression("%C")) +
   scale_y_continuous(limits=c(10,30)) +
-  annotate("text",x=0.6,y=30,label="(e)") +
+  annotate("text", x=0.6, y=30, label="(e)", fontface = "bold") +
   boxplot_theme + theme(legend.position="none")
 
 f <- ggplot(new_wetlands, aes(x=site, y=N, fill=horizon)) +
@@ -226,7 +227,7 @@ f <- ggplot(new_wetlands, aes(x=site, y=N, fill=horizon)) +
   stat_compare_means(aes(group = horizon), label = "p.signif", method="t.test") +
   ylab(expression("%N")) +
   #scale_y_continuous(limits=c(10,30)) +
-  annotate("text",x=0.6,y=1.6,label="(f)") +
+  annotate("text", x=0.6, y=1.6, label="(f)", fontface = "bold") +
   boxplot_theme + theme(legend.position="none")
 
 grid.arrange(a, b, c, d, e, f, ncol=3)
@@ -239,7 +240,7 @@ Differences in *NEE* were less notable across the two recently restored wetlands
 
 Other dominant biophysical drivers of GHG fluxes, including evapotranspiration (*ET*), photosynthetically active radiation (*PAR*), air temperature (*T~a~*), and water table depth (*WTD*), were similar across the wetlands, despite measurements occurring across different time periods (2011 - 2014 for the peat site; 2014 - 2017 for the alluvium site). Daily *ET* exhibited a similar seasonality and magnitude across sites, with the exception of the second year at the peat wetland when particularly large *ET* rates were observed (Fig. 3c). Daily mean *PAR* and *T~a~* were also similar across the wetlands during these time periods, and values generally overlapped in range (Fig. 3d,e). Additionally, the water table was always above surface at either wetland for the first three years following restoration and is therefore not responsible for reduced CH~4~ fluxes at the alluvium wetland (Fig. 3f).
 
-```{r fig3, fig.cap="Daily (a) methane flux (*F~CH4~*), (b) net ecosystem exchange (*NEE*), (c) evapotranspiration (*ET*), as well as mean (d) photosynthetically active radiation (*PAR*), (e) air temperature (*T~a~*), and (f) water table depth (*WTD*) at the peat and alluvium wetland from time since initial restoration. Day one is 2011-01-01 for the peat wetland and 2014-01-01 for the alluvium wetland.", fig.width=5, fig.height=3.5, dpi=600}
+```{r fig3, fig.cap="Daily (a) methane flux (*F~CH4~*), (b) net ecosystem exchange (*NEE*), (c) evapotranspiration (*ET*), as well as mean (d) photosynthetically active radiation (*PAR*), (e) air temperature (*T~a~*), and (f) water table depth (*WTD*) at the peat and alluvium wetland from time since initial restoration. Day one is 2011-01-01 for the peat wetland and 2014-01-01 for the alluvium wetland.", fig.width=6, fig.height=8, dpi=600}
 time_series <- theme_bw() +
   theme(panel.grid.minor=element_blank(), panel.grid.major.y = element_blank(),
         axis.title.x = element_blank(), axis.title.y = element_text(size=9))
@@ -259,7 +260,7 @@ trajectory <- subset(new_wetlands, rest_year < 4)
 a <- ggplot(trajectory, aes(x=dday/365, y=mgCH4, color=site)) +
   geom_point(aes(fill=site), colour="black", pch=21, size=0.9) +
   ylab(expression(F[CH4]~" "~"("~mg~C~m^{-2}~d^{-1}~")")) + 
-  annotate("text", x=5, y=Inf, label="(a)", vjust=1, hjust=1) +
+  annotate("text", x=5, y=Inf, label="(a)", vjust=1, hjust=1, fontface = "bold") +
   theme_bw() + time_series +
   theme(legend.title=element_blank(), legend.margin = margin(0, 0, 0, 0),
         legend.position=c(.12, .80),
@@ -269,35 +270,32 @@ a <- ggplot(trajectory, aes(x=dday/365, y=mgCH4, color=site)) +
 b <- ggplot(trajectory, aes(x=dday/365, y=gCO2, color=site)) +
   geom_point(aes(fill=site), colour="black", pch=21, size=0.9) +
   ylab(expression("NEE "~"("~g~C~m^{-2}~d^{-1}~")")) +
-  annotate("text", x=5, y=Inf, label="(b)", vjust=1, hjust=1) +
-  theme_bw() + 
-  theme(legend.position = "none", panel.grid.minor=element_blank(), 
-        panel.grid.major.y = element_blank(), axis.title.y = element_text(size=9))
-
+  annotate("text", x=5, y=Inf, label="(b)", vjust=1, hjust=1, fontface = "bold") +
+  theme_bw() + time_series + theme(legend.position = "none")
 
 c <- ggplot(trajectory, aes(x=dday/365, y=mET, color=site)) +
   geom_point(aes(fill=site), colour="black", pch=21, size=0.9) +
   ylab(expression("ET ("~mm~d^{-1}~")")) +
-  annotate("text", x=5, y=Inf, label="(c)", vjust=1, hjust=1) +
+  annotate("text", x=5, y=Inf, label="(c)", vjust=1, hjust=1, fontface = "bold") +
   theme_bw() + time_series + theme(legend.position = "none")
 
 d <- ggplot(trajectory, aes(x=dday/365, y=PAR, color=site)) +
   geom_line(size=0.5) + theme_bw() +
   ylab(expression(PAR~" ("~mu~mol~m^{-2}~s^{-1}~")")) + 
-  annotate("text", x=5, y=Inf, label="(d)", vjust=1, hjust=1) +
+  annotate("text", x=5, y=Inf, label="(d)", vjust=1, hjust=1, fontface = "bold") +
   theme_bw() + time_series + theme(legend.position = "none")
 
 e <- ggplot(trajectory, aes(x=dday/365, y=Tair, color=site)) +
   geom_line(size=0.5) + theme_bw() +
   ylab(expression(T[a]~" ("~degree~C~")")) +
-  annotate("text", x=5, y=Inf, label="(e)", vjust=1, hjust=1) +
+  annotate("text", x=5, y=Inf, label="(e)", vjust=1, hjust=1, fontface = "bold") +
   theme_bw() + time_series + theme(legend.position = "none")
 
 f <- ggplot(trajectory, aes(x=dday/365, y=WTD, color=site)) +
   geom_line(size=0.5) + theme_bw() +
   ylab("WTD (cm)") + xlab("Wetland age (years)") +
   geom_hline(yintercept=0, linetype="dashed") +
-  annotate("text", x=5, y=Inf, label="(f)", vjust=1, hjust=1) +
+  annotate("text", x=5, y=Inf, label="(f)", vjust=1, hjust=1, fontface = "bold") +
   theme_bw() + 
   theme(legend.position = "none", panel.grid.minor=element_blank(), 
         panel.grid.major.y = element_blank(), axis.title.y = element_text(size=9))
@@ -339,37 +337,28 @@ peat19_train <- peat19_daily %>%
 
 #cross validated model training where optimal model parameters are chosen, missing values are knn imputed
 #generalized additive model
-gam_fit <- train(mgCH4 ~ ., data = peat19_train, method = "gam",
+set.seed(1000)
+gam_fit <- train(mgCH4 ~ PAR + Tair + mVPD + PA + u. + mET + gER + gGEP + mGCC, data = peat19_daily, method = "gam",
                   preProcess = c("knnImpute"),
                   trControl = trainControl(method = "cv"),
                   na.action = na.pass)
 
-# extract prediction datasets
+# extract prediction datasets, only using time periods when wetlands were filly vegetated
 alluvium <- alluvium_daily %>%
-  select(mgCH4, PAR, Tair, mVPD, PA, u., mET, gER, gGEP, mGCC, year)
+  select(mgCH4, PAR, Tair, mVPD, PA, u., mET, gER, gGEP, mGCC, year) %>%
+  filter(year < 2018 & year > 2014)
 
 peat <- peat6_daily %>%
-  select(mgCH4, PAR, Tair, mVPD, PA, u., mET, gER, gGEP, mGCC, year)
+  select(mgCH4, PAR, Tair, mVPD, PA, u., mET, gER, gGEP, mGCC, year) %>%
+  filter(year < 2018 & year > 2011)
 
-# generate predictions and residuals for peat and alluvium wetlands
-alluvium <- alluvium %>%
-  na.omit() %>%
-  filter(year < 2018 & year > 2014) %>%
-  add_residuals(gam_fit) %>%
-  add_predictions(gam_fit)
+# generate predictions for peat and alluvium wetlands
+alluvium$pred <- predict.train(gam_fit, alluvium, na.action = na.pass)
+peat$pred <- predict.train(gam_fit, peat, na.action = na.pass)
 
-peat <- peat %>%
-  na.omit() %>%
-  filter(year < 2018 & year > 2011) %>%
-  add_residuals(gam_fit) %>%
-  add_predictions(gam_fit)
-
-# goodness of fit for both sites
-RMSE <- function(obs, pred) { #calculate root mean squared error
-  sqrt(mean((obs - pred)^2))
-}
-rmse_peat <- RMSE(peat$mgCH4, peat$pred)
-rmse_alluvium <- RMSE(alluvium$mgCH4, peat$pred)
+# ...and residuals
+alluvium$resid <- alluvium$mgCH4 - alluvium$pred
+peat$resid <- peat$mgCH4 - peat$pred
 
 #regression fits (obs v. pred)
 regr_peat <- lm(pred ~ mgCH4, data=peat); summary(regr_peat)
@@ -392,13 +381,15 @@ Model over-prediction in early years at the alluvium wetland suggests that other
 a <- ggplot(peat, aes(x=factor(year), y=resid)) +
   geom_ref_line(h = 0) +
   geom_boxplot(outlier.shape = NA) +
-  xlab("Peat wetland") + ylab(expression("Residual "~F[CH4]~" (mg C"~m^{-2}~d^{-1}~")")) +
+  xlab("Year") + ylab(expression("Residual "~F[CH4]~" (mg C"~m^{-2}~d^{-1}~")")) +
+  ggtitle("Peat wetland") +
   scale_y_continuous(limits = c(-300, 200))
 
 b <- ggplot(alluvium, aes(x=factor(year), y=resid)) +
   geom_ref_line(h = 0) +
   geom_boxplot(outlier.shape = NA) +
-  xlab("Alluvium wetland") + ylab(expression("Residual "~F[CH4]~" (mg C"~m^{-2}~d^{-1}~")")) +
+  xlab("Year") + ylab(expression("Residual "~F[CH4]~" (mg C"~m^{-2}~d^{-1}~")")) +
+  ggtitle("Alluvium wetland") +
   scale_y_continuous(limits = c(-300, 200))
 
 grid.arrange(a, b, nrow=1)
@@ -410,7 +401,7 @@ Methane emissions from the alluvium wetland increased steadily with time. This s
 ```{r fig6, fig.cap="Annual CH~4~ flux (*F~CH4~*) and greenhouse gas budget (GHG) across the two recently restored peat and alluvium wetlands, as well as the mature wetland restored on peat soils. Annual GHG balance is computed from annual *F~CH4~* and *NEE* budgets using the sustained global warming potential for CH~4~ [@neubauer_moving_2015].", fig.width=5, fig.height=4, dpi=600}
 time_series <- theme_bw() +
   theme(panel.grid.minor=element_blank(), panel.grid.major.x = element_blank(),
-        axis.title.x = element_blank(), axis.title.y = element_text(size=9))
+        axis.title.y = element_text(size=9))
 pd <- position_dodge(width = 0.0) #dodge parameter
 
 #merge annual budgets to single dataset
@@ -428,11 +419,11 @@ a <- ggplot(all_pst14, aes(x=year, y=tCH4, color=site)) +
         geom_errorbar(aes(ymin = tCH4 - ciCH4, ymax = tCH4 + ciCH4), position = pd, width = 0) +
         scale_x_continuous(breaks = c(2014, 2015, 2016, 2017)) +
         ylab(expression(F[CH4]~"("~g~C~m^{-2}~yr^{-1}~")")) + 
-        annotate("text",x=2017,y=60,label="(a)") +
+        annotate("text", x=2017, y=60, label="(a)", fontface = "bold") +
         time_series + theme(legend.title=element_blank(), legend.margin = margin(0, 0, 0, 0),
                             legend.position=c(.12, .25), legend.key.size =  unit(0.17, "in"), 
-                            legend.text = element_text(size=8), 
-                            legend.background = element_rect(fill = "transparent"))
+                            legend.text = element_text(size=8), legend.background = element_rect(fill = "transparent"),
+                            axis.title.x = element_blank())
 
 b <- ggplot(all_pst14, aes(x=year, y=GHGbalance, color=site)) +
         geom_point(position = pd) + geom_line() +
@@ -440,7 +431,7 @@ b <- ggplot(all_pst14, aes(x=year, y=GHGbalance, color=site)) +
                       position = pd, width = 0) +
         scale_x_continuous(breaks = c(2014, 2015, 2016, 2017)) +
         ylab(expression("GHG (g"~CO[2-eq]~m^{-2}~yr^{-1}~")")) + xlab("Year") +
-        annotate("text",x=2017,y=3000,label="(b)") +
+        annotate("text", x=2017, y=3000, label="(b)", fontface = "bold") +
         time_series + theme(legend.position = "none")
 
 #Multiple plots aligned
